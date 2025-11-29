@@ -1,0 +1,267 @@
+[
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "description": "Provides financial protection against accidental death and permanent disability, paying up to 100% of the sum insured.",
+    "benefits": [
+      "Hospital cash",
+      "Ambulance costs",
+      "Broken bones cover",
+      "Burns cover",
+      "Adventure sports coverage (in some plans)",
+      "OPD expenses",
+      "Support for dependent family members"
+    ],
+    "sum_insured_range": "₹10 lakhs – ₹1 crore",
+    "insurer": "HDFC ERGO"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "[translate:Pradhan Mantri Fasal Bima Yojana (PMFBY)]",
+    "description": "Crop insurance scheme with low, fixed premiums for farmers to cover crop loss due to natural calamities.",
+    "premium": {
+      "Kharif_crops": "2%",
+      "Rabi_crops": "1.5%",
+      "Annual_commercial_or_horticultural_crops": "5%"
+    },
+    "government_subsidy": "Up to 90% or more",
+    "coverage": "Full insured amount for crop loss from natural calamities",
+    "insurer": "Government of India"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "description": "Comprehensive home insurance that covers the structure and/or contents of your home against natural and man-made calamities.",
+    "key_features": [
+      "Long-term coverage options",
+      "Fast claims service",
+      "Optional add-ons (e.g. jewelry coverage)"
+    ],
+    "premium_example": "₹18/month for ₹5 lakh sum insured (pucca building)",
+    "factors_affecting_premium": [
+      "Sum insured",
+      "Type of dwelling",
+      "Policy term"
+    ],
+    "insurer": "ICICI Lombard"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Comprehensive Plan",
+    "description": "A broad health insurance policy for individuals and families with extensive coverage and multiple benefits.",
+    "benefits": [
+      "No cap on room rent",
+      "Maternity and newborn benefits",
+      "In-patient hospitalization",
+      "Pre- and post-hospitalization coverage (60 days before, 90 days after)",
+      "100% restoration benefit",
+      "Modern treatment coverage",
+      "Bariatric surgery",
+      "Second medical opinion"
+    ],
+    "insurer": "Star Health and Allied Insurance"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "description": "Comprehensive travel package for domestic and international travel covering medical and journey-related risks.",
+    "coverage": [
+      "Emergency hospitalization",
+      "Medical evacuation",
+      "Dental expenses",
+      "Trip cancellation or interruption",
+      "Loss of baggage"
+    ],
+    "policy_types": [
+      "Leisure travel",
+      "Business travel",
+      "Study travel"
+    ],
+    "insurer": "HDFC ERGO"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Insurance (General Overview)",
+    "description": "Leading standalone health insurer with a wide network and a variety of plans covering health, accident, and travel insurance.",
+    "key_features": [
+      "Network of over 14,000 hospitals for cashless treatment",
+      "24/7 customer support",
+      "Digital services and easy claim process",
+      "Coverage for pre-existing diseases and maternity",
+      "Automatic sum insured restoration",
+      "No medical check-up up to age 50"
+    ],
+    "insurer": "Star Health and Allied Insurance"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "description": "Comprehensive travel insurance plan offering coverage for medical, personal, and journey-related risks.",
+    "plan_variants": [
+      "Standard",
+      "Silver",
+      "Gold",
+      "Platinum"
+    ],
+    "key_features": [
+      "Emergency medical expenses",
+      "Trip cancellation/interruption",
+      "Baggage loss",
+      "Hospitalization",
+      "Dental treatment due to injury",
+      "Medical evacuation",
+      "Repatriation of mortal remains",
+      "Personal liability"
+    ],
+    "insurer": "Reliance General Insurance"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "description": "Comprehensive health insurance plan for individuals and families covering hospitalization, modern treatment, and more.",
+    "coverage": [
+      "In-patient hospital care",
+      "Daycare treatments",
+      "AYUSH and modern treatments",
+      "Organ donor expenses",
+      "Pre- and post-hospitalization",
+      "Unlimited sum insured restoration",
+      "Annual health check-ups",
+      "Cashless hospitalization at network hospitals"
+    ],
+    "optional_riders": [
+      "Daily cash benefit",
+      "Claim protection"
+    ],
+    "family_members_covered": "Up to 19 members",
+    "insurer": "Niva Bupa Health Insurance"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "description": "Provides financial protection for accidental death and disability with optional covers for hospitalization expenses.",
+    "coverage": [
+      "Accidental death",
+      "Permanent total disability",
+      "Permanent partial disability",
+      "Temporary total disability"
+    ],
+    "optional_covers": [
+      "Accidental hospitalization"
+    ],
+    "premium_example": "₹15 for every ₹25,000 of sum insured",
+    "premium_factors": [
+      "Sum insured amount",
+      "Policyholder’s risk level (normal, medium, heavy)",
+      "Type of policy (individual or family floater)"
+    ],
+    "specific_policy_example": "National Janata Personal Accident Policy",
+    "insurer": "National Insurance Company"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "[translate:LIC Jeevan Umang]",
+    "description": "[translate:Non-linked, participating, whole-life assurance plan providing coverage up to 100 years of age.]",
+    "features": [
+      "Annual survival benefit of 8% of Basic Sum Assured after premium payment term",
+      "Lump-sum maturity benefit at 100 years",
+      "Death benefit paid to nominee during the term",
+      "Offers long-term protection and regular income"
+    ]
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Family Health Optima",
+    "description": "Family-floater health policy covering multiple family members under a single sum insured.",
+    "features": [
+      "Hospitalization and daycare procedure coverage",
+      "Organ donor expenses",
+      "Automatic restoration of sum insured after exhaustion",
+      "Worldwide emergency coverage",
+      "Maternity benefit options",
+      "Cashless hospitalization at extensive hospital network"
+    ]
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "description": "Comprehensive vehicle insurance covering own damage, theft, fire, accidents, and third-party liabilities.",
+    "features": [
+      "Coverage for natural calamities and man-made incidents",
+      "Cashless repairs at authorized garages",
+      "Roadside assistance",
+      "Add-ons like zero-depreciation and engine protection"
+    ]
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "description": "Property insurance protecting residential buildings and contents against fire, burglary, and natural calamities.",
+    "features": [
+      "Coverage for reconstruction, repairs, and replacement of contents",
+      "Rent for alternative accommodation if home is uninhabitable",
+      "Financial security for unforeseen events"
+    ]
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "description": "Travel insurance providing protection against medical and travel emergencies abroad.",
+    "features": [
+      "Coverage for medical treatment and hospitalization",
+      "Trip cancellation and baggage loss coverage",
+      "Passport theft protection",
+      "24x7 global assistance",
+      "Cashless medical facilities",
+      "Compensation for delays or interruptions"
+    ]
+  },
+  {
+    "domain": "Cyber Insurance",
+    "policy_name": "SecureNet Cyber Shield",
+    "description": "Protects individuals and businesses against cyber threats, including data breaches and identity theft.",
+    "features": [
+      "Coverage for data loss recovery",
+      "Legal expenses for cybercrime defense",
+      "Financial protection against cyber theft",
+      "24/7 cybersecurity support and monitoring"
+    ],
+    "insurer": "SecureNet Insurance Co."
+  },
+  {
+    "domain": "Pet Insurance",
+    "policy_name": "PetCare Total Protection",
+    "description": "Comprehensive coverage for pets including illness, accidents, and routine care.",
+    "features": [
+      "Vet bills coverage",
+      "Accident treatment",
+      "Annual wellness visits",
+      "Third-party liability for pets"
+    ],
+    "insurer": "PetCare Insurance Ltd."
+  },
+  {
+    "domain": "Gadget Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "description": "Insurance plan for gadgets such as smartphones, laptops, and tablets against accidental damage and theft.",
+    "features": [
+      "Repair and replacement coverage",
+      "Worldwide protection",
+      "Loss and theft coverage",
+      "No-cost pick-up and drop service"
+    ],
+    "insurer": "TechGuard Insurance"
+  },
+  {
+    "domain": "Education Insurance",
+    "policy_name": "BrightFuture EduPlan",
+    "description": "Plans designed to secure funding for children’s higher education in case of unforeseen events.",
+    "features": [
+      "Savings for education",
+      "Life cover of the parent",
+      "Loan protection benefits",
+      "Flexible payout options"
+    ],
+    "insurer": "Bright Future Life"
+  }
+]
