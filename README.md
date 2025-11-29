@@ -67,3 +67,7 @@ npm
 Google Gemini API key (set in .env file as GEMINI_API_KEY)
 
 This README details the core goals, current functionality, usage instructions, and roadmap for the qk.ai Insurance Assistant project.
+
+
+
+FOR API KEY use gemini studio API key create feature 
