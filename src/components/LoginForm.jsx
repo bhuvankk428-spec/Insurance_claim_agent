@@ -62,7 +62,7 @@ export default function LoginForm() {
             Welcome Back
           </h1>
           <p className="text-neutral-400 text-lg mb-8 text-center leading-relaxed">
-            Sign in to your Inera account to continue
+            Sign in to your QK account to continue
           </p>
 
           {/* Inputs */}
