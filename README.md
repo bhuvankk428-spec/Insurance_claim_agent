@@ -1,94 +1,157 @@
-qk.ai Insurance Assistant
-Project Overview
-qk.ai is a modern web application designed to streamline insurance interactions by providing users with personalized policy summaries and claim eligibility verification. Using state-of-the-art AI with Google Gemini LLM and secure PDF claim checks, qk.ai aims to simplify insurance decision-making and claims processing with an intuitive experience.
+# qk.ai — AI-Assisted Insurance Claim Helper
 
-Features
-User Authentication: Login and registration with responsive and polished UI.
+## Project Overview
+qk.ai is a modern, AI-powered web application designed to simplify insurance interactions by helping users understand claim eligibility, gather required documents, and receive AI-generated guidance.  
+Using **Google Gemini LLM**, secure PDF checks, and a step-by-step workflow, users can upload their policy, FIR, accident photos, and describe what happened—after which the AI analyzes everything and provides clear next steps.
 
-Service Selector: Choose between Policy Summarizer or Policy Claim Checker functionality.
+The system includes:
+- A **three-step claim checker**
+- A **claim story analyzer**
+- A **policy search & summarizer**
+- A modern, responsive frontend with React + Tailwind CSS
+- A backend powered by Node.js/Express with Gemini API integration
 
-Policy Summarizer: AI-powered chatbot delivers personalized, clear, and helpful insurance policy recommendations based on available data.
+---
 
-Policy Claim Checker: Allows secure PDF uploads for claim eligibility checks with backend validations.
+## Key Features
 
-Interactive Chatbot UI: AI responses formatted in Markdown for readable and engaging advice.
+### 🔐 Authentication
+- Login + Register with **email/password**
+- **Google Authentication** support
+- Built using **Firebase Authentication**
 
-PDF Upload & Validation: Smooth PDF claim form verification with feedback and controlled progression.
+### 🚗 3-Step Policy Claim Workflow
+1. **Policy PDF Verification**  
+   - Upload policy PDF  
+   - Backend validates coverage and checks if the claim is even possible  
+   - UI shows instant success/error feedback  
 
-SPA Navigation: Efficient client-side routing with React Router v6.
+2. **FIR / Complaint Upload**  
+   - Upload FIR/complaint  
+   - Backend checks relevance, structure, and matches it with policy context  
 
-Consistent Dark Theme: Elegant and user-friendly styling throughout the application with Tailwind CSS.
+3. **Accident Photo Upload**  
+   - Upload scene images  
+   - Backend verifies consistency with FIR + policy  
+   - Ensures enough evidence before allowing user to proceed  
 
-Requirements
-Node.js (16+)
+Each step includes:
+- Loading states  
+- Success/error banners  
+- Step locking until validation passes  
 
-npm
+### 📝 Claim Story Analysis
+- Users describe what happened in natural language  
+- Backend sends text + policy context to **Google Gemini**  
+- Returns:
+  - Coverage likelihood
+  - Explanation in clean Markdown
+  - Claim code (when applicable)
 
-Google Gemini API key
+### 🔍 Policy Summarizer & Search
+- Users can ask insurance questions such as:
+  - *“Best car insurance?”*  
+  - *“Explain third-party coverage.”*  
+- Gemini returns:
+  - Markdown summaries
+  - Recommendations
+  - Easy beginner-friendly explanations  
 
-Use Gemini Studio to create an API key.
+---
 
-Set it in your backend .env file as:
+## Additional App Features
 
-env
-Copy code
-GEMINI_API_KEY=your_gemini_studio_api_key_here
-Setup and Run Instructions
-qk.ai consists of a backend (Express + Gemini) and a frontend (React + Vite/CRA). Run them separately.
+- **Interactive Chatbot UI** using Markdown output  
+- **PDF Upload & Validation System**  
+- **SPA Navigation** with React Router v6  
+- **Fully styled Dark Theme** using Tailwind CSS  
+- **Node/Express JSON APIs** for:
+  - Policy checking  
+  - Evidence upload  
+  - AI story analysis  
 
-1. Start the backend (Express + Gemini)
-From the project root:
+---
 
-bash
-Copy code
+## Requirements
+
+- **Node.js 16+**  
+- **npm**  
+- **Google Gemini API Key**  
+  - Create one from **Gemini Studio**
+  - Add to backend `.env`:
+
+    ```env
+    GEMINI_API_KEY=your_gemini_studio_api_key_here
+    ```
+
+---
+
+## Setup and Run Instructions
+
+qk.ai has a **backend (Express + Gemini)** and **frontend (React + Vite/CRA)**.  
+Run them separately.
+
+---
+
+### 1. Start the Backend
+
+```bash
 cd backend
-npm install        # only first time
-npm start          # starts server.js on http://localhost:5174
-Keep this terminal open. You should see something like:
+npm install        # first time only
+npm start          # runs server on http://localhost:5174
+```
 
-text
-Copy code
+Expected output:
+
+```
 Server running on http://localhost:5174
-Make sure your backend .env contains your Gemini Studio API key:
+```
 
-env
-Copy code
+Backend `.env` MUST include:
+
+```env
 GEMINI_API_KEY=your_gemini_studio_api_key_here
-2. Configure frontend environment
-From the frontend root (where src, public, and package.json for React live), create a .env file:
+```
 
-env
-Copy code
+---
+
+### 2. Configure the Frontend Environment
+
+Create `.env` inside the frontend folder:
+
+```env
 VITE_API_URL=http://localhost:5174
-Note: Restart the frontend dev server whenever you change .env.
+```
 
-All API calls in the React app should use:
+> Restart frontend when `.env` changes.
 
-js
-Copy code
+All API calls use:
+
+```js
 const API_BASE = import.meta.env.VITE_API_URL;
-This will point to your local Express backend at http://localhost:5174.
+```
 
-3. Start the frontend (React app)
-From the frontend root:
+---
 
-bash
-Copy code
-npm install        # only first time
-npm run dev        # or npm start if you used CRA
-Open the URL printed in the terminal (usually:
+### 3. Start the Frontend (React)
 
-http://localhost:5173 for Vite
+```bash
+npm install        # first time only
+npm run dev        # or npm start for CRA
+```
 
-http://localhost:3000 for Create React App)
+Frontend runs at:
 
-React pages run at localhost:5173 (or 3000).
+- **Vite:** http://localhost:5173  
+- **CRA:**  http://localhost:3000  
 
-All API calls go to http://localhost:5174 via VITE_API_URL.
+> All API requests automatically route to **http://localhost:5174**
 
-Project Structure
-text
-Copy code
+---
+
+## Project Structure
+
+```
 src/
 ├── components/
 │   ├── LoginForm.jsx
@@ -99,13 +162,49 @@ src/
 │   └── ...
 ├── server.js           # Node.js backend API server
 ├── policy.json         # Policy database JSON
-├── style.css           # Tailwind and other CSS styles
-├── App.jsx             # React router declarations
+├── style.css           # Tailwind + global styles
+├── App.jsx             # React route declarations
 └── ...
+```
 
-Future Plans:-
-Advanced Claim Analysis: Utilize trained ML models for deeper Semantic/NER analysis of claim forms.
+---
 
-User Profiles & Persistence: Implement secure login sessions, data persistence, chat history, and claim tracking.
+## Architecture Overview
 
-Multi-Language & Accessibility: Broaden accessibility with multiple languages and assistive technologies.
+### 🖥️ Frontend (React)
+- Tailwind CSS UI  
+- Firebase Authentication  
+- Step-by-step controlled workflow  
+- Intelligent banners + validation  
+- Markdown-based chatbot responses  
+
+### ⚙️ Backend (Node + Express)
+- Gemini-powered AI reasoning  
+- Document validation + evidence analysis  
+- JSON API endpoints for upload and story assessment  
+- Policy search + summarization  
+
+---
+
+## Core Use Cases
+
+- Determine **whether a claim is likely valid**  
+- Guide users in submitting the **right evidence**  
+- Provide **AI-generated explanations**  
+- Offer simple, understandable insurance knowledge  
+- Automate the early stages of the claim process  
+
+---
+
+## Future Plans
+
+- **Advanced Claim Analysis** using ML/NLP  
+- **User Profiles & Persistence**  
+  - Chat history  
+  - Saved claims  
+  - Policy tracking  
+- **OCR Support** for scanned images  
+- **Multi-Language Accessibility**  
+
+---
+
