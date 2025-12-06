@@ -19,33 +19,76 @@ SPA Navigation: Efficient client-side routing with React Router v6.
 
 Consistent Dark Theme: Elegant and user-friendly styling throughout the application with Tailwind CSS.
 
+Requirements
+Node.js (16+)
+
+npm
+
+Google Gemini API key
+
+Use Gemini Studio to create an API key.
+
+Set it in your backend .env file as:
+
+env
+Copy code
+GEMINI_API_KEY=your_gemini_studio_api_key_here
 Setup and Run Instructions
+qk.ai consists of a backend (Express + Gemini) and a frontend (React + Vite/CRA). Run them separately.
+
+1. Start the backend (Express + Gemini)
+From the project root:
+
 bash
-# Install frontend and backend dependencies
-npm i
+Copy code
+cd backend
+npm install        # only first time
+npm start          # starts server.js on http://localhost:5174
+Keep this terminal open. You should see something like:
 
-# Start backend server in terminal one
-node server.js
+text
+Copy code
+Server running on http://localhost:5174
+Make sure your backend .env contains your Gemini Studio API key:
 
-# Start frontend dev server in terminal two
-npm run dev
-Backend default port: 5174
+env
+Copy code
+GEMINI_API_KEY=your_gemini_studio_api_key_here
+2. Configure frontend environment
+From the frontend root (where src, public, and package.json for React live), create a .env file:
 
-Frontend runs with live reload and routing support
+env
+Copy code
+VITE_API_URL=http://localhost:5174
+Note: Restart the frontend dev server whenever you change .env.
 
-Future Plans
-Advanced Claim Analysis: Utilize trained ML models for deeper Semantic/NER analysis of claim forms.
+All API calls in the React app should use:
 
-User Profiles & Persistence: Implement secure login sessions, data persistence, chat history, and claim tracking.
+js
+Copy code
+const API_BASE = import.meta.env.VITE_API_URL;
+This will point to your local Express backend at http://localhost:5174.
 
-OCR Support: Add support for scanned photos of documents with text extraction.
+3. Start the frontend (React app)
+From the frontend root:
 
-Multi-Language & Accessibility: Broaden accessibility with multiple languages and assistive technologies.
+bash
+Copy code
+npm install        # only first time
+npm run dev        # or npm start if you used CRA
+Open the URL printed in the terminal (usually:
 
-Visual Analytics Dashboard: Provide visual summaries of policy coverages and user claims.
+http://localhost:5173 for Vite
+
+http://localhost:3000 for Create React App)
+
+React pages run at localhost:5173 (or 3000).
+
+All API calls go to http://localhost:5174 via VITE_API_URL.
 
 Project Structure
 text
+Copy code
 src/
 ├── components/
 │   ├── LoginForm.jsx
@@ -59,15 +102,10 @@ src/
 ├── style.css           # Tailwind and other CSS styles
 ├── App.jsx             # React router declarations
 └── ...
-Requirements
-Node.js (16+)
 
-npm
+Future Plans:-
+Advanced Claim Analysis: Utilize trained ML models for deeper Semantic/NER analysis of claim forms.
 
-Google Gemini API key (set in .env file as GEMINI_API_KEY)
+User Profiles & Persistence: Implement secure login sessions, data persistence, chat history, and claim tracking.
 
-This README details the core goals, current functionality, usage instructions, and roadmap for the qk.ai Insurance Assistant project.
-
-
-
-FOR API KEY use gemini studio API key create feature 
+Multi-Language & Accessibility: Broaden accessibility with multiple languages and assistive technologies.
