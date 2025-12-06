@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+
+
 export default function ClaimStoryChatbot() {
   const [story, setStory] = useState("");
   const [response, setResponse] = useState(null);
@@ -17,7 +20,7 @@ export default function ClaimStoryChatbot() {
     setClaimCode(null);
 
     try {
-      const res = await fetch("/api/claim-story", {
+      const res = await fetch(`${API_BASE}/api/claim-story`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ story }),
@@ -27,11 +30,14 @@ export default function ClaimStoryChatbot() {
       setResponse(data.answer);
       if (data.eligible) setClaimCode(data.claimCode);
     } catch (err) {
-      setResponse("Something went wrong while analyzing your story. Please try again.");
+      setResponse(
+        "Something went wrong while analyzing your story. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   }
+
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">

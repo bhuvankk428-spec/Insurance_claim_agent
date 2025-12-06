@@ -9,26 +9,27 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+
 export default function ClaimChecker() {
   const navigate = useNavigate();
 
   // Step 1: Policy PDF
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [nextEnabled, setNextEnabled] = useState(false);
-  const fileInput = useRef();
+  const [policyResult, setPolicyResult] = useState(null);
+  const [policyLoading, setPolicyLoading] = useState(false);
+  const fileInput = useRef(null);
 
   // Step 2: FIR
   const [firFile, setFirFile] = useState(null);
   const [firName, setFirName] = useState("");
-  const firInput = useRef();
+  const firInput = useRef(null);
 
   // Step 3: Photos
   const [photoFiles, setPhotoFiles] = useState([]);
   const [photoNames, setPhotoNames] = useState([]);
-  const photoInput = useRef();
+  const photoInput = useRef(null);
 
   // Shared evidence result
   const [evidenceResult, setEvidenceResult] = useState(null);
@@ -37,27 +38,32 @@ export default function ClaimChecker() {
   async function handlePolicyUpload(e) {
     e.preventDefault();
     if (!file) return;
-    setLoading(true);
-    setResult(null);
-    setNextEnabled(false);
 
-    const formData = new FormData();
-    formData.append("pdf", file);
+    setPolicyLoading(true);
+    setPolicyResult(null);
 
-    const res = await fetch("/api/claim-check", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const formData = new FormData();
+      formData.append("pdf", file);
 
-    const data = await res.json();
-    setLoading(false);
+      const res = await fetch(`${API_BASE}/api/claim-check`, {
+        method: "POST",
+        body: formData,
+      });
 
-    if (data.valid) {
-      setResult({ status: "success", ...data });
-      setNextEnabled(true);
-    } else {
-      setResult({ status: "error", ...data });
-      setNextEnabled(false);
+      const data = await res.json();
+      if (data.valid) {
+        setPolicyResult({ status: "success", message: data.message });
+      } else {
+        setPolicyResult({ status: "error", message: data.message });
+      }
+    } catch (err) {
+      setPolicyResult({
+        status: "error",
+        message: "Could not verify policy. Please try again.",
+      });
+    } finally {
+      setPolicyLoading(false);
     }
   }
 
@@ -68,19 +74,33 @@ export default function ClaimChecker() {
     setEvidenceLoading(true);
     setEvidenceResult(null);
 
-    const formData = new FormData();
-    if (firFile) formData.append("fir", firFile);
-    photoFiles.forEach((f) => formData.append("photos", f));
+    try {
+      const formData = new FormData();
+      if (firFile) formData.append("fir", firFile);
+      photoFiles.forEach((f) => formData.append("photos", f));
 
-    const res = await fetch("/api/claim-evidence", {
-      method: "POST",
-      body: formData,
-    });
+      const res = await fetch(`${API_BASE}/api/claim-evidence`, {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await res.json();
-    setEvidenceLoading(false);
-    setEvidenceResult(data);
+      const data = await res.json();
+      setEvidenceResult(data);
+
+      if (data.status === "success") {
+        navigate("/claim-story");
+      }
+    } catch (err) {
+      setEvidenceResult({
+        status: "error",
+        message: "Could not process evidence. Please try again.",
+      });
+    } finally {
+      setEvidenceLoading(false);
+    }
   }
+
+  const canSubmitEvidence = !!firFile || photoFiles.length > 0;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#050816] to-[#111827] px-4 py-10">
@@ -92,6 +112,7 @@ export default function ClaimChecker() {
         upload clear photos to build a strong claim.
       </p>
 
+      {/* Single form handles the final submit (evidence). Policy is checked via its own button */}
       <form
         onSubmit={handleEvidenceUpload}
         className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-6"
@@ -106,10 +127,7 @@ export default function ClaimChecker() {
             Upload Policy PDF
           </p>
 
-          <form
-            onSubmit={handlePolicyUpload}
-            className="w-full flex flex-col items-center"
-          >
+          <div className="w-full flex flex-col items-center">
             <label
               htmlFor="claim-pdf"
               className="flex flex-col items-center w-full border-2 border-dashed border-sky-700 rounded-xl p-6 mb-4 cursor-pointer hover:bg-sky-900/30 transition"
@@ -128,22 +146,25 @@ export default function ClaimChecker() {
                 className="hidden"
                 ref={fileInput}
                 onChange={(e) => {
-                  if (e.target.files[0]) {
-                    setFile(e.target.files[0]);
-                    setFileName(e.target.files[0].name);
-                    setResult(null);
-                    setNextEnabled(false);
+                  const f = e.target.files?.[0];
+                  if (f) {
+                    setFile(f);
+                    setFileName(f.name);
+                    setPolicyResult(null);
                   }
                 }}
               />
             </label>
 
             <button
-              type="submit"
+              type="button"
+              onClick={handlePolicyUpload}
               className="w-full bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-full px-4 py-2 text-sm font-semibold tracking-wide shadow hover:from-sky-500 hover:to-blue-700 transition disabled:opacity-50"
-              disabled={!file || loading}
+              disabled={!file || policyLoading}
             >
-              {loading ? "Checking..." : (
+              {policyLoading ? (
+                "Checking..."
+              ) : (
                 <>
                   <FaUpload className="inline-block mr-2" />
                   Check Claim
@@ -151,28 +172,28 @@ export default function ClaimChecker() {
               )}
             </button>
 
-            {result && (
+            {policyResult && (
               <div
                 className={`mt-4 w-full px-3 py-2 rounded-lg text-center text-xs ${
-                  result.status === "success"
+                  policyResult.status === "success"
                     ? "bg-emerald-800/80 text-emerald-200"
                     : "bg-red-800/80 text-red-200"
                 }`}
               >
-                {result.status === "success" ? (
+                {policyResult.status === "success" ? (
                   <>
                     <FaCheckCircle className="inline-block mb-1 mr-1 text-emerald-300" />
-                    Valid claim: {result.message}
+                    Valid claim: {policyResult.message}
                   </>
                 ) : (
                   <>
                     <FaExclamationTriangle className="inline-block mb-1 mr-1 text-yellow-200" />
-                    Not valid: {result.message}
+                    Not valid: {policyResult.message}
                   </>
                 )}
               </div>
             )}
-          </form>
+          </div>
         </div>
 
         {/* Card 2 – FIR (green) */}
@@ -213,7 +234,8 @@ export default function ClaimChecker() {
           </label>
 
           <p className="text-[11px] text-neutral-300 text-center">
-            Ensure the FIR details match the date, time, and description in your story.
+            Ensure the FIR details match the date, time, and description in your
+            story.
           </p>
         </div>
 
@@ -264,15 +286,16 @@ export default function ClaimChecker() {
           )}
 
           <p className="mt-2 text-[11px] text-neutral-300 text-center">
-            Capture wide shots, close‑ups of damage, and number plates if relevant.
+            Capture wide shots, close‑ups of damage, and number plates if
+            relevant.
           </p>
         </div>
 
-        {/* Bottom row: dark Next button + evidence status */}
+        {/* Bottom row: Next button + evidence status */}
         <div className="md:col-span-3 flex flex-col items-center mt-2">
           <button
             type="submit"
-            disabled={evidenceLoading || (!firFile && !photoFiles.length)}
+            disabled={evidenceLoading || !canSubmitEvidence}
             className="px-10 py-3 rounded-full bg-[#020617] text-white text-sm font-semibold shadow-lg border border-neutral-700 hover:bg-[#02081f] transition disabled:opacity-40"
           >
             {evidenceLoading ? "Processing evidence..." : "Next: Explain Story"}

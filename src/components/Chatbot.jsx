@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+
+
 export default function PolicySummarizer() {
   const [request, setRequest] = useState("");
   const [details, setDetails] = useState("");
@@ -23,13 +26,14 @@ export default function PolicySummarizer() {
     ]);
 
     try {
-      const response = await fetch("/api/gemini-chat", {
+      const response = await fetch(`${API_BASE}/api/gemini-chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: details ? `${request}\nDetails: ${details}` : request,
         }),
       });
+
       const data = await response.json();
       setMessages((prev) => [
         ...prev,
@@ -81,9 +85,8 @@ export default function PolicySummarizer() {
           <button
             type="submit"
             disabled={loading}
-            className={`my-2 py-4 rounded-lg text-lg font-bold transition bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-0 shadow-md hover:from-cyan-400 hover:to-indigo-700 ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            className={`my-2 py-4 rounded-lg text-lg font-bold transition bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-0 shadow-md hover:from-cyan-400 hover:to-indigo-700 ${loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
           >
             {loading ? "Searching..." : "Search"}
           </button>
@@ -103,11 +106,10 @@ export default function PolicySummarizer() {
             messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`max-w-2xl my-6 px-6 py-4 rounded-lg shadow ${
-                  msg.from === "user"
+                className={`max-w-2xl my-6 px-6 py-4 rounded-lg shadow ${msg.from === "user"
                     ? "bg-gradient-to-r from-indigo-600 to-sky-500 self-end text-white"
                     : "bg-[#232834] self-start border border-indigo-900"
-                }`}
+                  }`}
                 style={{ alignSelf: msg.from === "user" ? "flex-end" : "flex-start" }}
               >
                 {msg.from === "ai"
