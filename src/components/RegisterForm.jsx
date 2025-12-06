@@ -97,7 +97,7 @@ export default function RegisterForm() {
             Create Account
           </h1>
           <p className="text-neutral-400 text-lg mb-8 text-center leading-relaxed">
-            Join Inera and simplify your insurance management
+            Join QK.ai and simplify your insurance management
           </p>
 
           {/* Enhanced Inputs */}
