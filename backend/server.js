@@ -68,23 +68,27 @@ Format your answer in clear markdown for best readability.
 
 const upload = multer();
 
-app.post("/api/claim-check", upload.single("pdf"), async (req, res) => {
-  try {
-    if (!req.file) return res.status(400).json({ valid: false, message: "No file." });
-    
-    // For simple acceptance, no validation:
-    // const pdfData = await pdfParse(req.file.buffer);
-    // const text = pdfData.text;
-    // const isValid = text.includes("Claim Number") && text.includes("Policy Number");
-    // const message = isValid ? "Contains required fields." : "Required policy or claim information is missing.";
+// after `const upload = multer();`
 
-    // For now just accept:
-    res.json({ valid: true, message: "PDF accepted." });
+app.post("/api/claim-evidence", upload.any(), async (req, res) => {
+  try {
+    // For now just accept whatever comes in
+    // Later you can add OCR + AI checks here
+    return res.json({
+      status: "success",
+      message: "Evidence received successfully.",
+      sameIncident: true,
+      score: 0.9,
+    });
   } catch (error) {
-    console.error("Claim check error:", error);
-    res.status(500).json({ valid: false, message: "File could not be processed." });
+    console.error("Claim evidence error:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Server error while processing evidence.",
+    });
   }
 });
+
 
 const PORT = process.env.PORT || 5174;
 app.listen(PORT, () => {
