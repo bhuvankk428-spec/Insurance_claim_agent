@@ -11,3 +11,12 @@ html, body, #root {
 @layer base {
   body { @apply bg-black min-h-screen; }
 }
+.right-image-wrapper {
+  border-top-left-radius: 60px;
+  border-bottom-left-radius: 60px;
+}
+
+.right-image-wrapper:hover {
+  transform: translateY(-8px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
