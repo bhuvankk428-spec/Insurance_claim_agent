@@ -24,6 +24,7 @@ export default function LoginForm() {
       navigate("/choose");
     } catch (err) {
       setError(err.message || "Invalid email or password");
+    } finally {
       setLoading(false);
     }
   }
@@ -36,6 +37,7 @@ export default function LoginForm() {
       navigate("/choose");
     } catch (err) {
       setError(err.message || "Google login failed");
+    } finally {
       setLoading(false);
     }
   }
@@ -122,7 +124,7 @@ export default function LoginForm() {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin w-6 h-6" fill="none" viewBox="0 0 24 24">
-                  <rcle
+                  <circle
                     className="opacity-25"
                     cx="12"
                     cy="12"
