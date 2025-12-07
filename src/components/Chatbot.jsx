@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
 
-
 export default function PolicySummarizer() {
   const [request, setRequest] = useState("");
   const [details, setDetails] = useState("");
@@ -51,18 +50,17 @@ export default function PolicySummarizer() {
   }
 
   return (
-    // Fills the viewport and keeps bg always dark!
-    <div className="min-h-screen w-screen bg-black flex">
-      {/* Left - Fixed Search Panel */}
-      <div className="w-[400px] h-screen sticky top-0 bg-gradient-to-b from-[#15181d] to-[#232834] px-10 py-8 flex flex-col border-r border-gray-700 z-10">
-        <h2 className="text-3xl font-bold mb-12 mt-4 text-white">Search Configuration</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-8">
+    <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row">
+      {/* Left - Search Panel (Full width mobile, sidebar desktop) */}
+      <div className="lg:w-[420px] lg:h-screen lg:sticky lg:top-0 lg:bg-gradient-to-b lg:from-[#15181d] lg:to-[#232834] px-4 sm:px-6 lg:px-10 py-8 lg:py-12 flex flex-col border-b lg:border-r lg:border-gray-700">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 lg:mb-12 text-white">Search Configuration</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6 lg:gap-8">
           <div>
-            <label className="text-gray-300 mb-1 block text-lg font-medium">
+            <label className="text-gray-300 mb-2 block text-base sm:text-lg font-medium">
               Your Requested Policy
             </label>
             <input
-              className="w-full rounded bg-[#232834] px-4 py-3 text-white text-lg ring-1 ring-gray-700 focus:ring-blue-500 outline-none"
+              className="w-full rounded-lg bg-[#232834] px-4 py-3 text-white text-base sm:text-lg ring-1 ring-gray-700 focus:ring-sky-500 outline-none transition-all"
               type="text"
               placeholder="eg. best car insurance"
               value={request}
@@ -71,55 +69,73 @@ export default function PolicySummarizer() {
               required
             />
           </div>
+          
           <div>
-            <label className="text-gray-300 mb-1 block text-lg font-medium">Details (Optional)</label>
+            <label className="text-gray-300 mb-2 block text-base sm:text-lg font-medium">
+              Details (Optional)
+            </label>
             <textarea
-              className="rounded w-full bg-[#232834] px-4 py-3 text-white text-base resize-none ring-1 ring-gray-700 focus:ring-blue-500 outline-none"
-              placeholder="Customize instructions"
-              rows={5}
+              className="rounded-lg w-full bg-[#232834] px-4 py-3 text-white text-sm sm:text-base resize-none ring-1 ring-gray-700 focus:ring-sky-500 outline-none transition-all"
+              placeholder="Customize instructions (age, location, coverage needs...)"
+              rows={4}
               value={details}
               onChange={e => setDetails(e.target.value)}
               disabled={loading}
             />
           </div>
+          
           <button
             type="submit"
             disabled={loading}
-            className={`my-2 py-4 rounded-lg text-lg font-bold transition bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-0 shadow-md hover:from-cyan-400 hover:to-indigo-700 ${loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+            className={`py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold transition-all bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-0 shadow-lg hover:from-sky-400 hover:to-indigo-500 active:scale-95 ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
           >
-            {loading ? "Searching..." : "Search"}
+            {loading ? "Searching..." : "Search Policies"}
           </button>
-          <span className="inline-block text-sm text-sky-200 bg-gray-800 px-3 py-1 rounded mt-auto">
-            95 policies available (in our database)
+          
+          <span className="inline-block text-xs sm:text-sm text-sky-200 bg-gray-800/50 px-3 py-1.5 rounded-full mt-auto text-center">
+            95+ policies available
           </span>
         </form>
       </div>
 
-      {/* Right - Results */}
-      <div className="flex-grow flex flex-col bg-[#121316] text-white min-h-screen">
-        <h2 className="text-2xl font-bold px-12 pt-8 pb-4">Results</h2>
-        <div className="flex-grow m-6 bg-[#181b21] rounded-lg shadow-inner px-8 py-6 overflow-y-auto border border-gray-800">
+      {/* Right - Results (Full width mobile, flex-grow desktop) */}
+      <div className="flex-grow flex flex-col bg-[#121316] min-h-screen lg:min-h-0">
+        <h2 className="text-xl sm:text-2xl font-bold px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8 pb-4 lg:pb-6">
+          Policy Results
+        </h2>
+        <div className="flex-grow m-4 sm:m-6 lg:m-8 bg-[#181b21] rounded-xl lg:rounded-lg shadow-inner px-4 sm:px-6 lg:px-8 py-6 lg:py-8 overflow-y-auto border border-gray-800 max-w-4xl mx-auto w-full">
           {messages.length === 0 ? (
-            <span className="text-gray-400 font-mono text-xl">Preparing and searching policies...</span>
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <span className="text-gray-400 font-mono text-lg sm:text-xl mb-4">
+                Ready to find your perfect policy
+              </span>
+              <p className="text-gray-500 text-sm max-w-md">
+                Enter your insurance needs above and get personalized recommendations instantly.
+              </p>
+            </div>
           ) : (
-            messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`max-w-2xl my-6 px-6 py-4 rounded-lg shadow ${msg.from === "user"
-                    ? "bg-gradient-to-r from-indigo-600 to-sky-500 self-end text-white"
-                    : "bg-[#232834] self-start border border-indigo-900"
+            <div className="space-y-4 sm:space-y-6">
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`max-w-[90vw] sm:max-w-2xl lg:max-w-3xl mx-auto p-4 sm:p-6 rounded-xl shadow-lg flex ${
+                    msg.from === "user"
+                      ? "bg-gradient-to-r from-indigo-600 via-sky-500 to-indigo-600 ml-auto text-white"
+                      : "bg-[#232834] border border-indigo-900/50 mr-auto"
                   }`}
-                style={{ alignSelf: msg.from === "user" ? "flex-end" : "flex-start" }}
-              >
-                {msg.from === "ai"
-                  ? <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  : <span className="font-bold">{msg.text}</span>
-                }
-              </div>
-            ))
+                >
+                  {msg.from === "ai" ? (
+                    <ReactMarkdown className="prose prose-invert max-w-none text-sm sm:text-base leading-relaxed">
+                      {msg.text}
+                    </ReactMarkdown>
+                  ) : (
+                    <span className="font-semibold text-sm sm:text-base whitespace-pre-wrap">{msg.text}</span>
+                  )}
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
       </div>
     </div>
