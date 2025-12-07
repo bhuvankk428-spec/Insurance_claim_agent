@@ -16,7 +16,8 @@ const rawPolicies = fs.readFileSync("./policy.json", "utf-8");
 const policies = JSON.parse(rawPolicies);
 const policySnippet = JSON.stringify(policies).slice(0, 3000);
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent";
+// ✅ FIXED: Changed to gemini-2.5-flash (Free tier: 10 RPM, 250K TPM)
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 app.post("/api/gemini-chat", async (req, res) => {
@@ -35,7 +36,7 @@ User question: ${prompt}
 Relevant Policies (JSON): ${policySnippet}
 
 Instructions:
-- Greet the user warmly (e.g., "Hi! Here’s your best car insurance match...")
+- Greet the user warmly (e.g., "Hi! Here's your best car insurance match...")
 - Use bullet points for benefits and exclusions.
 - Briefly explain why this policy is suitable.
 - End with a helpful call-to-action (suggest what the user should do next).
@@ -68,8 +69,6 @@ Format your answer in clear markdown for best readability.
 
 const upload = multer();
 
-// after `const upload = multer();`
-
 app.post("/api/claim-evidence", upload.any(), async (req, res) => {
   try {
     // For now just accept whatever comes in
@@ -89,21 +88,12 @@ app.post("/api/claim-evidence", upload.any(), async (req, res) => {
   }
 });
 
-
-const PORT = process.env.PORT || 5174;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-
-
-
 app.post("/api/claim-story", async (req, res) => {
   try {
     const { story } = req.body;
     if (!story) return res.status(400).json({ error: "Story required" });
 
-    // Build a Gemini prompt to determine claim eligibility and generate code
+    // ✅ FIXED: Uses GEMINI_URL (now gemini-2.5-flash)
     const prompt = `
 You are an insurance claims AI assistant.
 User Story: ${story}
@@ -124,10 +114,6 @@ Respond with eligibility (yes/no), explanation, and claim code if eligible.
     const data = await geminiRes.json();
     const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
 
-    // Parse answer here or trust the AI's reply (for demo, we'll send raw answer)
-    // You can also add parsing logic to extract eligibility and claim code
-
-    // Simplified demo response:
     res.json({
       answer,
       eligible: answer.toLowerCase().includes("yes"),
@@ -137,4 +123,9 @@ Respond with eligibility (yes/no), explanation, and claim code if eligible.
     console.error("Claim story API error:", error);
     res.status(500).json({ error: "Claim story processing failed" });
   }
+});
+
+const PORT = process.env.PORT || 5174;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

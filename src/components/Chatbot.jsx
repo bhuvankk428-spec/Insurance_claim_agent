@@ -69,7 +69,7 @@ export default function PolicySummarizer() {
               required
             />
           </div>
-          
+
           <div>
             <label className="text-gray-300 mb-2 block text-base sm:text-lg font-medium">
               Details (Optional)
@@ -83,7 +83,7 @@ export default function PolicySummarizer() {
               disabled={loading}
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
@@ -91,7 +91,7 @@ export default function PolicySummarizer() {
           >
             {loading ? "Searching..." : "Search Policies"}
           </button>
-          
+
           <span className="inline-block text-xs sm:text-sm text-sky-200 bg-gray-800/50 px-3 py-1.5 rounded-full mt-auto text-center">
             95+ policies available
           </span>
@@ -118,19 +118,23 @@ export default function PolicySummarizer() {
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`max-w-[90vw] sm:max-w-2xl lg:max-w-3xl mx-auto p-4 sm:p-6 rounded-xl shadow-lg flex ${
-                    msg.from === "user"
+                  className={`max-w-[90vw] sm:max-w-2xl lg:max-w-3xl mx-auto p-4 sm:p-6 rounded-xl shadow-lg flex ${msg.from === "user"
                       ? "bg-gradient-to-r from-indigo-600 via-sky-500 to-indigo-600 ml-auto text-white"
                       : "bg-[#232834] border border-indigo-900/50 mr-auto"
-                  }`}
+                    }`}
                 >
                   {msg.from === "ai" ? (
-                    <ReactMarkdown className="prose prose-invert max-w-none text-sm sm:text-base leading-relaxed">
-                      {msg.text}
-                    </ReactMarkdown>
+                    <div className="prose prose-invert max-w-none text-sm sm:text-base leading-relaxed">
+                      <ReactMarkdown>
+                        {msg.text}
+                      </ReactMarkdown>
+                    </div>
                   ) : (
-                    <span className="font-semibold text-sm sm:text-base whitespace-pre-wrap">{msg.text}</span>
+                    <span className="font-semibold text-sm sm:text-base whitespace-pre-wrap">
+                      {msg.text}
+                    </span>
                   )}
+
                 </div>
               ))}
               <div ref={messagesEndRef} />
