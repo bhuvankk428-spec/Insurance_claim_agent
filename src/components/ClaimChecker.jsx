@@ -160,22 +160,6 @@ export default function ClaimChecker() {
                 />
               </label>
 
-              <button
-                type="button"
-                onClick={handlePolicyUpload}
-                className="w-full bg-gradient-to-r from-sky-600 to-sky-700 text-white rounded-xl px-4 py-2.5 text-sm font-semibold tracking-wide shadow-lg hover:from-sky-500 hover:to-sky-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!file || policyLoading}
-              >
-                {policyLoading ? (
-                  "Checking..."
-                ) : (
-                  <>
-                    <FaUpload className="inline-block mr-2 w-4 h-4" />
-                    Check Policy
-                  </>
-                )}
-              </button>
-
               {policyResult && (
                 <div
                   className={`w-full px-3 py-2.5 rounded-lg text-center text-xs sm:text-sm font-medium ${
