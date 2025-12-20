@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "plan_type": "Whole life with income (participating, non-linked)",
+    "what_it_does": "Combines lifelong life cover with guaranteed yearly income after the premium paying term and a maturity benefit at age 100.",
+    "benefits": {
+      "survival_benefit": "Guaranteed annual survival benefit of 8% of the Basic Sum Assured every year after the premium paying term, payable till age 100 or death, whichever is earlier.[web:155][web:156][web:163]",
+      "maturity_benefit": "At age 100, if the life assured survives, a lump sum equal to Sum Assured + vested simple reversionary bonus + final additional bonus (if any) is paid.[web:156][web:158][web:161][web:163]",
+      "death_benefit": "If death occurs during the policy term (any time up to age 100), the nominee receives a lump sum death benefit (typically Sum Assured on Death + bonuses as per policy rules). Life cover is active from day one.[web:154][web:161][web:163]",
+      "loan_facility": "Policy loans allowed after acquiring surrender value, giving liquidity while continuing cover.[web:161][web:163]"
+    },
+    "nature": "Savings + protection plan (not a pure term plan) – premium per ₹1 lakh cover is higher compared to pure term insurance but provides income plus maturity value.[web:155][web:158][web:161]",
+    "key_parameters": {
+      "coverage_upto_age": "Coverage and benefits available up to 100 years of age of the life assured.[web:155][web:158][web:163]",
+      "premium_paying_terms": "Common PPT options include 15, 20, 25 and 30 years; policy term is effectively 100 − entry age.[web:163]",
+      "entry_age": "Minimum and maximum entry age are defined by LIC (check latest brochure/UIN for exact numbers).[web:154][web:161]"
+    },
+    "insurer": "Life Insurance Corporation of India (LIC)",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "LIC’s overall life claim settlement ratio has been around 98–99% over recent years (e.g., ~98.15% in FY 2024–25).[web:159][web:164][web:167]",
+      "notes": "LIC handles the highest volume of life claims in India and is widely seen as one of the most reliable life insurers."
+    },
+    "best_for": [
+      "People who want guaranteed long-term yearly income plus life cover up to 100 years",
+      "Conservative investors who value guarantees and LIC’s high claim settlement record over maximum-return or low-premium term-only solutions"
+    ]
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "what_it_does": "Helps build a dedicated corpus for children’s higher education while ensuring that funding continues even if the parent (life assured) dies.",
+    "features": {
+      "savings_component": "Part of each premium goes towards building an education corpus that can be used for future school, college, or higher education costs.",
+      "life_cover_on_parent": "Provides life insurance on the parent; on the parent’s death, the insurer may pay an immediate lump sum and/or continue future premiums (premium waiver) so that the child’s benefits are not disrupted.[web:160][web:162][web:165][web:168]",
+      "loan_protection": "Can be structured to cover or support repayment of education loans in case the parent is no longer around.",
+      "flexible_payout_structure": [
+        "Lump sum at key milestones such as start of higher secondary, undergraduate, or postgraduate education",
+        "Periodic payouts to meet tuition fees and living expenses across multiple years rather than only one big payout[web:160][web:162][web:165][web:168]"
+      ]
+    },
+    "plan_nature": "Investment-cum-insurance child education plan; may be endowment-style (guaranteed) or market-linked (ULIP-type), depending on product design.[web:162][web:165][web:168]",
+    "key_customisation_options": [
+      "Choice of policy term to align with child’s age and target education years",
+      "Choice of premium payment mode (monthly, quarterly, half-yearly, yearly or single)[web:162][web:165]",
+      "Choice of payout pattern: lump sum at maturity, staggered payouts at milestones, or a combination[web:160][web:162][web:165][web:168]"
+    ],
+    "best_for": [
+      "Parents who want structured and disciplined savings for a child’s education plus protection if something happens to them",
+      "Families who prefer fixed, pre-planned payouts at school/UG/PG stages instead of ad-hoc investing"
+    ]
+  }
+]

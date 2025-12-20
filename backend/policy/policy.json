@@ -1,0 +1,42 @@
+[
+  {
+    "domain": "Cyber Insurance",
+    "policy_name": "SecureNet Cyber Shield",
+    "what_it_does": "Protects individuals and businesses against cyber-attacks, data breaches, and identity theft.",
+    "coverage": [
+      "Data loss recovery and restoration",
+      "Legal expenses for cybercrime defense and regulatory inquiries",
+      "Financial loss due to cyber theft or online fraud (as per policy limits)",
+      "24/7 incident response and cybersecurity support"
+    ],
+    "key_checks_before_buying": [
+      "Whether social-engineering scams and phishing are covered or excluded",
+      "Coverage and limits for business interruption due to cyber-attacks",
+      "Ransomware coverage, including ransom payment and negotiation support limits",
+      "Retroactive date (does it cover past unknown incidents discovered later?)",
+      "Notification and PR costs for informing affected customers after a breach",
+      "Any deductibles or sub-limits for specific cyber events"
+    ],
+    "insurer": "SecureNet Insurance Co."
+  },
+  {
+    "domain": "Pet Insurance",
+    "policy_name": "PetCare Total Protection",
+    "what_it_does": "Provides health and liability cover for pets, including illness, accidents, and some routine care.",
+    "coverage": [
+      "Veterinary bills for illness",
+      "Veterinary bills for accident-related treatment",
+      "Annual wellness or routine care in some variants",
+      "Third-party liability if the pet injures someone or damages property"
+    ],
+    "key_checks_before_buying": [
+      "Breed restrictions or higher premiums for certain breeds",
+      "Waiting periods for illness and accident claims",
+      "Whether hereditary or congenital conditions are covered or excluded",
+      "Minimum and maximum age limits for entry and renewal",
+      "Vaccination and medical history requirements for claims",
+      "Any sub-limits per condition or per policy year"
+    ],
+    "insurer": "PetCare Insurance Ltd."
+  }
+]

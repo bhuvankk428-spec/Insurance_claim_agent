@@ -1,0 +1,63 @@
+[
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "what_it_does": "Provides a one-time payout if the insured dies or becomes disabled due to an accident, helping to support family income and medical needs.",
+    "coverage_highlights": [
+      "Accidental death benefit up to 100% of the sum insured",
+      "Permanent total disability payouts as per policy schedule",
+      "Permanent partial disability payouts based on injury scale",
+      "Hospital cash benefit in selected variants",
+      "Ambulance cost coverage up to specified limits",
+      "Broken bones and burns cover in certain variants",
+      "OPD expenses in some variants",
+      "Financial support for dependent family members (e.g., education benefit in some plans)"
+    ],
+    "sum_insured_range": "Approximately ₹10 lakhs – ₹1 crore (may vary by age, occupation and underwriting).",
+    "important_conditions": [
+      "No cover for death or disability that is not due to an accident (natural death excluded)",
+      "No cover for self-harm, suicide attempt or intentional injury",
+      "No cover if under the influence of alcohol or drugs beyond legal limits",
+      "No cover for participation in criminal acts, war, civil commotion or terrorism unless specifically included",
+      "Territorial scope is often worldwide but subject to policy wording and local regulations"
+    ],
+    "insurer": "HDFC ERGO General Insurance",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "Health/Personal Accident claim settlement ratios for HDFC ERGO have broadly been in the ~90–95% zone in recent public disclosures (indicative).",
+      "general_business_csr": "Overall general insurance CSR also typically lies around 90–95% depending on product and year (approximate range).",
+      "service_profile": "Large hospital/partner network, digital-first claim notification and tracking, strong presence in health and PA segments."
+    },
+    "best_for": [
+      "People with a risky commute (e.g., two-wheeler riders) or hazardous work conditions",
+      "Individuals who already have life insurance but want an additional high-sum accident cover at relatively low cost"
+    ]
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "what_it_does": "Provides lump-sum payouts on accidental death or disability with an option to cover hospitalization expenses due to accident.",
+    "coverage_highlights": [
+      "Accidental death benefit",
+      "Permanent total disability benefit",
+      "Permanent partial disability benefit as per injury scale",
+      "Temporary total disability benefit (weekly compensation in some variants)",
+      "Optional accidental hospitalization expense cover"
+    ],
+    "premium_example": "₹15 for every ₹25,000 of sum insured under the National Janata Personal Accident Policy (illustrative).",
+    "premium_depends_on": [
+      "Chosen sum insured amount",
+      "Occupational risk class of the policyholder (normal, medium, heavy)",
+      "Type of policy (individual vs. family floater)",
+      "Age and any applicable loadings as per underwriting"
+    ],
+    "insurer": "National Insurance Company Limited",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "As a PSU general insurer, National’s CSR and ICR are typically moderate to good, with relative stability over the years.",
+      "service_profile": "Strong legacy presence and trust; claim processes may be more traditional and sometimes slower than some private insurers."
+    },
+    "best_for": [
+      "Very price-sensitive customers seeking basic personal accident protection",
+      "Buyers who prefer PSU backing and are comfortable with a more traditional servicing experience"
+    ]
+  }
+]

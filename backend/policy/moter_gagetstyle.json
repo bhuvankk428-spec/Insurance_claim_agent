@@ -1,0 +1,72 @@
+[
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "what_it_does": "Protects a car against own damage and provides mandatory third-party liability cover.",
+    "coverage": [
+      "Own damage due to accident (collision, overturning, etc.)",
+      "Fire, explosion, self-ignition and lightning damage",
+      "Theft or total loss of the vehicle",
+      "Damage due to natural calamities such as flood, cyclone, storm and earthquake",
+      "Damage due to man-made incidents such as riots, strikes, malicious acts and terrorism (as per policy terms)",
+      "Third-party liability for bodily injury, death and property damage (as per Motor Vehicles Act)",
+      "Cashless repairs at authorized network garages",
+      "Roadside assistance (towing, on-site repair, fuel delivery, etc., if opted)"
+    ],
+    "add_ons": [
+      "Zero depreciation cover (no deduction for depreciation on parts during claim)",
+      "Engine and gearbox protection cover",
+      "Return to invoice (RTI) cover for total loss/theft",
+      "No Claim Bonus (NCB) protection",
+      "Consumables cover (nuts, bolts, oils, etc.)",
+      "Key and lock replacement cover",
+      "Tyre and rim protection (in some variants)",
+      "Personal accident cover for owner-driver and optional for passengers"
+    ],
+    "premium_depends_on": [
+      "IDV (Insured Declared Value) of the car",
+      "Car make, model, fuel type and variant",
+      "Age of the vehicle",
+      "Geographical zone and parking location",
+      "Previous claim history and NCB level",
+      "Add-ons selected and voluntary deductible",
+      "Usage type (private vs commercial) where applicable"
+    ],
+    "insurer": "ICICI Lombard General Insurance",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "Health/general CSR typically in an approximate 85–97% range depending on product and year (indicative).",
+      "garage_network": "Large network of authorized garages for cashless repairs across India.",
+      "notes": "Strong digital purchase and claim intimation process, app-based status tracking and support."
+    },
+    "best_for": [
+      "Car owners who want a comprehensive private-insurer package with multiple add-on choices",
+      "Users who prefer cashless repairs and digital-first claim handling"
+    ]
+  },
+  {
+    "domain": "Gadget / Device Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "what_it_does": "Protects eligible gadgets (smartphones, laptops, tablets, etc.) against accidental damage and theft.",
+    "coverage": [
+      "Accidental physical damage to the device (e.g., screen cracks, drops, liquid spills) as per policy terms",
+      "Repair or replacement of the device up to the sum insured or invoice value (after deductibles)",
+      "Loss or theft of the device due to burglary, robbery or snatching (subject to police FIR and investigation)",
+      "Worldwide protection for specified devices during travel",
+      "No-cost pick-up and drop service for repairs where service network is available"
+    ],
+    "key_checks_before_buying": [
+      "Maximum age of the device at the time of purchase (e.g., usually new or within a few months)",
+      "Original purchase invoice and proof-of-ownership requirements",
+      "Whether data loss, software issues and unauthorized repairs are excluded",
+      "Excess/deductible amount per claim (how much the customer must pay from pocket)",
+      "Number of claims allowed per year and any claim amount caps",
+      "Exclusions for intentional damage, cosmetic damage or unreported theft",
+      "Fraud checks, IMEI/device registration requirements and claim documentation needed"
+    ],
+    "insurer": "TechGuard Insurance",
+    "best_for": [
+      "Users buying expensive smartphones, laptops or tablets who want protection against accidental damage and theft",
+      "Frequent travellers who need worldwide protection for work or personal devices"
+    ]
+  }
+]
