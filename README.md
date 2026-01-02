@@ -200,8 +200,9 @@ Expected:
 ✅ All chunks embedded & stored
 
 4️⃣ Start Backend Server
-npm start
-
+   cd gemini-api
+   node server.js
+   npm start 
 
 Backend runs at:
 
