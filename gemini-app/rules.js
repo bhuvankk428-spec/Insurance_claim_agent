@@ -1,39 +1,74 @@
+// rules.js
+
 export function scorePolicy(policy, user = {}) {
+  // Simple score-only version (used by existing code)
+  const result = scorePolicyWithExplanation(policy, user);
+  return result.score;
+}
+
+export function scorePolicyWithExplanation(policy, user = {}) {
   let score = 0;
-  const text = policy.content.toLowerCase();
+  const reasons = [];
 
-  /* ---------- CORE COVERAGE (MOST IMPORTANT) ---------- */
+  const text = (
+    policy.raw_text ||
+    policy.content ||
+    ""
+  ).toLowerCase();
+
+  /* ---------- PRE-EXISTING / HEALTH ---------- */
   if (user.health) {
-    if (text.includes("pre-existing")) score += 12;
-    if (text.includes("heart") && text.includes("exclusion")) score -= 25;
-  }
-
-  if (user.occupation === "Farmer") {
-    if (text.includes("drought")) score += 15;
-    if (text.includes("flood") || text.includes("excess rainfall")) score += 15;
-    if (text.includes("natural calamity")) score += 10;
-  }
-
-  /* ---------- AFFORDABILITY ---------- */
-  if (user.budget?.toLowerCase().includes("low")) {
-    if (text.includes("subsidy") || text.includes("government")) {
-      score += 10;
+    if (policy.coverage?.pre_existing_disease) {
+      score += 12;
+      reasons.push("Covers pre-existing diseases after waiting period");
+    } else if (text.includes("pre-existing")) {
+      score += 8;
+      reasons.push("Mentions pre-existing disease coverage");
     }
   }
 
-  /* ---------- FAMILY SUITABILITY ---------- */
-  if (user.family) {
-    if (text.includes("family floater")) score += 8;
-    if (text.includes("individual only")) score -= 5;
+  /* ---------- HEART CONDITIONS ---------- */
+  if (user.health?.includes("heart")) {
+    if (policy.coverage?.heart_conditions === "covered") {
+      score += 15;
+      reasons.push("Explicit heart condition coverage");
+    } else if (policy.coverage?.heart_conditions === "conditional") {
+      score += 5;
+      reasons.push("Heart condition covered after conditions/waiting period");
+    } else {
+      score -= 25;
+      reasons.push("Heart conditions excluded or unclear");
+    }
   }
 
-  /* ---------- LOCATION (WEAK SIGNAL) ---------- */
-  if (user.location) {
-    if (text.includes(user.location.toLowerCase())) score += 5;
+  /* ---------- FAMILY ---------- */
+  if (user.family || user.family_size >= 3) {
+    if (policy.family?.type?.includes("floater")) {
+      score += 10;
+      reasons.push("Family floater suitable for multiple members");
+    }
   }
 
-  /* ---------- BASE RELEVANCE ---------- */
-  score += Math.min(10, policy.similarity * 10);
+  /* ---------- AFFORDABILITY ---------- */
+  if (user.budget?.includes("low")) {
+    if (policy.financials?.government_scheme) {
+      score += 10;
+      reasons.push("Government subsidy improves affordability");
+    }
+  }
 
-  return score;
+  /* ---------- INSURER TRUST ---------- */
+  if (policy.insurer_metrics?.claim_settlement_ratio_band) {
+    score += 5;
+    reasons.push("Insurer has acceptable historical claim settlement ratio");
+  }
+
+  /* ---------- RAG SIMILARITY ---------- */
+  if (policy.similarity) {
+    const simScore = Math.min(10, policy.similarity * 10);
+    score += simScore;
+    reasons.push("Policy closely matches the query context");
+  }
+
+  return { score, reasons };
 }

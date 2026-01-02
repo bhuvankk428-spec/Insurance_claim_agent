@@ -1,107 +1,167 @@
 [
   {
-    "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
-    "what_it_does": "Broad health insurance for individuals and families with extensive coverage and no room-rent cap in many variants.",
-    "coverage_highlights": [
-      "No room rent cap (you can choose any room category as per policy terms)",
-      "In-patient hospitalization expenses",
-      "Pre-hospitalization expenses (typically up to 60 days)",
-      "Post-hospitalization expenses (typically up to 90 days)",
-      "Maternity and newborn baby coverage after applicable waiting period",
-      "Coverage for many modern treatments and procedures",
-      "Bariatric (weight-loss) surgery as per policy conditions",
-      "Second medical opinion facility",
-      "100% restoration of the sum insured once in a policy year after exhaustion"
-    ],
-    "key_conditions": [
-      "Waiting periods apply for pre-existing diseases (multi-year in many cases)",
-      "Waiting period for maternity and newborn benefits",
-      "Specific waiting periods for listed illnesses and procedures",
-      "Sub-limits and co-pays may apply depending on the chosen variant and age",
-      "General exclusions like cosmetic surgery, non-medical expenses, etc."
-    ],
-    "insurer": "Star Health and Allied Insurance",
-    "insurer_metrics_notes": {
-      "network_hospitals": "14,000+ network hospitals offering cashless treatment (approximate reported figure).",
-      "claim_settlement_ratio_trend": "Health claim settlement ratio roughly in the 80–90% band in recent years (indicative range).",
-      "regulatory_notes": "Standalone health insurer with strong cashless approvals; some periods of regulatory scrutiny on claim practices have been reported."
-    },
-    "best_for": [
-      "Individuals and families who want flexibility in choosing hospital room (no room-rent cap in many variants)",
-      "Customers who prioritize a strong cashless network and are comfortable reading detailed terms and exclusions"
-    ]
-  },
-  {
     "domain": "Health Insurance",
+    "insurer": "Star Health and Allied Insurance",
+
+    "coverage": {
+      "hospitalization": true,
+      "pre_existing_disease": "covered_after_waiting_period",
+      "heart_conditions": "conditional",
+      "maternity": "covered_after_waiting_period",
+      "room_rent_cap": false,
+      "restoration": true,
+      "modern_treatments": true
+    },
+
+    "family": {
+      "supported": true,
+      "type": "individual_or_family",
+      "family_floater": "variant_dependent"
+    },
+
+    "financials": {
+      "premium_level": "medium",
+      "government_scheme": false
+    },
+
+    "insurer_metrics": {
+      "network_strength": "strong",
+      "network_hospitals_estimate": "14000+",
+      "claim_settlement_ratio_band": "80–90%",
+      "csr_confidence": "indicative_not_city_specific"
+    },
+
+    "eligibility": {
+      "age_band": "adult_to_senior",
+      "medical_underwriting": true
+    },
+
+    "claim_process": {
+      "mode": ["cashless", "reimbursement"],
+      "notes": "Cashless hospital network is a key strength; exclusions and waiting periods must be reviewed carefully."
+    },
+
+    "best_for": [
+      "Families wanting no room rent cap",
+      "Users prioritizing hospital choice flexibility"
+    ],
+
+    "raw_text": "Broad health insurance for individuals and families with extensive coverage and no room-rent cap in many variants. Covers in-patient hospitalization, pre and post hospitalization expenses, maternity and newborn benefits after waiting periods, modern treatments, bariatric surgery as per conditions, second medical opinion, and 100% restoration of sum insured once per policy year. Waiting periods and sub-limits apply for pre-existing diseases and specific procedures."
+  },
+
+  {
     "policy_name": "Star Health Family Health Optima",
-    "plan_type": "Family floater",
-    "what_it_does": "Provides a single shared sum insured for the entire family under one health policy.",
-    "coverage_highlights": [
-      "In-patient hospitalization for all covered family members",
-      "Daycare procedures that do not require 24-hour hospitalization",
-      "Organ donor expenses as per policy terms",
-      "Automatic restoration of sum insured after it is exhausted (subject to conditions)",
-      "Worldwide emergency coverage in many variants (emergency treatments outside India)",
-      "Maternity and newborn coverage options after applicable waiting periods",
-      "Cashless hospitalization at Star Health’s extensive network hospitals"
-    ],
-    "key_conditions": [
-      "Waiting periods for pre-existing diseases, maternity and specified illnesses apply",
-      "Certain sub-limits, co-pays or disease-wise limits may exist depending on variant and age",
-      "Maximum age and relationship rules for who can be included in the floater"
-    ],
-    "insurer": "Star Health and Allied Insurance",
-    "best_for": [
-      "3–5 member families who prefer a single floater policy instead of multiple individual covers",
-      "Families looking for restoration benefits and optional worldwide emergency coverage"
-    ]
-  },
-  {
     "domain": "Health Insurance",
-    "policy_name": "Niva Bupa Health Companion Plan",
-    "what_it_does": "Comprehensive health insurance for individuals and families with strong restoration and wellness/check-up features.",
-    "coverage_highlights": [
-      "In-patient care for hospitalization above 24 hours",
-      "Daycare treatments that require less than 24 hours of hospitalization",
-      "Coverage for AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy) and modern treatments",
-      "Organ donor expenses as per policy terms",
-      "Pre-hospitalization expenses for a defined number of days",
-      "Post-hospitalization expenses for a defined number of days",
-      "Unlimited sum insured restoration in many variants when sum insured is exhausted",
-      "Annual health check-ups for insured members (subject to terms)",
-      "Cashless hospitalization at Niva Bupa’s network hospitals"
-    ],
-    "optional_riders": [
-      "Daily hospital cash benefit",
-      "Claim protection / claim safeguard rider (covers non-payable items or protects NCB, depending on design)"
-    ],
-    "family_coverage": "Can cover up to 19 family members in certain family floater structures, making it suitable for large/joint families.",
-    "insurer": "Niva Bupa Health Insurance",
-    "insurer_metrics_notes": {
-      "claim_settlement_ratio_trend": "CSR and ICR generally in a competitive band for standalone health insurers (exact numbers vary by year and product).",
-      "positioning": "Strong focus on urban, digitally savvy customers with emphasis on cashless, wellness and check-up benefits."
+    "insurer": "Star Health and Allied Insurance",
+
+    "coverage": {
+      "hospitalization": true,
+      "pre_existing_disease": "covered_after_waiting_period",
+      "maternity": "covered_after_waiting_period",
+      "restoration": true,
+      "worldwide_emergency": "variant_dependent"
     },
+
+    "family": {
+      "supported": true,
+      "type": "family_floater",
+      "recommended_family_size": "3_to_5_members"
+    },
+
+    "financials": {
+      "premium_level": "medium",
+      "government_scheme": false
+    },
+
+    "eligibility": {
+      "relationship_rules_apply": true,
+      "age_limits_apply": true
+    },
+
+    "claim_process": {
+      "mode": ["cashless", "reimbursement"],
+      "notes": "Single shared sum insured across family members with restoration benefits."
+    },
+
     "best_for": [
-      "Tech-savvy individuals and families who value unlimited restoration and wellness features like annual check-ups",
-      "Large or joint families needing coverage for many members under one umbrella"
-    ]
-  },
-  {
-    "domain": "Health / Accident / Travel",
-    "policy_name": "Star Health Insurance (General Overview)",
-    "positioning": "Large standalone health insurer offering multiple products across health, personal accident and travel segments.",
-    "key_features": [
-      "Network of 14,000+ hospitals providing cashless treatment, especially strong in many urban and semi-urban areas",
-      "24/7 customer support and digital claim intimation/monitoring",
-      "Coverage for pre-existing diseases after completion of specified waiting periods",
-      "Maternity and newborn coverage in eligible plans after waiting periods",
-      "Multiple riders/add-ons such as personal accident, critical illness, top-up and super top-up options"
+      "Mid-sized families preferring a floater plan",
+      "Families needing restoration benefits"
     ],
-    "key_metrics": {
-      "claim_settlement_ratio_trend": "CSR approximately in the 80–88% range in recent years (varies by year and source).",
-      "incurred_claim_ratio_trend": "ICR generally within the typical health insurance band, reflecting high claim volumes.",
-      "notes": "One of the largest retail health insurers in India by number of policies and claims handled."
-    }
+
+    "raw_text": "Provides a single shared sum insured for the entire family under one health policy. Covers in-patient hospitalization, daycare procedures, organ donor expenses, restoration of sum insured, worldwide emergency coverage in some variants, maternity benefits after waiting periods, and cashless treatment at Star Health’s network hospitals. Waiting periods and sub-limits apply."
+  },
+
+  {
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "domain": "Health Insurance",
+    "insurer": "Niva Bupa Health Insurance",
+
+    "coverage": {
+      "hospitalization": true,
+      "pre_existing_disease": "covered_after_waiting_period",
+      "ayush": true,
+      "restoration": "unlimited_variant_dependent",
+      "annual_health_checkups": true
+    },
+
+    "family": {
+      "supported": true,
+      "type": "large_family_floater",
+      "max_members_supported": 19
+    },
+
+    "financials": {
+      "premium_level": "medium",
+      "government_scheme": false
+    },
+
+    "insurer_metrics": {
+      "network_strength": "strong_urban",
+      "csr_confidence": "indicative_not_product_specific"
+    },
+
+    "eligibility": {
+      "urban_focus": true,
+      "medical_underwriting": true
+    },
+
+    "claim_process": {
+      "mode": ["cashless", "reimbursement"],
+      "notes": "Strong digital claim journey with wellness and preventive care focus."
+    },
+
+    "best_for": [
+      "Large or joint families",
+      "Users valuing unlimited restoration and wellness benefits"
+    ],
+
+    "raw_text": "Comprehensive health insurance for individuals and families with in-patient hospitalization, daycare treatments, AYUSH coverage, organ donor expenses, pre and post hospitalization cover, unlimited restoration in many variants, annual health check-ups, and cashless treatment at Niva Bupa’s network hospitals. Optional riders include daily hospital cash and claim protection features."
+  },
+
+  {
+    "policy_name": "Star Health Insurance (General Overview)",
+    "domain": "Health / Accident / Travel",
+    "insurer": "Star Health and Allied Insurance",
+
+    "coverage": {
+      "health": true,
+      "personal_accident": true,
+      "travel": "product_dependent"
+    },
+
+    "insurer_metrics": {
+      "network_strength": "very_strong",
+      "network_hospitals_estimate": "14000+",
+      "claim_settlement_ratio_band": "80–88%",
+      "notes": "One of the largest standalone health insurers by retail volume."
+    },
+
+    "claim_process": {
+      "digital_support": true,
+      "customer_support": "24x7"
+    },
+
+    "raw_text": "Large standalone health insurer offering multiple products across health, personal accident and travel insurance. Known for a wide cashless hospital network, digital claim support, maternity and pre-existing disease coverage after waiting periods, and multiple add-ons such as critical illness and top-up covers."
   }
 ]
