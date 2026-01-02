@@ -5,7 +5,7 @@ import {
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, googleProvider } from "../firebase";
+import { auth, googleProvider } from "../../firebase";
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
