@@ -2,13 +2,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChooserPage from "./components/ChooserPage";
 import Chatbot from "./components/Chatbot";
 import ClaimChecker from "./components/ClaimChecker";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/auth/LoginForm";
+import RegisterForm from "./components/auth/RegisterForm";
 import ClaimStoryChatbot from "./components/ClaimStoryChatbot";
-import AboutQKAI from "./components/AboutQKAI";
-import ContactQKAI from "./components/contact";
-            import HelpQKAI from "./components/Help";
-import FAQQKAI from "./components/FAQ";
+import AboutQKAI from "./components/ui/AboutQKAI";
+import ContactQKAI from "./components/ui/contact";
+            import HelpQKAI from "./components/ui/Help";
+import FAQQKAI from "./components/ui/FAQ";
 
 
 

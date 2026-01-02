@@ -22,11 +22,10 @@ function detectDomain(text) {
   return null;
 }
 
-/* ---------------- VOICE (FEMALE / HINDI / INDIAN) ---------------- */
-function speak(text) {
-  if (!window.speechSynthesis) return;
+/* ---------------- VOICE ---------------- */
+function speak(text, muted, voices) {
+  if (muted || !window.speechSynthesis || voices.length === 0) return;
 
-  const voices = window.speechSynthesis.getVoices();
   const preferred =
     voices.find(v => v.lang === "hi-IN") ||
     voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("female")) ||
@@ -38,14 +37,16 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance(
     text.replace(/[#*]/g, "")
   );
+
   utterance.voice = preferred;
   utterance.lang = preferred.lang;
   utterance.rate = 0.95;
   utterance.pitch = 1.1;
 
-  window.speechSynthesis.cancel();
+  window.speechSynthesis.cancel(); // ✅ stop any previous speech
   window.speechSynthesis.speak(utterance);
 }
+
 
 export default function PolicySummarizer() {
   const [request, setRequest] = useState("");
@@ -54,7 +55,20 @@ export default function PolicySummarizer() {
   const [messages, setMessages] = useState([]);
   const [confidence, setConfidence] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [voices, setVoices] = useState([]); // ✅ NEW
   const messagesEndRef = useRef(null);
+
+  /* -------- LOAD VOICES PROPERLY -------- */
+  useEffect(() => {
+    function loadVoices() {
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) setVoices(v);
+    }
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,7 +78,6 @@ export default function PolicySummarizer() {
     e.preventDefault();
     if (!request.trim()) return;
 
-    // 🔹 auto-domain ONLY if user chose "any"
     let finalDomain = domain;
     if (domain === "any") {
       const detected = detectDomain(request);
@@ -78,7 +91,7 @@ export default function PolicySummarizer() {
     setMessages(prev => [...prev, { from: "user", text: userText }]);
 
     try {
-      const response = await fetch(`${API_BASE}/api/rag-policies`, {
+      const response = await fetch(`${API_BASE}/api/rag-chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -95,15 +108,14 @@ export default function PolicySummarizer() {
         { from: "ai", text: data.answer || "No response." },
       ]);
 
-      // 🔹 confidence bar
       if (typeof data.confidence === "number") {
         setConfidence(data.confidence);
       } else {
         setConfidence(null);
       }
 
-      // 🔊 voice output
-      if (data.answer) speak(data.answer);
+      // 🔊 SPEAK (NOW WORKS)
+      if (data.answer) speak(data.answer, muted, voices);
 
     } catch (err) {
       console.error(err);
@@ -126,7 +138,21 @@ export default function PolicySummarizer() {
     <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row">
       {/* LEFT PANEL */}
       <div className="lg:w-[420px] lg:sticky lg:top-0 bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-10 border-r border-gray-700">
-        <h2 className="text-2xl font-bold mb-8">Search Configuration</h2>
+        <h2 className="text-2xl font-bold mb-6">Search Configuration</h2>
+
+        {/* 🔇 MUTE / UNMUTE */}
+        <button
+  onClick={() => {
+    if (!muted) {
+      window.speechSynthesis.cancel(); // 🔇 STOP IMMEDIATELY
+    }
+    setMuted(!muted);
+  }}
+  className="mb-6 w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600"
+>
+  {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
+</button>
+
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <select
@@ -179,12 +205,9 @@ export default function PolicySummarizer() {
       <div className="flex-grow bg-[#121316] p-8">
         <div className="max-w-4xl mx-auto space-y-6">
 
-          {/* CONFIDENCE BAR */}
           {confidence !== null && (
             <div>
-              <p className="mb-2 font-semibold">
-                Recommendation confidence
-              </p>
+              <p className="mb-2 font-semibold">Recommendation confidence</p>
               <div className="w-full bg-gray-700 rounded h-3">
                 <div
                   className="bg-green-500 h-3 rounded"
@@ -200,8 +223,7 @@ export default function PolicySummarizer() {
           {messages.length === 0 ? (
             <div className="text-center text-gray-400 mt-32">
               <p>
-                Enter your requirements on the left to get policy
-                recommendations.
+                Enter your requirements on the left to get policy recommendations.
               </p>
             </div>
           ) : (
