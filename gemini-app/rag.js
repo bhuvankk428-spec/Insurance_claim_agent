@@ -1,13 +1,6 @@
 import { retrieveChunks } from "./retrieval.js";
 import { scorePolicy } from "./rules.js";
 
-/**
- * RAG decision engine
- * - No hallucination
- * - Policy comparison enforced
- * - Personalised if details provided
- * - Asks clarifying questions if data missing
- */
 export async function askRAG({ question, domain = null, details = {} }) {
   // 1️⃣ Retrieve relevant chunks
   const rawChunks = await retrieveChunks({
