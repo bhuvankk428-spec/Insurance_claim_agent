@@ -1,10 +1,12 @@
+// backend/server.js
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch";
 import dotenv from "dotenv";
-import fs from "fs";
-import multer from "multer";
-import * as pdfParse from "pdf-parse";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+import { embed } from "./embedClient.js";
+import { searchVectors } from "./vectorStore.js";
+import { buildIndex } from "./buildIndex.js";
 
 dotenv.config();
 
@@ -12,120 +14,121 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const rawPolicies = fs.readFileSync("./policy.json", "utf-8");
-const policies = JSON.parse(rawPolicies);
-const policySnippet = JSON.stringify(policies).slice(0, 3000);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const MODEL = "gemini-2.5-flash";
 
-// ✅ FIXED: Changed to gemini-2.5-flash (Free tier: 10 RPM, 250K TPM)
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-app.post("/api/gemini-chat", async (req, res) => {
+app.post("/api/rag-policies", async (req, res) => {
   try {
-    const { prompt } = req.body;
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
+    const { question, details, domain } = req.body;
+    if (!question) {
+      return res.json({
+        status: "NOT_FOUND",
+        answer: "Please ask a valid insurance-related question."
+      });
     }
 
-    const combinedPrompt = `
-Act as an experienced insurance advisor. Based on the following user question and our available policies, present a clear, friendly, and personalized answer.
-If possible, recommend the most relevant policy for the user's needs and highlight why it suits them.
+    const query = details
+      ? `${question}\nDetails: ${details}`
+      : question;
 
-User question: ${prompt}
-
-Relevant Policies (JSON): ${policySnippet}
-
-Instructions:
-- Greet the user warmly (e.g., "Hi! Here's your best car insurance match...")
-- Use bullet points for benefits and exclusions.
-- Briefly explain why this policy is suitable.
-- End with a helpful call-to-action (suggest what the user should do next).
-
-Format your answer in clear markdown for best readability.
-    `.trim();
-
-    const geminiRes = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: combinedPrompt }],
-          },
-        ],
-      }),
+    // 🔹 Retrieve policies
+    const qEmbedding = await embed(query);
+    const topK = searchVectors({
+      embedding: qEmbedding,
+      k: 3,
+      domain
     });
 
-    const data = await geminiRes.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || JSON.stringify(data);
-    res.json({ text });
+    if (!topK.length) {
+      return res.json({
+        status: "NOT_FOUND",
+        answer:
+          "❌ **No suitable policy found**\n\n" +
+          "I couldn’t find a policy matching your requirement.\n\n" +
+          "**You can try:**\n" +
+          "- Changing the policy domain\n" +
+          "- Adding location, budget, or coverage details\n" +
+          "- Using a broader search term"
+      });
+    }
 
-  } catch (error) {
-    console.error("Gemini API error:", error);
-    res.status(500).json({ error: "Gemini API Error" });
-  }
-});
+    // 🔹 Build comparison context
+    const context = topK
+      .map(
+        (p, i) => `
+Policy ${String.fromCharCode(65 + i)}:
+Name: ${p.policy_name}
+Domain: ${p.domain}
+Insurer: ${p.insurer || "N/A"}
+Details:
+${p.text}
+`
+      )
+      .join("\n");
 
-const upload = multer();
-
-app.post("/api/claim-evidence", upload.any(), async (req, res) => {
-  try {
-    // For now just accept whatever comes in
-    // Later you can add OCR + AI checks here
-    return res.json({
-      status: "success",
-      message: "Evidence received successfully.",
-      sameIncident: true,
-      score: 0.9,
-    });
-  } catch (error) {
-    console.error("Claim evidence error:", error);
-    return res.status(500).json({
-      status: "error",
-      message: "Server error while processing evidence.",
-    });
-  }
-});
-
-app.post("/api/claim-story", async (req, res) => {
-  try {
-    const { story } = req.body;
-    if (!story) return res.status(400).json({ error: "Story required" });
-
-    // ✅ FIXED: Uses GEMINI_URL (now gemini-2.5-flash)
+    // 🔹 Gemini prompt (decision forced)
     const prompt = `
-You are an insurance claims AI assistant.
-User Story: ${story}
+You are a senior insurance advisor in India.
 
-Based on this story, decide if the claim should be accepted or rejected.
-If accepted, generate a unique claim code in format CLAIM-XXXXXX where X are digits.
-Respond with eligibility (yes/no), explanation, and claim code if eligible.
+User question:
+${query}
+
+Policies:
+${context}
+
+STRICT RULES:
+- You MUST compare Policy A vs Policy B.
+- You MUST pick exactly ONE best policy.
+- If none are suitable, clearly say so.
+- DO NOT output JSON.
+- Use **bold** for policy names.
+- Be confident and decisive.
+
+FORMAT:
+
+✅ **Recommended policy**
+<policy name>
+
+### Comparison
+**Policy A**: <pros / cons>
+**Policy B**: <pros / cons>
+
+### Why this is best
+<clear reasoning>
+
+### Claim process
+<simple explanation>
+
+If no policy fits, start with:
+❌ **No suitable policy found**
+
+Write clean markdown only.
 `;
 
-    const geminiRes = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }]
-      }),
-    });
+    const model = genAI.getGenerativeModel({ model: MODEL });
+    const result = await model.generateContent(prompt);
+    const answer = result.response.text().trim();
 
-    const data = await geminiRes.json();
-    const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+    const status = answer.startsWith("❌")
+      ? "NOT_FOUND"
+      : "FOUND";
 
+    res.json({ status, answer });
+  } catch (err) {
+    console.error(err);
     res.json({
-      answer,
-      eligible: answer.toLowerCase().includes("yes"),
-      claimCode: answer.match(/CLAIM-\d{6}/)?.[0] || null
+      status: "NOT_FOUND",
+      answer:
+        "⚠️ Something went wrong while fetching policy information. Please try again."
     });
-  } catch (error) {
-    console.error("Claim story API error:", error);
-    res.status(500).json({ error: "Claim story processing failed" });
   }
 });
 
 const PORT = process.env.PORT || 5174;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
+(async () => {
+  await buildIndex();
+  app.listen(PORT, () =>
+    console.log(`Server running at http://localhost:${PORT}`)
+  );
+})();

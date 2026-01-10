@@ -16,15 +16,18 @@
     "firebase": "^12.6.0",
     "multer": "^2.0.2",
     "node-fetch": "^3.3.2",
+    "openai": "^6.15.0",
     "pdf-parse": "^2.4.5",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.9.5"
+    "react-router-dom": "^7.9.5",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",

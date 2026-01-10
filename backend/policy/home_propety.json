@@ -1,0 +1,76 @@
+[
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "what_it_does": "Covers the structure and/or contents of a home against major natural and man-made risks.",
+    "coverage": [
+      "Fire, lightning, explosion and implosion",
+      "Flood, inundation, storm, cyclone and other natural calamities",
+      "Earthquake damage to structure and contents",
+      "Burglary, housebreaking and attempted theft",
+      "Damage to household contents such as furniture, appliances and electronics",
+      "Optional cover for jewellery and valuables via add-ons (up to specified limits)"
+    ],
+    "premium_example": "₹18/month for ₹5 lakh sum insured for a pucca building (illustrative only, not an actual quote).",
+    "premium_depends_on": [
+      "Total sum insured (structure + contents)",
+      "Type of dwelling (pucca / kachcha, flat / independent house)",
+      "Location risk (flood/quake zone, crime rate, etc.)",
+      "Security features (locks, alarms, gated community, etc.)",
+      "Policy term (1 year to multi-year options)",
+      "Optional covers selected (jewellery, terrorism, etc.)"
+    ],
+    "structure_and_contents_details": {
+      "structure_cover": "Protects the building structure (walls, roof, floors, built-in fittings) usually on reinstatement value basis, for homes up to a certain age (e.g., 50 years).",
+      "contents_cover": "Protects household contents (furniture, appliances, electronics, personal belongings) usually on market value basis after depreciation.",
+      "who_can_buy": [
+        "Homeowners for structure + contents",
+        "Tenants for contents-only cover"
+      ]
+    },
+    "insurer": "ICICI Lombard General Insurance",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "Health/general CSR typically in a competitive band (approx. mid-80s to 90s depending on product/year).",
+      "notes": "Large private general insurer with strong digital purchase and claim support."
+    },
+    "best_for": [
+      "Homeowners wanting low-cost protection for both structure and contents",
+      "Tenants wanting contents-only cover for appliances, furniture and valuables"
+    ]
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "what_it_does": "Protects the residential building and its contents against major natural and man-made risks, with useful living-expense add-ons.",
+    "coverage": [
+      "Loss or damage to building and contents due to fire, lightning and explosion",
+      "Damage due to flood, storm, cyclone and other specified natural disasters",
+      "Earthquake cover for structure and contents (if opted)",
+      "Burglary, theft and housebreaking losses to contents",
+      "Electrical and mechanical breakdown cover for specified appliances (if selected)",
+      "Coverage for reconstruction/repair of building and replacement of contents after covered events",
+      "Rent for alternative accommodation if the insured house becomes uninhabitable (as per chosen limit)"
+    ],
+    "additional_features": [
+      "Option to cover jewellery on worldwide basis (up to defined limits)",
+      "Option to cover portable equipment like mobiles, laptops and cameras on all-risk basis",
+      "New-for-old replacement for contents up to a certain age (typically 10 years) in many variants",
+      "Auto restoration of loss limit for contents after a claim in some options",
+      "Optional covers like hotel stay, brokerage and shifting expenses when moving to alternate accommodation",
+      "Discounts based on security and long-term coverage options"
+    ],
+    "who_can_buy": [
+      "Homeowners for structure-only, contents-only, or combined structure + contents",
+      "Tenants for contents-only cover"
+    ],
+    "insurer": "HDFC ERGO General Insurance",
+    "insurer_metrics_notes": {
+      "claim_settlement_ratio_trend": "Overall claim settlement ratios for general/health business generally in the 90%+ band in recent disclosures (exact numbers vary by segment and year).",
+      "notes": "Known for digital-first processes and wide partner network; home product positioned as long-term, discounted cover."
+    },
+    "best_for": [
+      "Flat or house owners concerned about natural disasters and burglary",
+      "Customers who want structure + contents cover plus temporary accommodation benefits"
+    ]
+  }
+]

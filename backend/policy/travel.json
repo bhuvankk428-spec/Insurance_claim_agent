@@ -1,0 +1,87 @@
+[
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "what_it_does": "Protects travellers against medical and journey-related risks during domestic or international trips.",
+    "coverage": [
+      "Emergency hospitalization during travel",
+      "Emergency medical evacuation to nearest suitable facility or home country (as per policy terms)",
+      "Dental emergencies due to accident",
+      "Trip cancellation or interruption due to covered reasons",
+      "Loss or delay of checked-in baggage",
+      "Personal accident cover in some variants"
+    ],
+    "policy_types": [
+      "Leisure travel plans",
+      "Business travel plans",
+      "Student travel plans"
+    ],
+    "key_points": [
+      "Region-specific sum insured and sub-limits; benefits often defined in USD for international trips",
+      "Pre-existing illnesses usually excluded or covered only under specific add-ons/conditions",
+      "High-risk activities (adventure sports, etc.) often excluded unless add-on is taken",
+      "Maximum trip duration limits vary by plan (e.g., 30/60/90 days etc.)",
+      "Cashless assistance through global assistance partners and 24x7 helpline"
+    ],
+    "insurer": "HDFC ERGO General Insurance"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "what_it_does": "Multi-level travel insurance providing medical and non-medical protection during trips.",
+    "plan_variants": [
+      "Standard",
+      "Silver",
+      "Gold",
+      "Platinum"
+    ],
+    "coverage": [
+      "Emergency medical expenses during travel",
+      "Hospitalization due to illness or accident",
+      "Emergency medical evacuation",
+      "Baggage loss or delay",
+      "Trip cancellation or interruption",
+      "Personal liability coverage",
+      "Repatriation of mortal remains",
+      "Dental treatment due to accidental injury"
+    ],
+    "best_for": [
+      "Travellers who want to choose coverage level based on budget and destination",
+      "People who prefer multiple plan tiers (Standard to Platinum) for flexibility"
+    ],
+    "key_checks_before_buying": [
+      "Whether pre-existing conditions are covered, partially covered, or excluded",
+      "Per-day and per-incident limits for medical and baggage claims",
+      "Coverage for adventure sports or high-risk activities, if required",
+      "Country-specific exclusions or restrictions (e.g., certain war-risk regions)"
+    ],
+    "insurer": "Reliance General Insurance"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "what_it_does": "Overseas travel insurance providing protection against medical emergencies and trip-related risks.",
+    "coverage": [
+      "Medical treatment and hospitalization abroad",
+      "Cashless medical facilities through global networks",
+      "Trip cancellation or interruption for covered reasons",
+      "Loss or delay of baggage",
+      "Passport theft and related assistance",
+      "24x7 global assistance services",
+      "Compensation for flight or travel delays",
+      "Personal accident cover in many variants"
+    ],
+    "insurer_quality_notes": [
+      "Tata AIG is widely used for international travel insurance",
+      "Competitive claim settlement experience in travel segment as per public reviews",
+      "Strong assistance tie-ups for international claims and medical support"
+    ],
+    "key_checks_before_buying": [
+      "Exact medical sum insured and sub-limits for OPD, IPD, and evacuation",
+      "Coverage for pre-existing diseases (often limited or excluded)",
+      "Requirements for documentation and approvals for cashless treatment",
+      "Geographical coverage (Schengen, worldwide excluding USA/Canada, etc.)"
+    ],
+    "insurer": "Tata AIG General Insurance"
+  }
+]

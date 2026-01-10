@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: qk-my-al-1999-2005.vercel.app
+Sitemap: https://qk-my-al-1999-2005.vercel.app/sitemap.xml
