@@ -1,0 +1,78 @@
+{
+  "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+  "domain": "Crop Insurance",
+  "insurer": "Government of India (implemented through empanelled public and private insurance companies)",
+
+  "coverage": {
+    "perils": [
+      "drought",
+      "flood",
+      "cyclone",
+      "hailstorm",
+      "pests",
+      "crop diseases",
+      "excess rainfall",
+      "prevented sowing",
+      "post-harvest loss",
+      "localised calamities"
+    ],
+    "natural_calamities": true,
+    "post_harvest_coverage": true,
+    "prevented_sowing": true
+  },
+
+  "eligibility": {
+    "occupation": ["Farmer"],
+    "notified_crops_required": true,
+    "area_based_assessment": true
+  },
+
+  "financials": {
+    "premium_structure": {
+      "kharif": "2% of sum insured",
+      "rabi": "1.5% of sum insured",
+      "commercial_horticulture": "5% of sum insured"
+    },
+    "government_subsidy": true,
+    "subsidy_range_percent": "90–98%",
+    "premium_affordability": "very_low"
+  },
+
+  "claims": {
+    "trigger_type": "yield_based",
+    "assessment_method": "area approach",
+    "timeline_goal": "approximately 2 months after final yield data",
+    "payout_basis": "threshold yield vs actual yield"
+  },
+
+  "exclusions": [
+    "Farmer negligence or improper farming practices",
+    "Crops not notified by the state",
+    "Post-harvest losses beyond notified period",
+    "Non-compliance with scheme rules or false claims"
+  ],
+
+  "best_for": [
+    "Loanee farmers",
+    "Non-loanee farmers growing notified crops",
+    "Farmers seeking low premium protection against weather and yield risks"
+  ],
+
+  "enrolment": {
+    "channels": [
+      "Banks and cooperative societies",
+      "Common Service Centres (CSC)",
+      "PMFBY online portal",
+      "Authorised insurance agents",
+      "Agriculture department offices"
+    ],
+    "requirements": [
+      "Land or cultivation records",
+      "Crop and season details",
+      "Bank account for DBT",
+      "KYC documents"
+    ]
+  },
+
+  "raw_text": "PMFBY is a government-backed crop insurance scheme that protects farmers against crop loss due to natural calamities such as drought, flood, cyclone, hailstorm, pests, and diseases. It covers prevented sowing, post-harvest losses for notified crops, and localized calamities. Premium payable by farmers is capped at 2% for Kharif crops, 1.5% for Rabi crops, and 5% for annual commercial and horticultural crops, with the remaining actuarial premium heavily subsidized by the Central and State governments. Claims are triggered when actual yield in a notified area falls below the threshold yield and are aimed to be settled within about two months after yield data is finalized. Coverage, crops, and timelines vary by state."
+}

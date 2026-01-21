@@ -1,210 +1,297 @@
-# qk.ai — AI-Assisted Insurance Claim Helper
+qk.ai — AI-Assisted Insurance Claim & Advisory System
+Project Overview
 
-## Project Overview
-qk.ai is a modern, AI-powered web application designed to simplify insurance interactions by helping users understand claim eligibility, gather required documents, and receive AI-generated guidance.  
-Using **Google Gemini LLM**, secure PDF checks, and a step-by-step workflow, users can upload their policy, FIR, accident photos, and describe what happened—after which the AI analyzes everything and provides clear next steps.
+qk.ai is a modern, AI-powered web application designed to simplify insurance interactions by helping users understand claim eligibility, policy suitability, and next steps with clear explanations.
 
-The system includes:
-- A **three-step claim checker**
-- A **claim story analyzer**
-- A **policy search & summarizer**
-- A modern, responsive frontend with React + Tailwind CSS
-- A backend powered by Node.js/Express with Gemini API integration
+The system combines:
 
----
+Retrieval-Augmented Generation (RAG)
 
-## Key Features
+Rule-based policy evaluation
 
-### 🔐 Authentication
-- Login + Register with **email/password**
-- **Google Authentication** support
-- Built using **Firebase Authentication**
+LLM-powered explanations (Gemini / OpenAI / Ollama)
 
-### 🚗 3-Step Policy Claim Workflow
-1. **Policy PDF Verification**  
-   - Upload policy PDF  
-   - Backend validates coverage and checks if the claim is even possible  
-   - UI shows instant success/error feedback  
+⚠️ qk.ai does not guess claim ratios, hospital availability, or medical eligibility.
+If data is unavailable, the system clearly states it.
 
-2. **FIR / Complaint Upload**  
-   - Upload FIR/complaint  
-   - Backend checks relevance, structure, and matches it with policy context  
+What’s New (Important)
+🧠 Hybrid AI Engine (NEW)
 
-3. **Accident Photo Upload**  
-   - Upload scene images  
-   - Backend verifies consistency with FIR + policy  
-   - Ensures enough evidence before allowing user to proceed  
+qk.ai now uses a two-layer intelligence system:
 
-Each step includes:
-- Loading states  
-- Success/error banners  
-- Step locking until validation passes  
+Rule Engine (Primary)
 
-### 📝 Claim Story Analysis
-- Users describe what happened in natural language  
-- Backend sends text + policy context to **Google Gemini**  
-- Returns:
-  - Coverage likelihood
-  - Explanation in clean Markdown
-  - Claim code (when applicable)
+Evaluates policies using structured data
 
-### 🔍 Policy Summarizer & Search
-- Users can ask insurance questions such as:
-  - *“Best car insurance?”*  
-  - *“Explain third-party coverage.”*  
-- Gemini returns:
-  - Markdown summaries
-  - Recommendations
-  - Easy beginner-friendly explanations  
+Checks eligibility, exclusions, affordability, family fit, occupation, and risks
 
----
+Produces a score + explanation
 
-## Additional App Features
+LLM (Secondary)
 
-- **Interactive Chatbot UI** using Markdown output  
-- **PDF Upload & Validation System**  
-- **SPA Navigation** with React Router v6  
-- **Fully styled Dark Theme** using Tailwind CSS  
-- **Node/Express JSON APIs** for:
-  - Policy checking  
-  - Evidence upload  
-  - AI story analysis  
+Explains the decision
 
----
+Compares Policy A vs Policy B
 
-## Requirements
+Picks exactly one best policy
 
-- **Node.js 16+**  
-- **npm**  
-- **Google Gemini API Key**  
-  - Create one from **Gemini Studio**
-  - Add to backend `.env`:
+Never overrides rules
 
-    ```env
-    GEMINI_API_KEY=your_gemini_studio_api_key_here
-    ```
+Key Features
+🔐 Authentication
 
----
+Email/password login & registration
 
-## Setup and Run Instructions
+Google Authentication
 
-qk.ai has a **backend (Express + Gemini)** and **frontend (React + Vite/CRA)**.  
-Run them separately.
+Firebase Authentication
 
----
+🚗 3-Step Claim Workflow
 
-### 1. Start the Backend
+Policy PDF Verification
 
-```bash
+FIR / Complaint Upload
+
+Accident Photo Upload
+
+Each step includes validation, progress locking, and clear feedback.
+
+📝 Claim Story Analysis
+
+Users describe incidents in natural language
+
+Backend validates coverage + evidence
+
+AI explains:
+
+Coverage likelihood
+
+Required documents
+
+Next steps
+
+🔍 Policy Search, Comparison & Recommendation (UPDATED)
+
+Users can ask:
+
+“Best health insurance for family with heart condition”
+
+“Low premium crop insurance for drought & flood”
+
+System output:
+
+Policy A vs Policy B comparison
+
+Exactly one recommendation
+
+Score breakdown explaining why
+
+Clear claim process explanation
+
+How the Recommendation System Works
+User Query
+   ↓
+Semantic Search (RAG)
+   ↓
+Rule Engine (structured + text)
+   ↓
+Score + Explanation
+   ↓
+LLM Comparison & Final Recommendation
+
+Rule Engine Checks:
+
+Pre-existing disease handling
+
+Heart / chronic condition exclusions
+
+Family suitability
+
+Government subsidy & affordability
+
+Occupation (e.g., farmer)
+
+Natural calamity coverage
+
+Explicit exclusions (heavy penalties)
+
+Output Example:
+{
+  "score": 61,
+  "reasons": [
+    "Covers pre-existing diseases after waiting period",
+    "Family floater structure suits multi-member families",
+    "Strong hospital network nationally"
+  ]
+}
+
+Technology Stack
+Frontend
+
+React + Vite
+
+Tailwind CSS
+
+Firebase Authentication
+
+Markdown-based chatbot UI
+
+Optional voice output (browser-based)
+
+Backend
+
+Node.js + Express
+
+PostgreSQL + pgvector (for RAG)
+
+Custom Rule Engine (explainable scoring)
+
+LLM support:
+
+Ollama (local, free)
+
+Google Gemini
+
+OpenAI (optional)
+
+Running the Project Locally (FULL PROCESS)
+1️⃣ Prerequisites
+
+Node.js 16+
+
+npm
+
+(Optional but recommended) Ollama
+
+Install Ollama and pull a model:
+
+ollama pull llama3
+
+2️⃣ Backend Setup
 cd backend
-npm install        # first time only
-npm start          # runs server on http://localhost:5174
-```
+npm install
 
-Expected output:
 
-```
-Server running on http://localhost:5174
-```
+Create backend/.env:
 
-Backend `.env` MUST include:
+Option A — Run fully local (FREE, recommended)
+PORT=5174
+LLM_PROVIDER=ollama
+OLLAMA_MODEL=llama3
 
-```env
-GEMINI_API_KEY=your_gemini_studio_api_key_here
-```
 
----
+Start Ollama:
 
-### 2. Configure the Frontend Environment
+ollama run llama3
 
-Create `.env` inside the frontend folder:
+Option B — Gemini (optional)
+PORT=5174
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=your_api_key_here
 
-```env
+3️⃣ Build RAG Data (One-time)
+node scripts/buildChunks.js
+node -r dotenv/config scripts/embedChunks.js
+
+
+Expected:
+
+✅ Built chunks
+✅ All chunks embedded & stored
+
+4️⃣ Start Backend Server
+   cd gemini-api
+   node server.js
+   npm start 
+
+Backend runs at:
+
+http://localhost:5174
+
+5️⃣ Frontend Setup
+cd ../frontend
+npm install
+
+
+Create frontend/.env:
+
 VITE_API_URL=http://localhost:5174
-```
 
-> Restart frontend when `.env` changes.
 
-All API calls use:
+Start frontend:-
 
-```js
-const API_BASE = import.meta.env.VITE_API_URL;
-```
+npm run dev
 
----
-
-### 3. Start the Frontend (React)
-
-```bash
-npm install        # first time only
-npm run dev        # or npm start for CRA
-```
 
 Frontend runs at:
 
-- **Vite:** http://localhost:5173  
-- **CRA:**  http://localhost:3000  
+http://localhost:5173
 
-> All API requests automatically route to **http://localhost:5174**
+Project Structure (Simplified)
+gemini-api/
+├── server.js
+├── rag.js
+├── rules.js              # Rule engine with score explanations
+├── policy_chunks.json
+├── health_policies.migrated.json
+├── scripts/
+│   ├── buildChunks.js
+│   └── embedChunks.js
+└── .env
 
----
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── LoginForm.jsx
-│   ├── RegisterForm.jsx
-│   ├── ChooserPage.jsx
+frontend/
+├── src/components/
 │   ├── Chatbot.jsx
 │   ├── ClaimChecker.jsx
 │   └── ...
-├── server.js           # Node.js backend API server
-├── policy.json         # Policy database JSON
-├── style.css           # Tailwind + global styles
-├── App.jsx             # React route declarations
-└── ...
-```
+└── .env
 
----
+Data Integrity Rules (STRICT)
 
-## Architecture Overview
+❌ No hallucinated claim ratios
 
-### 🖥️ Frontend (React)
-- Tailwind CSS UI  
-- Firebase Authentication  
-- Step-by-step controlled workflow  
-- Intelligent banners + validation  
-- Markdown-based chatbot responses  
+❌ No assumed disease coverage
 
-### ⚙️ Backend (Node + Express)
-- Gemini-powered AI reasoning  
-- Document validation + evidence analysis  
-- JSON API endpoints for upload and story assessment  
-- Policy search + summarization  
+❌ No city-level hospital claims without data
 
----
+✅ “Data not available” shown clearly
 
-## Core Use Cases
+✅ All insurer metrics marked indicative
 
-- Determine **whether a claim is likely valid**  
-- Guide users in submitting the **right evidence**  
-- Provide **AI-generated explanations**  
-- Offer simple, understandable insurance knowledge  
-- Automate the early stages of the claim process  
+Core Use Cases:-
 
----
+Policy comparison with explanations
 
-## Future Plans
+Claim eligibility pre-check
 
-- **Advanced Claim Analysis** using ML/NLP  
-- **User Profiles & Persistence**  
-  - Chat history  
-  - Saved claims  
-  - Policy tracking  
-- **OCR Support** for scanned images  
-- **Multi-Language Accessibility**  
+Farmer insurance advisory (drought/flood)
 
----
+Family & medical-condition-based recommendations
 
+Early-stage claim guidance
+
+Future Enhancements
+
+City-level hospital network data
+
+OCR for scanned documents
+
+Multilingual support
+
+User dashboards & saved comparisons
+
+Claim status tracking
+
+Summary:-
+
+qk.ai is not just a chatbot.
+
+It is an explainable insurance advisory engine built with:
+
+Rule validation
+
+Transparent AI reasoning
+
+No hallucination
+
+Local & cloud LLM support

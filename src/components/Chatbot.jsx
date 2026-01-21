@@ -22,11 +22,10 @@ function detectDomain(text) {
   return null;
 }
 
-/* ---------------- VOICE (FEMALE / HINDI / INDIAN) ---------------- */
-function speak(text) {
-  if (!window.speechSynthesis) return;
+/* ---------------- VOICE ---------------- */
+function speak(text, muted, voices) {
+  if (muted || !window.speechSynthesis || voices.length === 0) return;
 
-  const voices = window.speechSynthesis.getVoices();
   const preferred =
     voices.find(v => v.lang === "hi-IN") ||
     voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("female")) ||
@@ -38,14 +37,16 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance(
     text.replace(/[#*]/g, "")
   );
+
   utterance.voice = preferred;
   utterance.lang = preferred.lang;
   utterance.rate = 0.95;
   utterance.pitch = 1.1;
 
-  window.speechSynthesis.cancel();
+  window.speechSynthesis.cancel(); // ✅ stop any previous speech
   window.speechSynthesis.speak(utterance);
 }
+
 
 export default function PolicySummarizer() {
   const [request, setRequest] = useState("");
@@ -54,7 +55,20 @@ export default function PolicySummarizer() {
   const [messages, setMessages] = useState([]);
   const [confidence, setConfidence] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [voices, setVoices] = useState([]); // ✅ NEW
   const messagesEndRef = useRef(null);
+
+  /* -------- LOAD VOICES PROPERLY -------- */
+  useEffect(() => {
+    function loadVoices() {
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) setVoices(v);
+    }
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,7 +78,6 @@ export default function PolicySummarizer() {
     e.preventDefault();
     if (!request.trim()) return;
 
-    // 🔹 auto-domain ONLY if user chose "any"
     let finalDomain = domain;
     if (domain === "any") {
       const detected = detectDomain(request);
@@ -78,7 +91,7 @@ export default function PolicySummarizer() {
     setMessages(prev => [...prev, { from: "user", text: userText }]);
 
     try {
-      const response = await fetch(`${API_BASE}/api/rag-policies`, {
+      const response = await fetch(`${API_BASE}/api/rag-chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -95,15 +108,14 @@ export default function PolicySummarizer() {
         { from: "ai", text: data.answer || "No response." },
       ]);
 
-      // 🔹 confidence bar
       if (typeof data.confidence === "number") {
         setConfidence(data.confidence);
       } else {
         setConfidence(null);
       }
 
-      // 🔊 voice output
-      if (data.answer) speak(data.answer);
+      // 🔊 SPEAK (NOW WORKS)
+      if (data.answer) speak(data.answer, muted, voices);
 
     } catch (err) {
       console.error(err);
@@ -124,11 +136,34 @@ export default function PolicySummarizer() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row">
-      {/* LEFT PANEL */}
-      <div className="lg:w-[420px] lg:sticky lg:top-0 bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-10 border-r border-gray-700">
-        <h2 className="text-2xl font-bold mb-8">Search Configuration</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+      {/* LEFT PANEL */}
+      <aside className="lg:w-[420px] bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-8 border-r border-gray-700">
+        <h2 className="text-2xl font-bold mb-2">Policy Advisor</h2>
+        <p className="text-gray-400 mb-6 text-sm">
+          Compare & understand insurance policies intelligently
+        </p>
+
+        {/* STATUS BAR */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-sm">
+            {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
+          </span>
+          {loading && <span className="text-yellow-400 text-sm">⏳ Thinking...</span>}
+        </div>
+
+        {/* MUTE BUTTON */}
+        <button
+          onClick={() => {
+            if (!muted) window.speechSynthesis.cancel();
+            setMuted(!muted);
+          }}
+          className="mb-6 w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+        >
+          {muted ? "Enable Voice" : "Mute Voice"}
+        </button>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <select
             className="w-full rounded-lg bg-[#232834] px-4 py-3"
             value={domain}
@@ -138,16 +173,15 @@ export default function PolicySummarizer() {
             <option value="any">Any domain</option>
             <option value="Health Insurance">Health Insurance</option>
             <option value="Motor Insurance">Motor Insurance</option>
-            <option value="Personal Accident">Personal Accident</option>
+            <option value="Crop Insurance">Crop / Agriculture</option>
             <option value="Travel Insurance">Travel Insurance</option>
             <option value="Home Insurance">Home Insurance</option>
-            <option value="Crop Insurance">Crop / Agriculture</option>
             <option value="Life Insurance">Life Insurance</option>
           </select>
 
           <input
             className="w-full rounded-lg bg-[#232834] px-4 py-3"
-            placeholder="eg. best car insurance in Bengaluru"
+            placeholder="Ask your insurance question..."
             value={request}
             onChange={(e) => setRequest(e.target.value)}
             disabled={loading}
@@ -157,7 +191,7 @@ export default function PolicySummarizer() {
           <textarea
             className="w-full rounded-lg bg-[#232834] px-4 py-3"
             rows={4}
-            placeholder="Age, city, vehicle, budget..."
+            placeholder="Optional details: age, city, budget, condition..."
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             disabled={loading}
@@ -166,60 +200,56 @@ export default function PolicySummarizer() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl font-bold bg-gradient-to-r from-sky-500 to-indigo-600 ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            className={`w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-sky-500 to-indigo-600 transition ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
+              }`}
           >
-            {loading ? "Searching..." : "Search Policies"}
+            {loading ? "Analyzing..." : "Find Best Policy"}
           </button>
         </form>
-      </div>
+      </aside>
 
       {/* RIGHT PANEL */}
-      <div className="flex-grow bg-[#121316] p-8">
+      <main className="flex-grow bg-[#121316] p-6 overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
 
-          {/* CONFIDENCE BAR */}
+          {/* CONFIDENCE CARD */}
           {confidence !== null && (
-            <div>
-              <p className="mb-2 font-semibold">
-                Recommendation confidence
-              </p>
+            <div className="bg-[#1b1f2a] border border-gray-700 rounded-xl p-4">
+              <p className="font-semibold mb-2">Recommendation Confidence</p>
               <div className="w-full bg-gray-700 rounded h-3">
                 <div
-                  className="bg-green-500 h-3 rounded"
+                  className="bg-green-500 h-3 rounded transition-all"
                   style={{ width: `${confidence}%` }}
                 />
               </div>
-              <p className="text-sm text-gray-400 mt-1">
-                {confidence}% confidence
+              <p className="text-xs text-gray-400 mt-1">
+                Based on policy data & rule validation
               </p>
             </div>
           )}
 
+          {/* CHAT */}
           {messages.length === 0 ? (
-            <div className="text-center text-gray-400 mt-32">
-              <p>
-                Enter your requirements on the left to get policy
-                recommendations.
-              </p>
+            <div className="text-center text-gray-500 mt-32">
+              <p>Ask a question to get started.</p>
             </div>
           ) : (
             messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`p-5 rounded-xl ${
-                  msg.from === "user"
-                    ? "bg-gradient-to-r from-indigo-600 via-sky-500 to-indigo-600 ml-auto"
-                    : "bg-[#232834]"
-                }`}
+                className={`max-w-[85%] p-5 rounded-xl leading-relaxed ${msg.from === "user"
+                    ? "ml-auto bg-gradient-to-r from-indigo-600 to-sky-500"
+                    : "bg-[#232834] border border-gray-700"
+                  }`}
               >
                 {msg.from === "ai" ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {msg.text}
                   </ReactMarkdown>
                 ) : (
-                  <pre className="whitespace-pre-wrap">{msg.text}</pre>
+                  <pre className="whitespace-pre-wrap font-sans">
+                    {msg.text}
+                  </pre>
                 )}
               </div>
             ))
@@ -227,7 +257,8 @@ export default function PolicySummarizer() {
 
           <div ref={messagesEndRef} />
         </div>
-      </div>
+      </main>
     </div>
   );
+
 }
