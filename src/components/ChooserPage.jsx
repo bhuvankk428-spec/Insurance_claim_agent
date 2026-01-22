@@ -8,7 +8,6 @@ export default function ChooserPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       
-      {/* ✅ Reusable Navbar */}
       <Navbar />
 
       {/* Main content */}

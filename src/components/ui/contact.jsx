@@ -1,7 +1,9 @@
+import Navbar from "./Navbar";
 
 export default function ContactQKAI() {
   return (
     <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16">
+      <Navbar/>
       <div className="max-w-5xl mx-auto w-full grid gap-8 sm:gap-10 lg:grid-cols-[1.1fr_1fr] items-start lg:items-center">
         {/* Left: Heading + info */}
         <div className="order-2 lg:order-1 space-y-6 sm:space-y-8">

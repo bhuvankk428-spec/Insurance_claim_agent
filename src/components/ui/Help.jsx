@@ -1,7 +1,10 @@
+import Navbar from "./Navbar";
+
 // src/components/HelpQKAI.jsx
 export default function HelpQKAI() {
   return (
     <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16 lg:py-20">
+            <Navbar/>
       <div className="max-w-4xl mx-auto w-full space-y-8 sm:space-y-10 lg:space-y-12">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-14 lg:mb-16">
@@ -96,6 +99,7 @@ export default function HelpQKAI() {
 function HelpStep({ number, title, text }) {
   return (
     <div className="group bg-[#111827]/90 backdrop-blur-sm hover:bg-[#111827] border border-neutral-800/50 hover:border-sky-600/30 rounded-2xl p-5 sm:p-6 lg:p-7 shadow-lg hover:shadow-sky-500/20 hover:-translate-y-1 transition-all duration-300 flex gap-4 sm:gap-5 lg:gap-6 items-start">
+
       <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-sky-600 to-sky-700 rounded-2xl flex items-center justify-center text-base sm:text-lg lg:text-xl font-black shadow-lg group-hover:scale-110 group-hover:shadow-sky-400/30 transition-all">
         {number}
       </div>

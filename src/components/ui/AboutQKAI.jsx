@@ -1,7 +1,10 @@
+import Navbar from "./Navbar";
+
 // AboutQKAI.jsx
 export default function AboutQKAI() {
   return (
     <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16">
+      <Navbar/>
       <div className="max-w-5xl mx-auto w-full grid gap-8 sm:gap-10 md:grid-cols-[1.2fr_1fr] items-start md:items-center">
         {/* Left: Text */}
         <div className="order-2 md:order-1 space-y-6 sm:space-y-8">

@@ -28,6 +28,12 @@ export default function Navbar({ className = "" }) {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium">
+           <button
+            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            onClick={() => navigate("/chooserPage")}
+          >
+            Home
+          </button>
           <button
             className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
             onClick={() => navigate("/about")}

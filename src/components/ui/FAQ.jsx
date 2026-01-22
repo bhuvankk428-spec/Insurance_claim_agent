@@ -1,5 +1,6 @@
 // src/components/FAQQKAI.jsx
 import { useState } from "react";
+import Navbar from "./Navbar";
 
 const faqs = [
   {
@@ -41,6 +42,7 @@ export default function FAQQKAI() {
 
   return (
     <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16 lg:py-20">
+      <Navbar/>
       <div className="max-w-4xl mx-auto w-full">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
