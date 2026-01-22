@@ -8,6 +8,7 @@ import {
   FaImages,
   FaFileAlt,
 } from "react-icons/fa";
+import Navbar from "./ui/Navbar";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
 
@@ -103,8 +104,11 @@ export default function ClaimChecker() {
   const canSubmitEvidence = !!firFile || photoFiles.length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#050816] to-[#111827] px-4 py-8 sm:py-10 lg:py-12">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#050816] to-[#111827] px-6 pt-20 sm:pt-24 pb-10 sm:pb-12 lg:pb-12">
+        <Navbar className="text-white" />
+
       <div className="max-w-6xl w-full">
+
         <h1 className="text-2xl sm:text-3xl lg:text-4xl mb-3 text-white font-black text-center leading-tight">
           Policy Claim Workflow
         </h1>
@@ -295,7 +299,7 @@ export default function ClaimChecker() {
               disabled={evidenceLoading || !canSubmitEvidence}
               className="w-full sm:w-auto px-8 sm:px-10 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-base font-bold shadow-2xl hover:from-emerald-500 hover:to-emerald-600 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed max-w-md"
             >
-              {evidenceLoading ? "Processing..." : "✅ Next: Explain Story"}
+              {evidenceLoading ? "Processing..." : "Next: Explain Story"}
             </button>
 
             {evidenceResult && (
