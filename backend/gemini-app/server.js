@@ -1,38 +1,51 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import { askRAG } from "./rag.js";
+import { askRAGStream } from "./rag.js";
 
 const app = express();
 const PORT = process.env.PORT || 5174;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
-// Health check
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("RAG API running ✅");
 });
 
-// RAG chat endpoint
 app.post("/api/rag-chat", async (req, res) => {
   try {
-    const { question, domain } = req.body;
+    const { question, domain, details } = req.body;
 
     if (!question) {
-      return res.status(400).json({ error: "Question is required" });
+      return res.status(400).end("Question is required");
     }
 
-    const result = await askRAG({ question, domain });
+    // 🔑 Required for streaming
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Transfer-Encoding", "chunked");
+    res.setHeader("Cache-Control", "no-cache");
 
-    res.json(result);
+    await askRAGStream({
+      question,
+      domain,
+      details,
+      onToken: (token) => {
+        res.write(token);
+      },
+    });
+
+    res.end();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "RAG processing failed" });
+    console.error("🔥 STREAM ERROR:", err);
+    if (!res.headersSent) {
+      res.status(500).end("RAG streaming failed");
+    } else {
+      res.end();
+    }
   }
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 RAG server running on http://localhost:${PORT}`);
 });
-

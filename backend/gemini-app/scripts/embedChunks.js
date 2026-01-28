@@ -1,24 +1,30 @@
 import fs from "fs";
+import fetch from "node-fetch";
 import { db } from "../db.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import "dotenv/config";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const OLLAMA_URL = "http://localhost:11434/api/embeddings";
+const MODEL = "nomic-embed-text";
 
-const embedModel = genAI.getGenerativeModel({
-  model: "text-embedding-004",
-});
-
-// read chunks
 const chunks = JSON.parse(
   fs.readFileSync("policy_chunks.json", "utf-8")
 );
 
-for (const chunk of chunks) {
-  const emb = await embedModel.embedContent(chunk.text);
+console.log(`🔢 Embedding ${chunks.length} chunks...`);
 
-  // ✅ convert array → pgvector string
-  const vector = `[${emb.embedding.values.join(",")}]`;
+for (const chunk of chunks) {
+  const res = await fetch(OLLAMA_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: MODEL,
+      prompt: chunk.text.slice(0, 4000),
+    }),
+  });
+
+  if (!res.ok) throw new Error("Ollama embedding failed");
+
+  const data = await res.json();
+  const vector = `[${data.embedding.join(",")}]`;
 
   await db.query(
     `

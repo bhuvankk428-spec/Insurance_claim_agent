@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-
+import Navbar from "./ui/Navbar.jsx";
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
 
 /* ---------------- AUTO DOMAIN DETECTION ---------------- */
@@ -75,70 +75,103 @@ export default function PolicySummarizer() {
   }, [messages]);
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    if (!request.trim()) return;
+  e.preventDefault();
+  if (!request.trim()) return;
 
-    let finalDomain = domain;
-    if (domain === "any") {
-      const detected = detectDomain(request);
-      if (detected) finalDomain = detected;
-    }
-
-    const userText =
-      details.trim() ? `${request}\nDetails: ${details}` : request;
-
-    setLoading(true);
-    setMessages(prev => [...prev, { from: "user", text: userText }]);
-
-    try {
-      const response = await fetch(`${API_BASE}/api/rag-chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          question: request,
-          details,
-          domain: finalDomain === "any" ? null : finalDomain,
-        }),
-      });
-
-      const data = await response.json();
-
-      setMessages(prev => [
-        ...prev,
-        { from: "ai", text: data.answer || "No response." },
-      ]);
-
-      if (typeof data.confidence === "number") {
-        setConfidence(data.confidence);
-      } else {
-        setConfidence(null);
-      }
-
-      // 🔊 SPEAK (NOW WORKS)
-      if (data.answer) speak(data.answer, muted, voices);
-
-    } catch (err) {
-      console.error(err);
-      setMessages(prev => [
-        ...prev,
-        {
-          from: "ai",
-          text:
-            "⚠️ We’re having trouble fetching policy details right now. Please try again shortly.",
-        },
-      ]);
-    }
-
-    setLoading(false);
-    setRequest("");
-    setDetails("");
+  let finalDomain = domain;
+  if (domain === "any") {
+    const detected = detectDomain(request);
+    if (detected) finalDomain = detected;
   }
 
-  return (
-    <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row">
+  const userText =
+    details.trim() ? `${request}\nDetails: ${details}` : request;
 
+  setLoading(true);
+
+  // 1️⃣ Push user message
+  setMessages(prev => [...prev, { from: "user", text: userText }]);
+
+  // 2️⃣ Create empty AI message (important)
+  let aiIndex;
+  setMessages(prev => {
+    aiIndex = prev.length;
+    return [...prev, { from: "ai", text: "" }];
+  });
+
+  try {
+    const response = await fetch(`${API_BASE}/api/rag-chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: request,
+        details,
+        domain: finalDomain === "any" ? null : finalDomain,
+      }),
+    });
+
+    if (!response.body) {
+      throw new Error("Streaming not supported");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let fullText = "";
+    let firstSpeechTriggered = false;
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      fullText += chunk;
+
+      // 3️⃣ Incrementally update AI message
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[aiIndex] = {
+          ...updated[aiIndex],
+          text: fullText,
+        };
+        return updated;
+      });
+
+      // 🔊 Start voice early (optional but awesome)
+      if (!firstSpeechTriggered && fullText.length > 200) {
+        firstSpeechTriggered = true;
+        speak(fullText, muted, voices);
+      }
+    }
+
+  } catch (err) {
+    console.error(err);
+    setMessages(prev => [
+      ...prev,
+      {
+        from: "ai",
+        text:
+          "⚠️ We’re having trouble fetching policy details right now. Please try again shortly.",
+      },
+    ]);
+  }
+
+  setLoading(false);
+  setRequest("");
+  setDetails("");
+}
+
+
+ return (
+  <>
+    {/* FIXED NAVBAR */}
+    <Navbar />
+
+    {/* MAIN LAYOUT */}
+    <div className="pt-16 h-[calc(100vh-4rem)] bg-black text-white flex flex-col lg:flex-row">
+      
       {/* LEFT PANEL */}
-      <aside className="lg:w-[420px] bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-8 border-r border-gray-700">
+      <aside className="lg:w-[420px] h-full bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-8 border-r border-gray-700 overflow-y-auto">
         <h2 className="text-2xl font-bold mb-2">Policy Advisor</h2>
         <p className="text-gray-400 mb-6 text-sm">
           Compare & understand insurance policies intelligently
@@ -149,7 +182,9 @@ export default function PolicySummarizer() {
           <span className="text-sm">
             {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
           </span>
-          {loading && <span className="text-yellow-400 text-sm">⏳ Thinking...</span>}
+          {loading && (
+            <span className="text-yellow-400 text-sm">⏳ Thinking...</span>
+          )}
         </div>
 
         {/* MUTE BUTTON */}
@@ -200,8 +235,11 @@ export default function PolicySummarizer() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-sky-500 to-indigo-600 transition ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
-              }`}
+            className={`w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-sky-500 to-indigo-600 transition ${
+              loading
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:opacity-90"
+            }`}
           >
             {loading ? "Analyzing..." : "Find Best Policy"}
           </button>
@@ -209,13 +247,15 @@ export default function PolicySummarizer() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <main className="flex-grow bg-[#121316] p-6 overflow-y-auto">
+      <main className="flex-1 h-full bg-[#121316] p-6 overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* CONFIDENCE CARD */}
           {confidence !== null && (
             <div className="bg-[#1b1f2a] border border-gray-700 rounded-xl p-4">
-              <p className="font-semibold mb-2">Recommendation Confidence</p>
+              <p className="font-semibold mb-2">
+                Recommendation Confidence
+              </p>
               <div className="w-full bg-gray-700 rounded h-3">
                 <div
                   className="bg-green-500 h-3 rounded transition-all"
@@ -237,10 +277,11 @@ export default function PolicySummarizer() {
             messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`max-w-[85%] p-5 rounded-xl leading-relaxed ${msg.from === "user"
+                className={`max-w-[85%] p-5 rounded-xl leading-relaxed ${
+                  msg.from === "user"
                     ? "ml-auto bg-gradient-to-r from-indigo-600 to-sky-500"
                     : "bg-[#232834] border border-gray-700"
-                  }`}
+                }`}
               >
                 {msg.from === "ai" ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -259,6 +300,8 @@ export default function PolicySummarizer() {
         </div>
       </main>
     </div>
-  );
+  </>
+);
+
 
 }

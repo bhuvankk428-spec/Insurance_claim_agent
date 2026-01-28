@@ -7,8 +7,13 @@ export default function Navbar({ className = "" }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-   <nav className={`w-full border-b border-neutral-800 bg-black/80 backdrop-blur-md fixed top-0 left-0 z-20 ${className}`}>
-   
+   <nav
+  className={`w-full border-b border-neutral-800 
+  bg-neutral-950/95 backdrop-blur-md 
+  fixed top-0 left-0 z-50 
+  text-white ${className}`}
+>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
         
         {/* Logo / Brand */}

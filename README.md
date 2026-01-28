@@ -1,297 +1,144 @@
-qk.ai — AI-Assisted Insurance Claim & Advisory System
-Project Overview
+# 🚀 QK.AI — Intelligent Insurance Policy Advisor
 
-qk.ai is a modern, AI-powered web application designed to simplify insurance interactions by helping users understand claim eligibility, policy suitability, and next steps with clear explanations.
+**QK.AI** is an AI-powered insurance assistant that helps users **understand, compare, and evaluate insurance policies** using natural language.
 
-The system combines:
+It leverages a **Retrieval-Augmented Generation (RAG)** pipeline with **local LLMs via Ollama**, ensuring fast, private, and cost-free AI inference — no paid APIs required.
 
-Retrieval-Augmented Generation (RAG)
+---
 
-Rule-based policy evaluation
+## ✨ Features
 
-LLM-powered explanations (Gemini / OpenAI / Ollama)
+* 🧠 AI-powered insurance policy advisor
+* 📂 Policy data stored and processed in **structured JSON format**
+* 🔎 Semantic search using **pgvector embeddings**
+* ⚡ **Streaming AI responses** for real-time interaction
+* 🔐 Secure authentication with **Firebase (Email & Google)**
+* 🎯 Confidence-based policy recommendations
+* 🖥️ Modern, responsive UI (React + Tailwind)
 
-⚠️ qk.ai does not guess claim ratios, hospital availability, or medical eligibility.
-If data is unavailable, the system clearly states it.
+---
 
-What’s New (Important)
-🧠 Hybrid AI Engine (NEW)
+## 🛠️ Tech Stack
 
-qk.ai now uses a two-layer intelligence system:
+### Frontend
 
-Rule Engine (Primary)
+* React (Vite)
+* Tailwind CSS
+* React Router
+* Firebase Authentication
 
-Evaluates policies using structured data
+### Backend
 
-Checks eligibility, exclusions, affordability, family fit, occupation, and risks
+* Node.js (Express)
+* PostgreSQL + pgvector
+* Ollama (Local LLM + Embeddings)
+* RAG Architecture
+* Streaming NDJSON responses
 
-Produces a score + explanation
+---
 
-LLM (Secondary)
+## 🧩 How It Works
 
-Explains the decision
+1. User asks a question in natural language
+2. Relevant policy chunks are retrieved from PostgreSQL using vector similarity
+3. Results are ranked using business rules
+4. Context-aware prompts are sent to a local Ollama LLM
+5. AI streams an explainable insurance recommendation in real time
 
-Compares Policy A vs Policy B
+---
 
-Picks exactly one best policy
+## ⚙️ How to Run the Project (Step-by-Step)
 
-Never overrides rules
+> ⚠️ **Use three separate terminals**
 
-Key Features
-🔐 Authentication
+---
 
-Email/password login & registration
+### 🟢 Terminal 1 — Start Ollama
 
-Google Authentication
+```bash
+ollama serve
+```
 
-Firebase Authentication
+Ensure required models are installed:
 
-🚗 3-Step Claim Workflow
-
-Policy PDF Verification
-
-FIR / Complaint Upload
-
-Accident Photo Upload
-
-Each step includes validation, progress locking, and clear feedback.
-
-📝 Claim Story Analysis
-
-Users describe incidents in natural language
-
-Backend validates coverage + evidence
-
-AI explains:
-
-Coverage likelihood
-
-Required documents
-
-Next steps
-
-🔍 Policy Search, Comparison & Recommendation (UPDATED)
-
-Users can ask:
-
-“Best health insurance for family with heart condition”
-
-“Low premium crop insurance for drought & flood”
-
-System output:
-
-Policy A vs Policy B comparison
-
-Exactly one recommendation
-
-Score breakdown explaining why
-
-Clear claim process explanation
-
-How the Recommendation System Works
-User Query
-   ↓
-Semantic Search (RAG)
-   ↓
-Rule Engine (structured + text)
-   ↓
-Score + Explanation
-   ↓
-LLM Comparison & Final Recommendation
-
-Rule Engine Checks:
-
-Pre-existing disease handling
-
-Heart / chronic condition exclusions
-
-Family suitability
-
-Government subsidy & affordability
-
-Occupation (e.g., farmer)
-
-Natural calamity coverage
-
-Explicit exclusions (heavy penalties)
-
-Output Example:
-{
-  "score": 61,
-  "reasons": [
-    "Covers pre-existing diseases after waiting period",
-    "Family floater structure suits multi-member families",
-    "Strong hospital network nationally"
-  ]
-}
-
-Technology Stack
-Frontend
-
-React + Vite
-
-Tailwind CSS
-
-Firebase Authentication
-
-Markdown-based chatbot UI
-
-Optional voice output (browser-based)
-
-Backend
-
-Node.js + Express
-
-PostgreSQL + pgvector (for RAG)
-
-Custom Rule Engine (explainable scoring)
-
-LLM support:
-
-Ollama (local, free)
-
-Google Gemini
-
-OpenAI (optional)
-
-Running the Project Locally (FULL PROCESS)
-1️⃣ Prerequisites
-
-Node.js 16+
-
-npm
-
-(Optional but recommended) Ollama
-
-Install Ollama and pull a model:
-
+```bash
 ollama pull llama3
+ollama pull nomic-embed-text
+```
 
-2️⃣ Backend Setup
-cd backend
+---
+
+### 🔵 Terminal 2 — Start Backend
+
+```bash
+cd backend/gemini-app
 npm install
+npm start
+```
 
+Backend runs on:
 
-Create backend/.env:
-
-Option A — Run fully local (FREE, recommended)
-PORT=5174
-LLM_PROVIDER=ollama
-OLLAMA_MODEL=llama3
-
-
-Start Ollama:
-
-ollama run llama3
-
-Option B — Gemini (optional)
-PORT=5174
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=your_api_key_here
-
-3️⃣ Build RAG Data (One-time)
-node scripts/buildChunks.js
-node -r dotenv/config scripts/embedChunks.js
-
-
-Expected:
-
-✅ Built chunks
-✅ All chunks embedded & stored
-
-4️⃣ Start Backend Server
-   cd gemini-api
-   node server.js
-   npm start 
-
-Backend runs at:
-
+```
 http://localhost:5174
+```
 
-5️⃣ Frontend Setup
-cd ../frontend
+---
+
+### 🟣 Terminal 3 — Start Frontend
+
+```bash
+cd frontend
 npm install
-
-
-Create frontend/.env:
-
-VITE_API_URL=http://localhost:5174
-
-
-Start frontend:-
-
 npm run dev
+```
 
+Frontend runs on:
 
-Frontend runs at:
-
+```
 http://localhost:5173
+```
 
-Project Structure (Simplified)
-gemini-api/
-├── server.js
-├── rag.js
-├── rules.js              # Rule engine with score explanations
-├── policy_chunks.json
-├── health_policies.migrated.json
-├── scripts/
-│   ├── buildChunks.js
-│   └── embedChunks.js
-└── .env
+---
 
-frontend/
-├── src/components/
-│   ├── Chatbot.jsx
-│   ├── ClaimChecker.jsx
-│   └── ...
-└── .env
+## 🔐 Authentication
 
-Data Integrity Rules (STRICT)
+* Email & Password login
+* Google OAuth login
+* Firebase-backed authentication
+* Protected routes after login
 
-❌ No hallucinated claim ratios
+---
 
-❌ No assumed disease coverage
+## 📂 Data Format
 
-❌ No city-level hospital claims without data
+* Insurance policies are stored as **JSON chunks**
+* Each chunk includes:
 
-✅ “Data not available” shown clearly
+  * Policy name
+  * Domain (Health, Motor, Travel, etc.)
+  * Section
+  * Text content
+  * Vector embedding
 
-✅ All insurer metrics marked indicative
+This structure enables fast retrieval and explainable AI responses.
 
-Core Use Cases:-
+---
 
-Policy comparison with explanations
+## 👨‍💻 Author
 
-Claim eligibility pre-check
+**Bhuvan KK**
+Full-Stack Developer | AI Engineer
+📧 [bhuvankk2005@gmail.com](mailto:bhuvankk2005@gmail.com)
+📞 +91 90366 94320
 
-Farmer insurance advisory (drought/flood)
+---
 
-Family & medical-condition-based recommendations
+## 📜 License
 
-Early-stage claim guidance
+MIT License — open-source and free to use.
 
-Future Enhancements
+---
 
-City-level hospital network data
+> **QK.AI** — *Smarter insurance decisions, powered by local AI.*
 
-OCR for scanned documents
 
-Multilingual support
-
-User dashboards & saved comparisons
-
-Claim status tracking
-
-Summary:-
-
-qk.ai is not just a chatbot.
-
-It is an explainable insurance advisory engine built with:
-
-Rule validation
-
-Transparent AI reasoning
-
-No hallucination
-
-Local & cloud LLM support

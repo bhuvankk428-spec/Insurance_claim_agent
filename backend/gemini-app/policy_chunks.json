@@ -2,176 +2,152 @@
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "what_it_does",
-    "text": "Government-backed crop insurance scheme that protects farmers against crop loss due to natural calamities, pests, and diseases, helping to stabilize farm income."
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "premium",
-    "text": "2% of sum insured 1.5% of sum insured 5% of sum insured These are the maximum premium shares payable by farmers; the balance actuarial premium is subsidized by Central and State governments."
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "government_subsidy",
-    "text": "Typically 90–98% of the actuarial premium is borne by the Central and State governments, depending on the crop and state."
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "coverage",
-    "text": "Yield loss due to widespread natural calamities such as drought, flood, cyclone, hailstorm, and other notified events, Loss due to pests and crop diseases for notified crops, Prevented sowing or planting in notified areas due to adverse weather conditions, Post-harvest losses for specified crops caused by unseasonal rain or cyclones for a limited period after harvest, as per scheme rules, Localised calamities such as hailstorm, landslide, and inundation affecting individual farms, where notified"
+    "text": "drought, flood, cyclone, hailstorm, pests, crop diseases, excess rainfall, prevented sowing, post-harvest loss, localised calamities true true true"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "financials",
+    "text": "2% of sum insured 1.5% of sum insured 5% of sum insured true 90–98% very_low"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "claims",
+    "text": "yield_based area approach approximately 2 months after final yield data threshold yield vs actual yield"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "exclusions",
-    "text": "Losses due to farmer negligence or improper farming practices, Losses to crops not notified under the scheme by the state, Post-harvest losses occurring beyond the notified coverage period, Non-compliance with scheme guidelines or false claims"
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "notified_crops_and_area_basis",
-    "text": "Food crops (cereals, millets, pulses), oilseeds, annual commercial crops, and annual horticultural crops as notified by the respective state government. Implemented on an 'area approach' basis where yield loss is assessed for a defined notified unit area, and all insured farmers in that unit receive compensation based on the same threshold yield."
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "claim_and_payout_notes",
-    "text": "Sum insured is generally linked to the scale of finance, loan amount, or cost of cultivation for the insured crop. Claims are paid if the actual yield in the notified area falls below the threshold yield fixed for that crop and area. The scheme aims to settle claims within approximately 2 months after final yield data is received, although timelines may vary by state."
+    "text": "Farmer negligence or improper farming practices, Crops not notified by the state, Post-harvest losses beyond notified period, Non-compliance with scheme rules or false claims"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "best_for",
-    "text": "Loanee farmers who take crop loans from banks or cooperative societies, Non-loanee farmers who cultivate notified crops in participating districts, Farmers seeking protection from weather, pest, and yield risks at a very low premium cost"
+    "text": "Loanee farmers, Non-loanee farmers growing notified crops, Farmers seeking low premium protection against weather and yield risks"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "enrolment_and_access",
-    "text": "Automatically through banks or cooperative societies when availing crop loans, Through Common Service Centres (CSC) or the PMFBY online portal in many states, Through authorised insurance company agents or agriculture department offices Land ownership or cultivation records, Crop type, season, and cultivated area details, Active bank account details for direct claim credit, KYC documents as per state and insurer requirements"
+    "section": "enrolment",
+    "text": "Banks and cooperative societies, Common Service Centres (CSC), PMFBY online portal, Authorised insurance agents, Agriculture department offices Land or cultivation records, Crop and season details, Bank account for DBT, KYC documents"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "state_variation_note",
-    "text": "Coverage details, notified crops, premium subsidy sharing, and claim timelines vary by state and season."
-  },
-  {
-    "domain": "Crop Insurance",
-    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-    "section": "scheme_governance",
-    "text": "Government of India in coordination with State Governments and empanelled insurance companies. Provide affordable and comprehensive crop insurance coverage against natural and biological risks, Stabilize farmers’ income and reduce dependence on ad-hoc disaster relief, Encourage adoption of modern agricultural practices, Improve credit flow to the agriculture sector"
+    "section": "raw_text",
+    "text": "PMFBY is a government-backed crop insurance scheme that protects farmers against crop loss due to natural calamities such as drought, flood, cyclone, hailstorm, pests, and diseases. It covers prevented sowing, post-harvest losses for notified crops, and localized calamities. Premium payable by farmers is capped at 2% for Kharif crops, 1.5% for Rabi crops, and 5% for annual commercial and horticultural crops, with the remaining actuarial premium heavily subsidized by the Central and State governments. Claims are triggered when actual yield in a notified area falls below the threshold yield and are aimed to be settled within about two months after yield data is finalized. Coverage, crops, and timelines vary by state."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
-    "section": "what_it_does",
-    "text": "Broad health insurance for individuals and families with extensive coverage and no room-rent cap in many variants."
+    "section": "coverage",
+    "text": "true covered_after_waiting_period conditional covered_after_waiting_period  true true"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
-    "section": "coverage_highlights",
-    "text": "No room rent cap (you can choose any room category as per policy terms), In-patient hospitalization expenses, Pre-hospitalization expenses (typically up to 60 days), Post-hospitalization expenses (typically up to 90 days), Maternity and newborn baby coverage after applicable waiting period, Coverage for many modern treatments and procedures, Bariatric (weight-loss) surgery as per policy conditions, Second medical opinion facility, 100% restoration of the sum insured once in a policy year after exhaustion"
+    "section": "family",
+    "text": "true individual_or_family variant_dependent"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
-    "section": "key_conditions",
-    "text": "Waiting periods apply for pre-existing diseases (multi-year in many cases), Waiting period for maternity and newborn benefits, Specific waiting periods for listed illnesses and procedures, Sub-limits and co-pays may apply depending on the chosen variant and age, General exclusions like cosmetic surgery, non-medical expenses, etc."
+    "section": "insurer_metrics",
+    "text": "strong 14000+ 80–90% indicative_not_city_specific"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
-    "section": "insurer_metrics_notes",
-    "text": "14,000+ network hospitals offering cashless treatment (approximate reported figure). Health claim settlement ratio roughly in the 80–90% band in recent years (indicative range). Standalone health insurer with strong cashless approvals; some periods of regulatory scrutiny on claim practices have been reported."
+    "section": "claim_process",
+    "text": "cashless, reimbursement Cashless hospital network is a key strength; exclusions and waiting periods must be reviewed carefully."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "best_for",
-    "text": "Individuals and families who want flexibility in choosing hospital room (no room-rent cap in many variants), Customers who prioritize a strong cashless network and are comfortable reading detailed terms and exclusions"
+    "text": "Families wanting no room rent cap, Users prioritizing hospital choice flexibility"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Comprehensive Plan",
+    "section": "raw_text",
+    "text": "Broad health insurance for individuals and families with extensive coverage and no room-rent cap in many variants. Covers in-patient hospitalization, pre and post hospitalization expenses, maternity and newborn benefits after waiting periods, modern treatments, bariatric surgery as per conditions, second medical opinion, and 100% restoration of sum insured once per policy year. Waiting periods and sub-limits apply for pre-existing diseases and specific procedures."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
-    "section": "what_it_does",
-    "text": "Provides a single shared sum insured for the entire family under one health policy."
+    "section": "coverage",
+    "text": "true covered_after_waiting_period covered_after_waiting_period true variant_dependent"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
-    "section": "coverage_highlights",
-    "text": "In-patient hospitalization for all covered family members, Daycare procedures that do not require 24-hour hospitalization, Organ donor expenses as per policy terms, Automatic restoration of sum insured after it is exhausted (subject to conditions), Worldwide emergency coverage in many variants (emergency treatments outside India), Maternity and newborn coverage options after applicable waiting periods, Cashless hospitalization at Star Health’s extensive network hospitals"
+    "section": "family",
+    "text": "true family_floater 3_to_5_members"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
-    "section": "key_conditions",
-    "text": "Waiting periods for pre-existing diseases, maternity and specified illnesses apply, Certain sub-limits, co-pays or disease-wise limits may exist depending on variant and age, Maximum age and relationship rules for who can be included in the floater"
+    "section": "claim_process",
+    "text": "cashless, reimbursement Single shared sum insured across family members with restoration benefits."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "best_for",
-    "text": "3–5 member families who prefer a single floater policy instead of multiple individual covers, Families looking for restoration benefits and optional worldwide emergency coverage"
+    "text": "Mid-sized families preferring a floater plan, Families needing restoration benefits"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Family Health Optima",
+    "section": "raw_text",
+    "text": "Provides a single shared sum insured for the entire family under one health policy. Covers in-patient hospitalization, daycare procedures, organ donor expenses, restoration of sum insured, worldwide emergency coverage in some variants, maternity benefits after waiting periods, and cashless treatment at Star Health’s network hospitals. Waiting periods and sub-limits apply."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
-    "section": "what_it_does",
-    "text": "Comprehensive health insurance for individuals and families with strong restoration and wellness/check-up features."
+    "section": "coverage",
+    "text": "true covered_after_waiting_period true unlimited_variant_dependent true"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
-    "section": "coverage_highlights",
-    "text": "In-patient care for hospitalization above 24 hours, Daycare treatments that require less than 24 hours of hospitalization, Coverage for AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy) and modern treatments, Organ donor expenses as per policy terms, Pre-hospitalization expenses for a defined number of days, Post-hospitalization expenses for a defined number of days, Unlimited sum insured restoration in many variants when sum insured is exhausted, Annual health check-ups for insured members (subject to terms), Cashless hospitalization at Niva Bupa’s network hospitals"
+    "section": "insurer_metrics",
+    "text": "strong_urban indicative_not_product_specific"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
-    "section": "optional_riders",
-    "text": "Daily hospital cash benefit, Claim protection / claim safeguard rider (covers non-payable items or protects NCB, depending on design)"
-  },
-  {
-    "domain": "Health Insurance",
-    "policy_name": "Niva Bupa Health Companion Plan",
-    "section": "family_coverage",
-    "text": "Can cover up to 19 family members in certain family floater structures, making it suitable for large/joint families."
-  },
-  {
-    "domain": "Health Insurance",
-    "policy_name": "Niva Bupa Health Companion Plan",
-    "section": "insurer_metrics_notes",
-    "text": "CSR and ICR generally in a competitive band for standalone health insurers (exact numbers vary by year and product). Strong focus on urban, digitally savvy customers with emphasis on cashless, wellness and check-up benefits."
+    "section": "claim_process",
+    "text": "cashless, reimbursement Strong digital claim journey with wellness and preventive care focus."
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "best_for",
-    "text": "Tech-savvy individuals and families who value unlimited restoration and wellness features like annual check-ups, Large or joint families needing coverage for many members under one umbrella"
+    "text": "Large or joint families, Users valuing unlimited restoration and wellness benefits"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "section": "raw_text",
+    "text": "Comprehensive health insurance for individuals and families with in-patient hospitalization, daycare treatments, AYUSH coverage, organ donor expenses, pre and post hospitalization cover, unlimited restoration in many variants, annual health check-ups, and cashless treatment at Niva Bupa’s network hospitals. Optional riders include daily hospital cash and claim protection features."
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
-    "section": "positioning",
-    "text": "Large standalone health insurer offering multiple products across health, personal accident and travel segments."
+    "section": "insurer_metrics",
+    "text": "very_strong 14000+ 80–88% One of the largest standalone health insurers by retail volume."
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
-    "section": "key_features",
-    "text": "Network of 14,000+ hospitals providing cashless treatment, especially strong in many urban and semi-urban areas, 24/7 customer support and digital claim intimation/monitoring, Coverage for pre-existing diseases after completion of specified waiting periods, Maternity and newborn coverage in eligible plans after waiting periods, Multiple riders/add-ons such as personal accident, critical illness, top-up and super top-up options"
-  },
-  {
-    "domain": "Health / Accident / Travel",
-    "policy_name": "Star Health Insurance (General Overview)",
-    "section": "key_metrics",
-    "text": "CSR approximately in the 80–88% range in recent years (varies by year and source). ICR generally within the typical health insurance band, reflecting high claim volumes. One of the largest retail health insurers in India by number of policies and claims handled."
+    "section": "raw_text",
+    "text": "Large standalone health insurer offering multiple products across health, personal accident and travel insurance. Known for a wide cashless hospital network, digital claim support, maternity and pre-existing disease coverage after waiting periods, and multiple add-ons such as critical illness and top-up covers."
   },
   {
     "domain": "Home Insurance",

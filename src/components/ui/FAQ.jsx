@@ -1,6 +1,6 @@
 // src/components/FAQQKAI.jsx
 import { useState } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar.jsx";
 
 const faqs = [
   {

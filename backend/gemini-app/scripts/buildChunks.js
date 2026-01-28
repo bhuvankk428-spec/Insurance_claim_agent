@@ -22,7 +22,13 @@ function loadAllPolicies() {
     const content = JSON.parse(
       fs.readFileSync(path.join(DATA_DIR, file), "utf-8")
     );
-    policies.push(...content);
+
+    // ✅ SUPPORT both array and single object
+    if (Array.isArray(content)) {
+      policies.push(...content);
+    } else {
+      policies.push(content);
+    }
   }
 
   return policies;
@@ -46,7 +52,7 @@ function buildChunks(policies) {
         domain,
         policy_name: policyName,
         section: key,
-        text
+        text,
       });
     }
   }
@@ -54,11 +60,11 @@ function buildChunks(policies) {
   return chunks;
 }
 
-// run
+// RUN
 const policies = loadAllPolicies();
 const chunks = buildChunks(policies);
 
-// save output
+// SAVE
 fs.writeFileSync(
   "policy_chunks.json",
   JSON.stringify(chunks, null, 2)

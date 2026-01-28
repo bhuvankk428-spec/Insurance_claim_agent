@@ -1,26 +1,36 @@
+
 import { db } from "./db.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import "dotenv/config";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const OLLAMA_URL = "http://localhost:11434/api/embeddings";
+const MODEL = "nomic-embed-text";
 
-const embedModel = genAI.getGenerativeModel({
-  model: "text-embedding-004",
-});
+async function embed(text) {
+  const res = await fetch(OLLAMA_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: MODEL,
+      prompt: text.slice(0, 4000),
+    }),
+  });
 
-/**
- * Retrieve relevant policy chunks using vector similarity
- */
+  if (!res.ok) {
+    throw new Error("Embedding failed");
+  }
+
+  const data = await res.json();
+
+  // ✅ EXACT SAME FORMAT AS embedChunks.js
+  return `[${data.embedding.join(",")}]`;
+}
+
 export async function retrieveChunks({
   question,
   domain = null,
   limit = 6,
 }) {
-  // 1️⃣ Embed the user question
-  const emb = await embedModel.embedContent(question);
-  const queryVector = `[${emb.embedding.values.join(",")}]`;
+  const vector = await embed(question);
 
-  // 2️⃣ Build SQL dynamically (domain optional)
   let sql = `
     SELECT
       domain,
@@ -31,7 +41,7 @@ export async function retrieveChunks({
     FROM policy_chunks
   `;
 
-  const params = [queryVector];
+  const params = [vector];
 
   if (domain) {
     sql += ` WHERE domain = $2 `;
@@ -43,8 +53,6 @@ export async function retrieveChunks({
     LIMIT ${limit}
   `;
 
-  // 3️⃣ Query database
-  const result = await db.query(sql, params);
-
-  return result.rows;
+  const { rows } = await db.query(sql, params);
+  return rows;
 }

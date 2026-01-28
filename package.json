@@ -15,7 +15,6 @@
     "express": "^5.2.1",
     "firebase": "^12.6.0",
     "multer": "^2.0.2",
-    "node-fetch": "^3.3.2",
     "openai": "^6.15.0",
     "pdf-parse": "^2.4.5",
     "react": "^19.2.3",
