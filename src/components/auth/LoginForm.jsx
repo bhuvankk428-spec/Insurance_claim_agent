@@ -113,9 +113,7 @@ export default function LoginForm() {
                 <span className="leading-relaxed">{error}</span>
               </div>
             )}
-          </form>
-
-          {/* Sign in button */}
+            {/* Sign in button */}
           <button
             type="submit"
             disabled={loading}
@@ -144,6 +142,9 @@ export default function LoginForm() {
               "Sign In to QK.AI"
             )}
           </button>
+          </form>
+
+          
 
           {/* Sign up link */}
           <div className="text-center mb-6 sm:mb-8">

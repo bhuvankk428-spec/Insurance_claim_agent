@@ -1,7 +1,9 @@
 // src/components/HelpQKAI.jsx
+import Navbar from "./Navbar.jsx";
 export default function HelpQKAI() {
   return (
     <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16 lg:py-20">
+      <Navbar />
       <div className="max-w-4xl mx-auto w-full space-y-8 sm:space-y-10 lg:space-y-12">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-14 lg:mb-16">
