@@ -4,8 +4,9 @@ export function matchDocuments({
   domain,
   policyData,
   firData,
-  imageLocation
+  imageLocation,
 }) {
+  /* ---------------- HARD GUARDS ---------------- */
   if (!policyData) {
     return { ok: false, level: "reject", reason: "Policy data missing" };
   }
@@ -22,7 +23,7 @@ export function matchDocuments({
 
   let partial = false;
 
-  // 🔒 ASSET MATCH
+  /* ---------------- ASSET MATCH ---------------- */
   for (const field of rules.assetMatch) {
     const policyValue = policyData[field];
     const firValue = firData[field];
@@ -31,7 +32,7 @@ export function matchDocuments({
       return {
         ok: false,
         level: "reject",
-        reason: `${field} missing in documents`
+        reason: `${field} missing in documents`,
       };
     }
 
@@ -39,23 +40,30 @@ export function matchDocuments({
       return {
         ok: false,
         level: "reject",
-        reason: `${field} mismatch between policy and FIR`
+        reason: `${field} mismatch between policy and FIR`,
       };
     }
   }
 
-  // 🌍 LOCATION MATCH (SOFT)
-  if (imageLocation && firData.location) {
+  /* ---------------- LOCATION MATCH (SOFT) ---------------- */
+  if (
+    imageLocation &&
+    imageLocation !== "UNKNOWN" &&
+    firData.location
+  ) {
     if (!locationMatch(imageLocation, firData.location)) {
       partial = true; // ⚠️ allow partial
     }
   }
 
+  /* ---------------- SUCCESS ---------------- */
   return {
     ok: true,
-    level: partial ? "partial" : "full"
+    level: partial ? "partial" : "full",
   };
 }
+
+/* ---------------- HELPERS ---------------- */
 
 function normalize(value) {
   return value
@@ -66,9 +74,9 @@ function normalize(value) {
 }
 
 function locationMatch(imageLoc, firLoc) {
+  if (!imageLoc || !firLoc) return false;
+
   return imageLoc
     .toLowerCase()
-    .includes(
-      firLoc.toLowerCase().split(",")[0]
-    );
+    .includes(firLoc.toLowerCase().split(",")[0]);
 }

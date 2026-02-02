@@ -1,8 +1,8 @@
+import "dotenv/config";   // ✅ MUST BE FIRST
+
 import express from "express";
 import cors from "cors";
 import claimRoutes from "./routes/claim.routes.js";
-import "dotenv/config";
-
 
 const app = express();
 
@@ -17,4 +17,5 @@ app.get("/", (_, res) => {
 
 app.listen(5174, () => {
   console.log("🚀 Backend running on http://localhost:5174");
+  console.log("🔑 GROQ_API_KEY =", process.env.GROQ_API_KEY ? "LOADED" : "MISSING");
 });

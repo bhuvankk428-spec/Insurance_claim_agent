@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { claimStore } from "../store/claimStore.js";
 
 /* ---------------- CLAIM CODE GENERATORS ---------------- */
@@ -10,18 +10,35 @@ function generatePartialClaimCode() {
   return "CLM-P-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-/* ---------------- AI SETUP ---------------- */
-const genAI = process.env.GEMINI_API_KEY
-  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+/* ---------------- GROQ SETUP ---------------- */
+const groq = process.env.GROQ_API_KEY
+  ? new Groq({ apiKey: process.env.GROQ_API_KEY })
   : null;
 
-/* ---------------- UTILS ---------------- */
+console.log(
+  "🔑 GROQ_API_KEY =",
+  process.env.GROQ_API_KEY ? "LOADED" : "MISSING"
+);
+
+/* ---------------- JSON EXTRACT ---------------- */
 function extractJSON(text) {
   try {
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
     if (start === -1 || end === -1) return null;
-    return JSON.parse(text.slice(start, end + 1));
+
+    const parsed = JSON.parse(text.slice(start, end + 1));
+
+    // strict shape validation
+    if (
+      typeof parsed.consistent !== "boolean" ||
+      !parsed.reason ||
+      !parsed.riskLevel
+    ) {
+      return null;
+    }
+
+    return parsed;
   } catch {
     return null;
   }
@@ -35,43 +52,46 @@ export async function analyzeStory(req, res) {
     if (!story || !claimId) {
       return res.status(400).json({
         eligible: false,
-        answer: "Story or claim reference missing.",
+        reason: "Story or claim reference missing.",
       });
     }
 
     if (story.trim().length < 40) {
       return res.json({
         eligible: false,
-        answer:
+        reason:
           "Please describe the incident in at least 2–3 complete sentences.",
       });
     }
 
     const claim = claimStore.get(claimId);
 
-    if (
-      !claim ||
-      !claim.policyData ||
-      !claim.firData ||
-      !claim.matchLevel
-    ) {
+    if (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) {
       return res.status(400).json({
         eligible: false,
-        answer: "Claim context missing. Please restart the claim process.",
+        reason: "Claim context missing. Please restart the claim process.",
       });
     }
 
-    const { policyData, firData, imageLocation, matchLevel } = claim;
+    if (claim.matchLevel === "reject") {
+      return res.json({
+        eligible: false,
+        reason:
+          "Documents do not sufficiently match. Claim cannot be processed.",
+      });
+    }
 
-    /* ---------------- AI ---------------- */
+    const { policyData, firData, imageLocation } = claim;
+
+    /* ---------------- GROQ AI ---------------- */
     let aiResult = null;
 
-    if (genAI) {
-      console.log("🧠 Gemini AI is being called");
+    if (groq) {
+      console.log("🧠 Groq LLM is being called");
 
       try {
         const prompt = `
-You are a senior insurance claim analyst.
+You are an insurance claim assessment assistant.
 
 Policy details:
 ${JSON.stringify(policyData, null, 2)}
@@ -79,28 +99,44 @@ ${JSON.stringify(policyData, null, 2)}
 FIR details:
 ${JSON.stringify(firData, null, 2)}
 
-Image location evidence:
+Image evidence location:
 ${JSON.stringify(imageLocation, null, 2)}
 
 User story:
 "${story}"
 
+RULES:
+- Missing fields are inconclusive, not incorrect
+- Ignore UNKNOWN image location
+- Reject only on clear contradictions
+- Prefer approval if core details match
+
 Respond STRICTLY in JSON:
 {
   "consistent": true | false,
-  "reason": "clear explanation in simple language",
+  "decision": "approved" | "partially_approved" | "rejected",
+  "reason": "clear explanation for user",
   "riskLevel": "low" | "medium" | "high"
 }
 `;
 
-        const model = genAI.getGenerativeModel({
-          model: "gemini-1.5-pro",
+        const completion = await groq.chat.completions.create({
+          model: "llama-3.1-8b-instant",
+          temperature: 0.2,
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are an insurance claim verification and fraud risk expert.",
+            },
+            { role: "user", content: prompt },
+          ],
         });
 
-        const result = await model.generateContent(prompt);
-        aiResult = extractJSON(result.response.text());
+        const text = completion.choices[0]?.message?.content;
+        aiResult = extractJSON(text);
       } catch (err) {
-        console.warn("⚠️ Gemini failed, using fallback");
+        console.error("❌ Groq error:", err.message || err);
       }
     }
 
@@ -108,48 +144,52 @@ Respond STRICTLY in JSON:
     if (!aiResult) {
       aiResult = {
         consistent: true,
-        reason: "Story appears consistent with verified documents.",
+        decision: "approved",
+        reason: "Story is consistent with verified documents.",
         riskLevel: "medium",
       };
     }
 
-    if (!aiResult.consistent) {
+    if (!aiResult.consistent || aiResult.decision === "rejected") {
       return res.json({
         eligible: false,
-        answer: aiResult.reason,
+        reason: aiResult.reason,
       });
     }
 
     /* ---------------- FINAL DECISION ---------------- */
-    const claimCode =
-      matchLevel === "full"
-        ? generateFullClaimCode()
-        : generatePartialClaimCode();
+    const isPartial = aiResult.decision === "partially_approved";
+
+    const claimCode = isPartial
+      ? generatePartialClaimCode()
+      : generateFullClaimCode();
 
     claim.claimCode = claimCode;
     claim.riskLevel = aiResult.riskLevel;
+    claim.matchLevel = isPartial ? "partial" : "full";
+
     claimStore.set(claimId, claim);
 
     return res.json({
       eligible: true,
       claimCode,
-      level: matchLevel,
+      level: claim.matchLevel,
       riskLevel: aiResult.riskLevel,
       explanation: aiResult.reason,
       reasons: [
-        "Policy details matched with FIR",
-        "Vehicle number verified",
-        "Incident type consistent",
-        matchLevel === "partial"
-          ? "Location match was approximate"
-          : "Location verified from images",
+        "Policy and FIR details are consistent",
+        "Vehicle information verified",
+        "Incident description matches documents",
+        isPartial
+          ? "Some evidence requires manual verification"
+          : "All required evidence verified successfully",
       ],
     });
   } catch (err) {
     console.error("Story analysis error:", err);
     return res.status(500).json({
       eligible: false,
-      answer: "Internal error while analyzing claim.",
+      reason: "Internal error while analyzing claim.",
     });
   }
 }

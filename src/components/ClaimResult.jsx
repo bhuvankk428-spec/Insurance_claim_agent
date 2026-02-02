@@ -1,20 +1,25 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./ui/Navbar";
+
 export default function ClaimResult() {
   const { claimId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Data passed from story page
-  const { level, answer, riskLevel } = location.state || {};
+  const {
+    level,
+    explanation,
+    reasons = [],
+    riskLevel,
+  } = location.state || {};
 
   const isPartial = level === "partial";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-[#050816] to-[#111827] flex items-center justify-center px-4">
-        <Navbar/>
+      <Navbar />
+
       <div className="max-w-xl w-full bg-[#0f1117]/90 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
-        
         <h1 className="text-3xl font-black text-white text-center mb-6">
           Claim Result
         </h1>
@@ -47,9 +52,25 @@ export default function ClaimResult() {
         )}
 
         {/* EXPLANATION */}
-        <div className="mt-6 p-4 bg-black/40 rounded-xl text-sm text-neutral-200 leading-relaxed">
-          {answer}
-        </div>
+        {(reasons.length > 0 || explanation) && (
+          <div className="mt-6 p-4 bg-black/40 rounded-xl text-sm text-neutral-200">
+            <p className="font-semibold mb-2 text-white">
+              Why this claim was approved
+            </p>
+
+            <ul className="list-disc list-inside space-y-1">
+              {reasons.map((r, i) => (
+                <li key={i}>{r}</li>
+              ))}
+            </ul>
+
+            {explanation && (
+              <p className="mt-3 text-neutral-300 italic">
+                {explanation}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* NEXT STEPS */}
         <div className="mt-6 text-center text-neutral-400 text-sm">

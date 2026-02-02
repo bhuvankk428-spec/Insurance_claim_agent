@@ -28,9 +28,15 @@ export async function checkPolicy(req, res) {
 
   // ✅ STORE IN claimStore
   claimStore.set(claimId, {
-    policyData: fields,
-    createdAt: Date.now(),
-  });
+  policyData: fields,
+  firData: null,
+  imageLocation: null,
+  matchLevel: null,
+  riskLevel: null,
+  claimCode: null,
+  createdAt: Date.now(),
+});
+
 
   return res.json({
     valid: true,

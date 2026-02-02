@@ -44,12 +44,14 @@ export default function ClaimStoryChatbot() {
 
       if (data.eligible) {
   navigate(`/claim-result/${data.claimCode}`, {
-    state: {
-      level: data.level,
-      answer: data.answer,
-      riskLevel: data.riskLevel
-    }
-  });
+  state: {
+    level: data.level,
+    riskLevel: data.riskLevel,
+    explanation: data.explanation,
+    reasons: data.reasons,
+  },
+});
+
 }
 
     } catch (err) {
