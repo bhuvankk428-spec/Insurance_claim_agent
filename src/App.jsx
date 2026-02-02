@@ -22,7 +22,7 @@ function App() {
         <Route path="/choose" element={<ChooserPage />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/claim-checker" element={<ClaimChecker />} />
-        <Route path="/claim-story" element={<ClaimStoryChatbot />} />
+       <Route path="/claim-story/:claimId" element={<ClaimStoryChatbot />} />
         {/* fallback for any unmatched url */}
         <Route path="*" element={<ChooserPage />} />
         <Route path="/about" element={<AboutQKAI />} />
