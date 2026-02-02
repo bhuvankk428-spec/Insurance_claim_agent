@@ -81,7 +81,7 @@ export async function checkEvidence(req, res) {
   claim.firData = firData;
   claim.imageLocation = imageLocation;
   claim.geoTagged = geoTagged;
-  claim.matchLevel = result.level;   // ✅ ADD THIS LINE
+  claim.matchLevel = result.level;   
 
   claimStore.set(claimId, claim);
 
