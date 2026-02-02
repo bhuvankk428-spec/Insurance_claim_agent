@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import claimRoutes from "./routes/claim.routes.js";
+import "dotenv/config";
 
 
 const app = express();

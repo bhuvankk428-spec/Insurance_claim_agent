@@ -9,6 +9,7 @@ import AboutQKAI from "./components/ui/AboutQKAI";
 import ContactQKAI from "./components/ui/contact";
             import HelpQKAI from "./components/ui/Help";
 import FAQQKAI from "./components/ui/FAQ";
+import ClaimResult from "./components/ClaimResult";
 
 
 
@@ -23,6 +24,8 @@ function App() {
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/claim-checker" element={<ClaimChecker />} />
        <Route path="/claim-story/:claimId" element={<ClaimStoryChatbot />} />
+       <Route path="/claim-result/:claimId" element={<ClaimResult />} />
+
         {/* fallback for any unmatched url */}
         <Route path="*" element={<ChooserPage />} />
         <Route path="/about" element={<AboutQKAI />} />

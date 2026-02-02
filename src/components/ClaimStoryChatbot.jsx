@@ -42,9 +42,16 @@ export default function ClaimStoryChatbot() {
 
       setResponse(data.answer || data.message || "No response generated.");
 
-      if (data.eligible && data.claimCode) {
-        setClaimCode(data.claimCode);
-      }
+      if (data.eligible) {
+  navigate(`/claim-result/${data.claimCode}`, {
+    state: {
+      level: data.level,
+      answer: data.answer,
+      riskLevel: data.riskLevel
+    }
+  });
+}
+
     } catch (err) {
       setResponse(
         "Something went wrong while analyzing your story. Please try again."
