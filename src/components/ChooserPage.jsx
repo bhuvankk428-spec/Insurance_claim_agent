@@ -7,7 +7,14 @@ export default function ChooserPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-48 -left-32 h-96 w-96 rounded-full bg-sky-600/15 blur-[120px]" />
+        <div className="absolute top-32 -right-24 h-80 w-80 rounded-full bg-violet-600/20 blur-[110px]" />
+        <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] [background-size:26px_26px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+      </div>
       {/* Navbar */}
       <nav className="w-full border-b border-neutral-800 bg-black/80 backdrop-blur-md fixed top-0 left-0 z-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
@@ -133,16 +140,19 @@ export default function ChooserPage() {
       </nav>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 lg:pb-20">
-        <div className="max-w-4xl sm:max-w-5xl w-full text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 sm:mb-8 text-white tracking-tight drop-shadow-2xl leading-tight">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 lg:pb-20">
+        <div className="max-w-5xl w-full text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs sm:text-sm text-sky-200 mb-5">
+            Fast, simple, and secure
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-5 sm:mb-7 text-white tracking-tight drop-shadow-2xl leading-tight">
             Welcome! What would you like to do?
           </h1>
-          <p className="text-sm sm:text-base lg:text-lg text-neutral-400 mb-10 lg:mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-neutral-300 mb-10 lg:mb-12 max-w-2xl mx-auto leading-relaxed">
             Choose a tool below to get instant insights about your insurance policies and claims.
           </p>
 
-          {/* Cards – responsive grid */}
+          {/* Cards - responsive grid */}
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:justify-items-center w-full">
             <HoverCard
               icon={<FaSearch className="text-4xl sm:text-5xl lg:text-6xl text-sky-200 mb-4 sm:mb-6" />}
@@ -165,7 +175,7 @@ export default function ChooserPage() {
           {/* Helper strip */}
           <div className="mt-12 lg:mt-16 mx-auto max-w-3xl rounded-2xl border border-neutral-800/50 bg-gradient-to-r from-sky-900/30 via-transparent to-violet-900/30 px-6 py-5 sm:py-6 flex flex-col sm:flex-row items-center gap-4 backdrop-blur-sm">
             <span className="px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-sky-700/70 text-sky-100 shadow-lg">
-              💡 Tip
+              Tip
             </span>
             <p className="text-xs sm:text-sm lg:text-base text-neutral-300 leading-relaxed text-center sm:text-left">
               Not sure where to start? Use{" "}
@@ -181,7 +191,7 @@ export default function ChooserPage() {
       <footer className="border-t border-neutral-800/50 bg-black/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 text-xs sm:text-sm text-neutral-400">
           <p className="text-center lg:text-left order-2 lg:order-1">
-            © {new Date().getFullYear()} QK.AI  All rights reserved.
+            (c) {new Date().getFullYear()} QK.AI All rights reserved.
           </p>
           <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 lg:gap-4 order-1 lg:order-2">
             <button className="hover:text-sky-300 transition-colors px-3 py-1 rounded-lg hover:bg-white/10">
@@ -208,11 +218,12 @@ function HoverCard({ icon, title, desc, tag, tagColor, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group relative bg-[#181e27]/90 backdrop-blur-xl border border-[#222231]/50 hover:border-sky-500/50 hover:bg-[#181e27] transition-all duration-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 w-full max-w-sm sm:max-w-md lg:max-w-[340px] min-h-[280px] sm:min-h-[320px] flex flex-col items-center cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl hover:-translate-y-1"
+      className="group relative bg-[#141923]/90 backdrop-blur-xl border border-[#1d2431]/80 hover:border-sky-500/60 hover:bg-[#171c27] transition-all duration-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 w-full max-w-sm sm:max-w-md lg:max-w-[360px] min-h-[280px] sm:min-h-[320px] flex flex-col items-center cursor-pointer hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl hover:-translate-y-1"
     >
+      <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-transparent bg-gradient-to-br from-sky-500/15 via-transparent to-violet-500/15 opacity-0 group-hover:opacity-100 transition-opacity" />
       {/* Hover star */}
       <span className="absolute -top-3 -right-3 hidden lg:group-hover:block lg:group-hover:animate-pulse text-xl lg:text-2xl text-sky-400 drop-shadow-2xl z-10">
-        ★
+        *
       </span>
       
       {/* Icon */}
@@ -235,3 +246,5 @@ function HoverCard({ icon, title, desc, tag, tagColor, onClick }) {
     </div>
   );
 }
+
+

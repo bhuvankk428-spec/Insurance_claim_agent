@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChooserPage from "./components/ChooserPage";
 import Chatbot from "./components/Chatbot";
 import ClaimChecker from "./components/ClaimChecker";
-import LoginForm from "./components/auth/LoginForm";
+import LoginEntry from "./components/auth/LoginEntry";
 import RegisterForm from "./components/auth/RegisterForm";
 import ClaimStoryChatbot from "./components/ClaimStoryChatbot";
 import AboutQKAI from "./components/ui/AboutQKAI";
@@ -17,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<LoginEntry />} />
         <Route path="/register" element={<RegisterForm />} />
 
         <Route path="/choose" element={<ChooserPage />} />

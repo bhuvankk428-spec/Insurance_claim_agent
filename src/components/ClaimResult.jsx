@@ -16,23 +16,39 @@ export default function ClaimResult() {
   const isPartial = level === "partial";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#050816] to-[#111827] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4 pt-24 pb-12 relative overflow-hidden">
       <Navbar />
 
-      <div className="max-w-xl w-full bg-[#0f1117]/90 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
-        <h1 className="text-3xl font-black text-white text-center mb-6">
-          Claim Result
-        </h1>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-600/15 blur-[120px]" />
+        <div className="absolute top-16 -right-24 h-80 w-80 rounded-full bg-violet-600/20 blur-[110px]" />
+        <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] [background-size:26px_26px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+      </div>
+
+      <div className="max-w-xl w-full bg-[#0f1422]/90 border border-[#1f2734] rounded-3xl p-8 shadow-2xl relative z-10">
+        <div className="text-center mb-7">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs text-sky-200 mb-4">
+            Claim Summary
+          </div>
+          <h1 className="text-3xl font-black text-white">
+            Claim Result
+          </h1>
+          <p className="text-sm text-neutral-300 mt-2">
+            Review your approval details and next steps.
+          </p>
+        </div>
 
         {/* STATUS */}
         <div
-          className={`mb-6 p-4 rounded-xl text-center font-semibold ${
+          className={`mb-6 p-4 rounded-2xl text-center font-semibold border ${
             isPartial
-              ? "bg-yellow-900/40 text-yellow-300"
-              : "bg-emerald-900/40 text-emerald-300"
+              ? "bg-yellow-900/30 text-yellow-200 border-yellow-700/40"
+              : "bg-emerald-900/30 text-emerald-200 border-emerald-700/40"
           }`}
         >
-          {isPartial ? "⚠️ Partially Approved" : "✅ Approved"}
+          {isPartial ? "Partially Approved" : "Approved"}
         </div>
 
         {/* CLAIM ID */}
@@ -53,7 +69,7 @@ export default function ClaimResult() {
 
         {/* EXPLANATION */}
         {(reasons.length > 0 || explanation) && (
-          <div className="mt-6 p-4 bg-black/40 rounded-xl text-sm text-neutral-200">
+          <div className="mt-6 p-5 bg-black/40 border border-neutral-800/70 rounded-2xl text-sm text-neutral-200">
             <p className="font-semibold mb-2 text-white">
               Why this claim was approved
             </p>
@@ -82,7 +98,7 @@ export default function ClaimResult() {
         {/* ACTION */}
         <button
           onClick={() => navigate("/choose")}
-          className="mt-8 w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-500 transition text-white font-bold"
+          className="mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 transition text-white font-bold shadow-lg"
         >
           Back to Home
         </button>
@@ -90,3 +106,6 @@ export default function ClaimResult() {
     </div>
   );
 }
+
+
+
