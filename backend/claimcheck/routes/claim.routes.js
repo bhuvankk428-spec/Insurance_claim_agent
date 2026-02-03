@@ -3,9 +3,20 @@ import multer from "multer";
 import { checkPolicy } from "../services/policy.service.js";
 import { checkEvidence } from "../services/evidence.service.js";
 import { analyzeStory } from "../services/story.service.js";
+import { listClaims, updateAdminDecision } from "../services/supabase.service.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
+
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "qk-admin-2026";
+
+function requireAdmin(req, res, next) {
+  const token = req.headers["x-admin-token"];
+  if (!token || token !== ADMIN_TOKEN) {
+    return res.status(401).json({ status: "error", message: "Unauthorized" });
+  }
+  next();
+}
 
 /* ------------------ ROUTES ------------------ */
 
@@ -28,5 +39,53 @@ router.post(
 
 // STEP 3: Story analysis 
 router.post("/claim-story", analyzeStory);
+
+/* ------------------ ADMIN ------------------ */
+router.get("/admin/claims", requireAdmin, async (req, res) => {
+  try {
+    const claims = await listClaims();
+    return res.json({ status: "success", claims });
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err.message || "Failed to load claims",
+    });
+  }
+});
+
+router.patch("/admin/claims/:claimId", requireAdmin, async (req, res) => {
+  try {
+    const { claimId } = req.params;
+    const { adminDecision, adminNotes } = req.body || {};
+
+    if (!claimId) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "Claim ID is required" });
+    }
+
+    if (
+      adminDecision &&
+      !["approved", "rejected", "pending"].includes(adminDecision)
+    ) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid admin decision",
+      });
+    }
+
+    const updated = await updateAdminDecision(claimId, {
+      admin_decision: adminDecision || null,
+      admin_notes: adminNotes || null,
+    });
+
+    return res.json({ status: "success", claim: updated });
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err.message || "Failed to update claim",
+    });
+  }
+});
 
 export default router;

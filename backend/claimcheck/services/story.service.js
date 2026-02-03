@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import { claimStore } from "../store/claimStore.js";
+import { upsertClaimDecision } from "./supabase.service.js";
 
 /* ---------------- CLAIM CODE GENERATORS ---------------- */
 function generateFullClaimCode() {
@@ -74,6 +75,33 @@ export async function analyzeStory(req, res) {
     }
 
     if (claim.matchLevel === "reject") {
+      try {
+        await upsertClaimDecision({
+          claim_id: claimId,
+          email: claim.email || null,
+          eligibility_status: "rejected",
+          risk_level: null,
+          claim_code: null,
+          match_level: claim.matchLevel || null,
+          image_location: claim.imageLocation || null,
+          geo_tagged: claim.geoTagged ?? null,
+          policy_owner_name: claim.policyData?.ownerName || null,
+          policy_bike_number: claim.policyData?.bikeNumber || null,
+          policy_land_location: claim.policyData?.landLocation || null,
+          fir_incident: claim.firData?.incident || null,
+          fir_bike_number: claim.firData?.bikeNumber || null,
+          fir_location: claim.firData?.location || null,
+          admin_decision: null,
+          admin_notes: null,
+          created_at: claim.createdAt
+            ? new Date(claim.createdAt).toISOString()
+            : new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error("❌ Supabase save error:", err.message || err);
+      }
+
       return res.json({
         eligible: false,
         reason:
@@ -151,6 +179,33 @@ Respond STRICTLY in JSON:
     }
 
     if (!aiResult.consistent || aiResult.decision === "rejected") {
+      try {
+        await upsertClaimDecision({
+          claim_id: claimId,
+          email: claim.email || null,
+          eligibility_status: "rejected",
+          risk_level: aiResult.riskLevel || null,
+          claim_code: null,
+          match_level: claim.matchLevel || null,
+          image_location: claim.imageLocation || null,
+          geo_tagged: claim.geoTagged ?? null,
+          policy_owner_name: claim.policyData?.ownerName || null,
+          policy_bike_number: claim.policyData?.bikeNumber || null,
+          policy_land_location: claim.policyData?.landLocation || null,
+          fir_incident: claim.firData?.incident || null,
+          fir_bike_number: claim.firData?.bikeNumber || null,
+          fir_location: claim.firData?.location || null,
+          admin_decision: null,
+          admin_notes: null,
+          created_at: claim.createdAt
+            ? new Date(claim.createdAt).toISOString()
+            : new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error("❌ Supabase save error:", err.message || err);
+      }
+
       return res.json({
         eligible: false,
         reason: aiResult.reason,
@@ -170,12 +225,40 @@ Respond STRICTLY in JSON:
 
     claimStore.set(claimId, claim);
 
+    try {
+      await upsertClaimDecision({
+        claim_id: claimId,
+        email: claim.email || null,
+        eligibility_status: isPartial ? "partial" : "approved",
+        risk_level: aiResult.riskLevel || null,
+        claim_code: claimCode,
+        match_level: claim.matchLevel || null,
+        image_location: claim.imageLocation || null,
+        geo_tagged: claim.geoTagged ?? null,
+        policy_owner_name: claim.policyData?.ownerName || null,
+        policy_bike_number: claim.policyData?.bikeNumber || null,
+        policy_land_location: claim.policyData?.landLocation || null,
+        fir_incident: claim.firData?.incident || null,
+        fir_bike_number: claim.firData?.bikeNumber || null,
+        fir_location: claim.firData?.location || null,
+        admin_decision: null,
+        admin_notes: null,
+        created_at: claim.createdAt
+          ? new Date(claim.createdAt).toISOString()
+          : new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("❌ Supabase save error:", err.message || err);
+    }
+
     return res.json({
       eligible: true,
       claimCode,
       level: claim.matchLevel,
       riskLevel: aiResult.riskLevel,
       explanation: aiResult.reason,
+      eligibilityStatus: isPartial ? "partial" : "approved",
       reasons: [
         "Policy and FIR details are consistent",
         "Vehicle information verified",

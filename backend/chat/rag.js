@@ -32,56 +32,54 @@ export async function askRAGStream({
   const context = chunks
     .map(
       (c, i) =>
-        `(${i + 1}) ${c.policy_name} – ${c.section}\n${c.content}`
+        `(${i + 1}) ${c.policy_name} - ${c.section}\n${(c.content || "")
+          .slice(0, 800)
+          .trim()}`
     )
     .join("\n\n");
 
   /* 4️⃣ Tight prompt */
   const prompt = `
-You are an experienced insurance advisor in India.
+You are an insurance advisor. Use ONLY the policy excerpts below.
+If data is missing, say "data not available".
 
-User question:
+Question:
 ${question}
 
 Policy excerpts:
 ${context}
 
-Rules:
-- Compare only listed policies
-- Choose ONE best policy
-- No assumptions
-- Say "data not available" if missing
-- Markdown only
-
-Answer format:
-
+Answer in Markdown with:
 ✅ **Recommended policy**
-<policy>
-
-### Comparison
-<short>
-
-### Why this is best
-<reason>
-
-### Claim process
-<steps>
+### Comparison (2-4 bullets)
+### Why this is best (2-4 bullets)
+### Claim process (3-6 steps)
 `;
 
   /* 5️⃣ Stream from Ollama */
   const controller = new AbortController();
+  const timeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || 60000);
+  const timeout =
+    timeoutMs > 0 ? setTimeout(() => controller.abort(), timeoutMs) : null;
 
-  const response = await fetch("http://localhost:11434/api/generate", {
+  const ollamaBase = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
+  const ollamaModel = process.env.OLLAMA_CHAT_MODEL || "llama3";
+
+  const response = await fetch(`${ollamaBase}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     signal: controller.signal,
     body: JSON.stringify({
-      model: "llama3",
+      model: ollamaModel,
       prompt,
       stream: true,
       options: {
         temperature: 0.2,
-        num_ctx: 4096,
+        top_p: 0.9,
+        top_k: 40,
+        repeat_penalty: 1.1,
+        num_ctx: Number(process.env.OLLAMA_NUM_CTX || 2048),
+        num_predict: Number(process.env.OLLAMA_MAX_TOKENS || 350),
       },
     }),
   });
@@ -124,6 +122,8 @@ Answer format:
       }
     }
   } finally {
+    if (timeout) clearTimeout(timeout);
     controller.abort(); // ✅ ensure Ollama stops
   }
 }
+

@@ -6,18 +6,18 @@ export default function AboutQKAI() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-black text-white px-4 py-12 sm:py-16">
+      <div className="min-h-screen bg-[#0b0f14] text-white px-4 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto w-full grid gap-8 sm:gap-10 md:grid-cols-[1.2fr_1fr] items-start md:items-center">
           
           {/* Left: Text */}
           <div className="order-2 md:order-1 space-y-6 sm:space-y-8">
-            <p className="text-xs uppercase tracking-[0.25em] text-sky-400 mb-3">
+            <p className="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-3">
               About QK.AI
             </p>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 sm:mb-6 leading-tight">
               Smarter insurance decisions,
-              <span className="block bg-gradient-to-r from-sky-400 to-violet-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
                 powered by QK.AI
               </span>
             </h1>
@@ -68,7 +68,7 @@ export default function AboutQKAI() {
           <div className="order-1 md:order-2 flex justify-center md:justify-end">
             <div className="bg-[#111827]/90 border border-neutral-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-violet-500 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center flex-shrink-0">
                   <img
                     src="/logo.png"
                     alt="QK.AI Logo"
@@ -102,7 +102,7 @@ export default function AboutQKAI() {
 function FeatureItem({ title, desc }) {
   return (
     <div className="rounded-2xl border border-neutral-800 bg-[#0b1120]/80 px-4 py-3 sm:px-5">
-      <h3 className="text-sm font-semibold mb-1 text-sky-200">
+      <h3 className="text-sm font-semibold mb-1 text-cyan-200">
         {title}
       </h3>
       <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">

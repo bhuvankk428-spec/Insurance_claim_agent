@@ -75,7 +75,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0a0e17] to-[#111827] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gradient-to-br from-[#0b0f14] via-[#0d1320] to-[#0f172a] flex flex-col lg:flex-row">
       {/* Left: Register Card - Full width mobile, 40% desktop */}
       <div className="w-full lg:w-2/5 flex flex-col justify-center items-center px-4 py-6 sm:px-6 sm:py-8 lg:p-8 bg-black/50 backdrop-blur-sm lg:backdrop-blur-sm">
         <form
@@ -95,7 +95,7 @@ export default function RegisterForm() {
 
           {/* Title */}
           <div className="text-center mb-5 sm:mb-6 lg:mb-8">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2 bg-gradient-to-r from-emerald-400 via-sky-400 to-violet-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2 bg-gradient-to-r from-emerald-400 via-cyan-400 to-sky-400 bg-clip-text text-transparent drop-shadow-2xl">
               Create Account
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md mx-auto">
@@ -198,7 +198,7 @@ export default function RegisterForm() {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin w-6 h-6" fill="none" viewBox="0 0 24 24">
-                  <rcle
+                  <circle
                     className="opacity-25"
                     cx="12"
                     cy="12"

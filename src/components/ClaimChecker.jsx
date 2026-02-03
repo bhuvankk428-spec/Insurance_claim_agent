@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 import {
   FaFilePdf,
   FaCheckCircle,
@@ -9,7 +10,10 @@ import {
 } from "react-icons/fa";
 import Navbar from "./ui/Navbar";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+const API_BASE =
+  import.meta.env.VITE_CLAIM_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5174";
 
 export default function ClaimChecker() {
   const navigate = useNavigate();
@@ -43,6 +47,8 @@ export default function ClaimChecker() {
   async function verifyPolicy(file) {
     const formData = new FormData();
     formData.append("pdf", file); // ? ONLY PDF
+    const email = auth.currentUser?.email;
+    if (email) formData.append("email", email);
 
     try {
       setPolicyLoading(true);
@@ -125,17 +131,17 @@ export default function ClaimChecker() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-black px-4 pt-24 pb-12 relative overflow-hidden">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0b0f14] px-4 pt-24 pb-12 relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-600/15 blur-[120px]" />
-          <div className="absolute top-20 -right-24 h-80 w-80 rounded-full bg-violet-600/20 blur-[110px]" />
-          <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] [background-size:26px_26px]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+          <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-cyan-500/12 blur-[140px]" />
+          <div className="absolute top-16 -right-24 h-80 w-80 rounded-full bg-amber-400/12 blur-[130px]" />
+          <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[150px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.04)_1px,transparent_0)] [background-size:28px_28px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f14] via-[#0b0f14]/90 to-[#0b0f14]" />
         </div>
         <div className="max-w-6xl w-full relative z-10">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs sm:text-sm text-sky-200 mb-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm text-cyan-200 mb-4">
               Secure claim workflow
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-white mb-3">
@@ -151,16 +157,16 @@ export default function ClaimChecker() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {/* POLICY */}
-            <div className="bg-[#121826]/90 rounded-2xl border border-sky-700/40 p-6 flex flex-col items-center shadow-xl hover:shadow-2xl transition-all">
+            <div className="bg-[#111827]/90 rounded-2xl border border-cyan-700/35 p-6 flex flex-col items-center shadow-xl hover:shadow-2xl transition-all">
               <div className="w-full flex items-center justify-between mb-4">
                 <h2 className="text-white font-semibold">Policy PDF</h2>
-                <span className="text-xs text-sky-200/80 bg-sky-500/10 border border-sky-500/30 px-2.5 py-1 rounded-full">
+                <span className="text-xs text-cyan-200/80 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 rounded-full">
                   Step 1
                 </span>
               </div>
 
-              <label className="border-2 border-dashed border-sky-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1422]/70 hover:bg-[#101827] transition-colors">
-                <FaFilePdf className="mx-auto text-4xl text-sky-300 mb-3" />
+              <label className="border-2 border-dashed border-cyan-600/60 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
+                <FaFilePdf className="mx-auto text-4xl text-cyan-300 mb-3" />
                 <span className="text-white text-sm sm:text-base">
                   {fileName || "Drop PDF or click"}
                 </span>
@@ -208,7 +214,7 @@ export default function ClaimChecker() {
                 </span>
               </div>
 
-              <label className="border-2 border-dashed border-emerald-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1422]/70 hover:bg-[#101827] transition-colors">
+              <label className="border-2 border-dashed border-emerald-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
                 <FaFileAlt className="mx-auto text-4xl text-emerald-300 mb-3" />
                 <span className="text-white text-sm sm:text-base">
                   {firName || "Drop FIR or click"}
@@ -234,16 +240,16 @@ export default function ClaimChecker() {
             </div>
 
             {/* PHOTOS */}
-            <div className="bg-[#121826]/90 rounded-2xl border border-violet-700/40 p-6 flex flex-col items-center shadow-xl hover:shadow-2xl transition-all">
+            <div className="bg-[#121826]/90 rounded-2xl border border-amber-700/40 p-6 flex flex-col items-center shadow-xl hover:shadow-2xl transition-all">
               <div className="w-full flex items-center justify-between mb-4">
                 <h2 className="text-white font-semibold">Incident Photos</h2>
-                <span className="text-xs text-violet-200/80 bg-violet-500/10 border border-violet-500/30 px-2.5 py-1 rounded-full">
+                <span className="text-xs text-amber-200/80 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-full">
                   Step 3
                 </span>
               </div>
 
-              <label className="border-2 border-dashed border-violet-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1422]/70 hover:bg-[#101827] transition-colors">
-                <FaImages className="mx-auto text-4xl text-violet-300 mb-3" />
+              <label className="border-2 border-dashed border-amber-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
+                <FaImages className="mx-auto text-4xl text-amber-300 mb-3" />
                 <span className="text-white text-sm sm:text-base">
                   {photoNames.length
                     ? `${photoNames.length} photo(s)`
@@ -273,7 +279,7 @@ export default function ClaimChecker() {
               <button
                 type="submit"
                 disabled={evidenceLoading || !canSubmitEvidence}
-                className="px-10 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-sky-600 text-white font-bold shadow-xl hover:from-emerald-500 hover:to-sky-500 transition-all disabled:opacity-40"
+                className="px-10 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-600 text-white font-bold shadow-xl hover:from-emerald-500 hover:to-cyan-500 transition-all disabled:opacity-40"
               >
                 {evidenceLoading
                   ? "Processing..."

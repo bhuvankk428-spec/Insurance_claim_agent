@@ -33,32 +33,32 @@ export default function Navbar({ className = "" }) {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium">
-           <button
-            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
-            onClick={() => navigate("/chooserPage")}
+          <button
+            className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            onClick={() => navigate("/choose")}
           >
             Home
           </button>
           <button
-            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
             onClick={() => navigate("/about")}
           >
             About
           </button>
           <button
-            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
             onClick={() => navigate("/contact")}
           >
             Contact
           </button>
           <button
-            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
             onClick={() => navigate("/help")}
           >
             Help
           </button>
           <button
-            className="hover:text-sky-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+            className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
             onClick={() => navigate("/faq")}
           >
             FAQ
@@ -69,7 +69,7 @@ export default function Navbar({ className = "" }) {
         <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={() => navigate("/")}
-            className="hidden md:inline-flex px-4 py-2 sm:py-1.5 rounded-full text-sm font-semibold bg-sky-600 hover:bg-sky-500 transition-all text-white shadow-sm"
+            className="hidden md:inline-flex px-4 py-2 sm:py-1.5 rounded-full text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 transition-all text-white shadow-sm"
           >
             Login
           </button>
@@ -106,6 +106,7 @@ export default function Navbar({ className = "" }) {
         <div className="md:hidden border-t border-neutral-800 bg-black/95 backdrop-blur-md">
           <div className="px-4 pt-4 pb-6 space-y-3 text-base font-medium">
             {[
+              { label: "Home", path: "/choose" },
               { label: "About", path: "/about" },
               { label: "Contact", path: "/contact" },
               { label: "Help", path: "/help" },
@@ -113,7 +114,7 @@ export default function Navbar({ className = "" }) {
             ].map(item => (
               <button
                 key={item.label}
-                className="block w-full text-left py-3 px-4 rounded-xl hover:text-sky-300 hover:bg-neutral-900/50 transition-all"
+                className="block w-full text-left py-3 px-4 rounded-xl hover:text-cyan-300 hover:bg-neutral-900/50 transition-all"
                 onClick={() => {
                   setMenuOpen(false);
                   navigate(item.path);
@@ -128,7 +129,7 @@ export default function Navbar({ className = "" }) {
                 setMenuOpen(false);
                 navigate("/");
               }}
-              className="mt-4 w-full text-left py-3 px-4 rounded-xl text-sky-400 bg-sky-900/50 hover:bg-sky-800/50 transition-all font-semibold"
+              className="mt-4 w-full text-left py-3 px-4 rounded-xl text-cyan-400 bg-cyan-900/40 hover:bg-cyan-800/50 transition-all font-semibold"
             >
               Login
             </button>

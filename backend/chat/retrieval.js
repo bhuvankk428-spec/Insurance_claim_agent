@@ -1,8 +1,9 @@
 
 import { db } from "./db.js";
 
-const OLLAMA_URL = "http://localhost:11434/api/embeddings";
-const MODEL = "nomic-embed-text";
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
+const OLLAMA_URL = `${OLLAMA_BASE_URL}/api/embeddings`;
+const MODEL = process.env.OLLAMA_EMBED_MODEL || "nomic-embed-text";
 
 async function embed(text) {
   const res = await fetch(OLLAMA_URL, {

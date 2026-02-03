@@ -1,12 +1,35 @@
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { askRAGStream } from "./rag.js";
 
-const app = express();
-const PORT = process.env.PORT || 5174;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config();
 
-app.use(cors());
+const app = express();
+const PORT = process.env.CHAT_PORT || process.env.PORT || 5174;
+const corsOrigin =
+  process.env.CORS_ORIGIN ||
+  "http://localhost:5173,http://127.0.0.1:5173";
+const allowedOrigins = corsOrigin
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes("*")) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST"],
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
@@ -37,6 +60,13 @@ app.post("/api/rag-chat", async (req, res) => {
 
     res.end();
   } catch (err) {
+    if (err?.name === "AbortError") {
+      res.write(
+        "\n\n⚠️ The response is taking longer than expected. Please try again."
+      );
+      return res.end();
+    }
+
     console.error("🔥 STREAM ERROR:", err);
     if (!res.headersSent) {
       res.status(500).end("RAG streaming failed");

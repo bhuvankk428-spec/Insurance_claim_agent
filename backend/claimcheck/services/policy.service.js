@@ -9,6 +9,7 @@ function generateClaimId() {
 
 export async function checkPolicy(req, res) {
   const file = req.file;
+  const email = req.body?.email || null;
   if (!file) {
     return res.json({ valid: false, message: "Policy missing" });
   }
@@ -28,14 +29,15 @@ export async function checkPolicy(req, res) {
 
   // ✅ STORE IN claimStore
   claimStore.set(claimId, {
-  policyData: fields,
-  firData: null,
-  imageLocation: null,
-  matchLevel: null,
-  riskLevel: null,
-  claimCode: null,
-  createdAt: Date.now(),
-});
+    email,
+    policyData: fields,
+    firData: null,
+    imageLocation: null,
+    matchLevel: null,
+    riskLevel: null,
+    claimCode: null,
+    createdAt: Date.now(),
+  });
 
 
   return res.json({

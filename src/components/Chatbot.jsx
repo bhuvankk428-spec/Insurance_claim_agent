@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navbar from "./ui/Navbar.jsx";
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+const CHAT_API_BASE = import.meta.env.VITE_CHAT_API_URL
+  ? import.meta.env.VITE_CHAT_API_URL.replace(/\/$/, "")
+  : "";
 
 /* ---------------- AUTO DOMAIN DETECTION ---------------- */
 function detectDomain(text) {
@@ -100,7 +102,10 @@ export default function PolicySummarizer() {
   });
 
   try {
-    const response = await fetch(`${API_BASE}/api/rag-chat`, {
+    const endpoint = CHAT_API_BASE
+      ? `${CHAT_API_BASE}/api/rag-chat`
+      : "/api/rag-chat";
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -151,7 +156,7 @@ export default function PolicySummarizer() {
       {
         from: "ai",
         text:
-          "We are having trouble fetching policy details right now. Please try again shortly.",
+          "⚠️ We’re having trouble fetching policy details right now. Please try again shortly.",
       },
     ]);
   }
@@ -164,50 +169,43 @@ export default function PolicySummarizer() {
 
  return (
   <>
+    {/* FIXED NAVBAR */}
     <Navbar />
 
-    <div className="pt-16 h-[calc(100vh-4rem)] bg-black text-white flex flex-col lg:flex-row relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-600/15 blur-[120px]" />
-        <div className="absolute top-16 -right-24 h-80 w-80 rounded-full bg-indigo-600/20 blur-[110px]" />
-        <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.05)_1px,transparent_0)] [background-size:26px_26px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
-      </div>
+    {/* MAIN LAYOUT */}
+    <div className="pt-16 h-[calc(100vh-4rem)] bg-black text-white flex flex-col lg:flex-row">
+      
+      {/* LEFT PANEL */}
+      <aside className="lg:w-[420px] h-full bg-gradient-to-b from-[#15181d] to-[#232834] px-6 py-8 border-r border-gray-700 overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-2">Policy Advisor</h2>
+        <p className="text-gray-400 mb-6 text-sm">
+          Compare & understand insurance policies intelligently
+        </p>
 
-      <aside className="lg:w-[420px] h-full bg-[#121826]/90 px-6 py-8 border-r border-[#1f2734] overflow-y-auto relative z-10">
-        <div className="mb-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-xs text-sky-200 mb-3">
-            Policy Advisor
-          </div>
-          <h2 className="text-2xl font-black mb-2">Smart Policy Q and A</h2>
-          <p className="text-gray-400 text-sm">
-            Compare and understand insurance policies intelligently
-          </p>
-        </div>
-
-        <div className="flex items-center justify-between mb-6 text-sm">
-          <span className="text-neutral-300">
-            {muted ? "Voice Muted" : "Voice Enabled"}
+        {/* STATUS BAR */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-sm">
+            {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
           </span>
           {loading && (
-            <span className="text-yellow-300">Thinking...</span>
+            <span className="text-yellow-400 text-sm">⏳ Thinking...</span>
           )}
         </div>
 
+        {/* MUTE BUTTON */}
         <button
           onClick={() => {
             if (!muted) window.speechSynthesis.cancel();
             setMuted(!muted);
           }}
-          className="mb-6 w-full py-2.5 rounded-xl bg-[#1b2332] hover:bg-[#222c3f] border border-[#273246] transition"
+          className="mb-6 w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
         >
           {muted ? "Enable Voice" : "Mute Voice"}
         </button>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <select
-            className="w-full rounded-xl bg-[#0f1422] px-4 py-3 border border-[#253043] focus:outline-none focus:ring-4 focus:ring-sky-500/20"
+            className="w-full rounded-lg bg-[#232834] px-4 py-3"
             value={domain}
             onChange={(e) => setDomain(e.target.value)}
             disabled={loading}
@@ -222,7 +220,7 @@ export default function PolicySummarizer() {
           </select>
 
           <input
-            className="w-full rounded-xl bg-[#0f1422] px-4 py-3 border border-[#253043] focus:outline-none focus:ring-4 focus:ring-sky-500/20"
+            className="w-full rounded-lg bg-[#232834] px-4 py-3"
             placeholder="Ask your insurance question..."
             value={request}
             onChange={(e) => setRequest(e.target.value)}
@@ -231,7 +229,7 @@ export default function PolicySummarizer() {
           />
 
           <textarea
-            className="w-full rounded-xl bg-[#0f1422] px-4 py-3 border border-[#253043] focus:outline-none focus:ring-4 focus:ring-sky-500/20"
+            className="w-full rounded-lg bg-[#232834] px-4 py-3"
             rows={4}
             placeholder="Optional details: age, city, budget, condition..."
             value={details}
@@ -253,37 +251,41 @@ export default function PolicySummarizer() {
         </form>
       </aside>
 
-      <main className="flex-1 h-full p-6 overflow-y-auto relative z-10">
+      {/* RIGHT PANEL */}
+      <main className="flex-1 h-full bg-[#121316] p-6 overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
+
+          {/* CONFIDENCE CARD */}
           {confidence !== null && (
-            <div className="bg-[#151b27]/90 border border-[#223043] rounded-2xl p-4 shadow-lg">
+            <div className="bg-[#1b1f2a] border border-gray-700 rounded-xl p-4">
               <p className="font-semibold mb-2">
                 Recommendation Confidence
               </p>
-              <div className="w-full bg-[#223043] rounded h-3">
+              <div className="w-full bg-gray-700 rounded h-3">
                 <div
-                  className="bg-emerald-400 h-3 rounded transition-all"
+                  className="bg-green-500 h-3 rounded transition-all"
                   style={{ width: `${confidence}%` }}
                 />
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                Based on policy data and rule validation
+                Based on policy data & rule validation
               </p>
             </div>
           )}
 
+          {/* CHAT */}
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-28">
+            <div className="text-center text-gray-500 mt-32">
               <p>Ask a question to get started.</p>
             </div>
           ) : (
             messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`max-w-[85%] p-5 rounded-2xl leading-relaxed shadow-xl ${
+                className={`max-w-[85%] p-5 rounded-xl leading-relaxed ${
                   msg.from === "user"
                     ? "ml-auto bg-gradient-to-r from-indigo-600 to-sky-500"
-                    : "bg-[#151b27] border border-[#223043]"
+                    : "bg-[#232834] border border-gray-700"
                 }`}
               >
                 {msg.from === "ai" ? (
@@ -306,6 +308,5 @@ export default function PolicySummarizer() {
   </>
 );
 
+
 }
-
-

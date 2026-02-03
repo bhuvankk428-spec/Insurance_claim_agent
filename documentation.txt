@@ -1,0 +1,120 @@
+Project File Documentation
+==========================
+
+Note: This file documents all tracked project files outside of .git and node_modules.
+
+Root
+-----
+- .env: Shared environment configuration for frontend and both backends.
+- .gitignore: Git ignore rules for generated and local-only files.
+- eslint.config.js: ESLint configuration for code quality.
+- index.html: Vite HTML entry template.
+- package-lock.json: NPM lockfile for root dependencies.
+- package.json: Root scripts and dependencies (frontend + tooling + backend runner).
+- postcss.config.js: PostCSS configuration for Tailwind.
+- README.md: Project overview, setup instructions, and environment info.
+- tailwind.config.js: Tailwind CSS configuration.
+- vite.config.js: Vite build/dev configuration.
+- documentation.txt: This documentation file.
+
+Backend - Chat (RAG)
+-------------------
+- backend\chat\.env: Local chat backend env file (root .env is source of truth).
+- backend\chat\db.js: PostgreSQL connection pool for RAG retrieval.
+- backend\chat\package-lock.json: NPM lockfile for chat backend.
+- backend\chat\package.json: Chat backend dependencies and scripts.
+- backend\chat\policy_chunks.json: Prebuilt policy chunks used for RAG indexing.
+- backend\chat\rag.js: RAG pipeline and streaming response logic (Ollama).
+- backend\chat\retrieval.js: Embedding + vector similarity retrieval logic.
+- backend\chat\rules.js: Rule-based scoring layer for policy ranking.
+- backend\chat\server.js: Chat backend HTTP server (RAG API).
+
+Backend - Chat Data
+------------------
+- backend\chat\data\agri.json: Agriculture policy source data.
+- backend\chat\data\health.json: Health policy source data.
+- backend\chat\data\home_propety.json: Home/property policy source data.
+- backend\chat\data\life_edu.json: Life/education policy source data.
+- backend\chat\data\moter_gagetstyle.json: Motor policy source data.
+- backend\chat\data\personal.json: Personal policy source data.
+- backend\chat\data\policy.json: Base policy data collection.
+- backend\chat\data\travel.json: Travel policy source data.
+
+Backend - Chat Scripts
+---------------------
+- backend\chat\scripts\buildChunks.js: Builds chunked policy documents for RAG.
+- backend\chat\scripts\embedChunks.js: Embeds chunks into pgvector for retrieval.
+
+Backend - Claimcheck
+-------------------
+- backend\claimcheck\.env: Local claimcheck env file (root .env is source of truth).
+- backend\claimcheck\eng.traineddata: Tesseract OCR language data.
+- backend\claimcheck\package-lock.json: NPM lockfile for claimcheck backend.
+- backend\claimcheck\package.json: Claimcheck backend dependencies and scripts.
+- backend\claimcheck\server.js: Claimcheck HTTP server and middleware setup.
+- backend\claimcheck\config\domains.js: Domain configuration for claim types.
+- backend\claimcheck\routes\claim.routes.js: API routes for claim workflow + admin endpoints.
+- backend\claimcheck\services\evidence.service.js: FIR + image evidence validation.
+- backend\claimcheck\services\exif.service.js: Image EXIF extraction for geo check.
+- backend\claimcheck\services\extractFields.service.js: Field extraction from OCR text.
+- backend\claimcheck\services\match.service.js: Matching logic for policy/FIR/evidence.
+- backend\claimcheck\services\ocr.service.js: OCR pipeline for PDFs/images.
+- backend\claimcheck\services\policy.service.js: Policy verification + claim creation.
+- backend\claimcheck\services\story.service.js: Story analysis + decision logic + Supabase write.
+- backend\claimcheck\services\supabase.service.js: Supabase client + claim persistence.
+- backend\claimcheck\store\claimStore.js: In-memory claim store for workflow state.
+
+Public Assets
+-------------
+- public\bhuvan.jpg: Profile image used on contact page.
+- public\login.jpg: Background image for auth screens.
+- public\logo.png: App logo.
+- public\roboto.txt: Font license file.
+- public\sitemap.xml: Sitemap for SEO.
+
+Research
+--------
+- research\AI_Policy_Suggester_Claim_Checker_Synopsis.docx: Project synopsis document.
+- research\how to build llm insurance.pdf: Reference PDF for LLM insurance workflow.
+- research\IEEE.pdf: IEEE reference material.
+- research\IEEE_for_bank_example.pdf: IEEE example reference.
+- research\insurance policy summeriser.pdf: Policy summarizer reference PDF.
+- research\ppt.pptx: Presentation deck.
+- research\WhatsApp Image 2025-09-08 at 21.40.18_b4f7af60.jpg: Research image asset.
+- research\WhatsApp Image 2025-09-08 at 21.40.36_37477f60.jpg: Research image asset.
+
+Frontend (src)
+--------------
+- src\App.css: Global app styles.
+- src\App.jsx: Main router and route definitions.
+- src\firebase.js: Firebase initialization and auth providers.
+- src\index.css: Base styles and Tailwind directives.
+- src\main.jsx: React entry point and app bootstrap.
+
+Frontend Components
+------------------
+- src\components\Chatbot.jsx: Policy advisor chat UI and streaming view.
+- src\components\ChooserPage.jsx: Landing page for choosing tools.
+- src\components\ClaimChecker.jsx: Claim document upload workflow UI.
+- src\components\ClaimResult.jsx: Claim decision summary UI.
+- src\components\ClaimStoryChatbot.jsx: Claim story submission and response UI.
+
+Frontend Admin
+-------------
+- src\components\admin\adminAuth.js: Admin auth helpers + env-based credentials.
+- src\components\admin\AdminDashboard.jsx: Admin dashboard UI + claim controls + PDF export.
+
+Frontend Auth
+-------------
+- src\components\auth\LoginEntry.jsx: Splash + login entry wrapper.
+- src\components\auth\LoginForm.jsx: User/admin login UI + handlers.
+- src\components\auth\RegisterForm.jsx: Registration UI + handlers.
+- src\components\auth\SplashScreen.jsx: Animated splash screen.
+
+Frontend UI
+-----------
+- src\components\ui\AboutQKAI.jsx: About page content.
+- src\components\ui\contact.jsx: Contact page content.
+- src\components\ui\FAQ.jsx: FAQ page content.
+- src\components\ui\Help.jsx: Help page content.
+- src\components\ui\Navbar.jsx: Top navigation bar.

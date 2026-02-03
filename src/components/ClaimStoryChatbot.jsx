@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./ui/Navbar";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+const API_BASE =
+  import.meta.env.VITE_CLAIM_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5174";
 
 export default function ClaimStoryChatbot() {
   const { claimId } = useParams(); // ✅ GET claimId
@@ -64,14 +67,14 @@ export default function ClaimStoryChatbot() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-[#0b0f14] text-white flex flex-col">
       <Navbar />
 
       <main className="flex-1 flex flex-col items-center justify-center px-4 pt-24 pb-12">
         <div className="w-full max-w-3xl">
           {/* Heading */}
           <div className="text-center mb-10">
-            <p className="text-xs uppercase tracking-[0.25em] text-sky-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-4">
               Claim Assistant
             </p>
             <h1 className="text-3xl font-black mb-4">
@@ -84,14 +87,14 @@ export default function ClaimStoryChatbot() {
           </div>
 
           {/* Card */}
-          <div className="bg-[#0f1117]/90 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
+          <div className="bg-[#111827]/90 border border-neutral-800/80 rounded-3xl p-8 shadow-2xl">
             <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-6">
               <label className="font-semibold text-neutral-200">
                 Your story
               </label>
 
               <textarea
-                className="w-full border-2 border-neutral-700 bg-black/40 rounded-2xl p-4 resize-none focus:outline-none focus:border-sky-500 min-h-[160px]"
+                className="w-full border-2 border-neutral-700 bg-black/40 rounded-2xl p-4 resize-none focus:outline-none focus:border-cyan-500 min-h-[160px]"
                 placeholder="Describe the incident in detail..."
                 value={story}
                 onChange={(e) => setStory(e.target.value)}
@@ -101,7 +104,7 @@ export default function ClaimStoryChatbot() {
               <button
                 type="submit"
                 disabled={loading || !story.trim()}
-                className="px-8 py-3 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 font-bold disabled:opacity-50"
+                className="px-8 py-3 rounded-2xl bg-gradient-to-r from-cyan-600 to-emerald-600 font-bold disabled:opacity-50"
               >
                 {loading ? "Analyzing..." : "Analyze My Claim"}
               </button>
@@ -109,14 +112,14 @@ export default function ClaimStoryChatbot() {
 
             {/* Response */}
             {response && (
-              <div className="mt-6 p-6 rounded-2xl bg-[#1a1f2e] border border-neutral-700">
-                <h2 className="font-bold text-sky-300 mb-2">
+              <div className="mt-6 p-6 rounded-2xl bg-[#0f1522] border border-neutral-700/80">
+                <h2 className="font-bold text-cyan-300 mb-2">
                   QK.AI Assessment
                 </h2>
                 <p className="text-neutral-100">{response}</p>
 
                 {claimCode && (
-                  <div className="mt-4 p-4 rounded-xl bg-emerald-900/40 border border-emerald-500">
+                  <div className="mt-4 p-4 rounded-xl bg-emerald-900/30 border border-emerald-600/60">
                     <span className="font-semibold text-emerald-200">
                       ✅ Claim Eligible
                     </span>
