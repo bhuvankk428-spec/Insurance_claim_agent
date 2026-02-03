@@ -23,7 +23,7 @@ Frontend
 
 Backend
 - Node.js (Express)
-- PostgreSQL + pgvector
+- PostgreSQL + pgvector (SUPERBASE DB)
 - RAG architecture with streaming responses
 
 ## Project Structure
