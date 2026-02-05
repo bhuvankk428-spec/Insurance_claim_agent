@@ -1,5 +1,17 @@
+import OpenAI from "openai";
 import { retrieveChunks } from "./retrieval.js";
 import { scorePolicy } from "./rules.js";
+
+const hasOpenAIKey =
+  Boolean(process.env.OPENAI_API_KEY) &&
+  !process.env.OPENAI_API_KEY.startsWith("your_");
+
+const openai = hasOpenAIKey
+  ? new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      timeout: Number(process.env.OPENAI_TIMEOUT_MS || 60000),
+    })
+  : null;
 
 export async function askRAGStream({
   question,
@@ -7,7 +19,7 @@ export async function askRAGStream({
   details = {},
   onToken,
 }) {
-  /* 1️⃣ Retrieve chunks */
+  /* Step 1: Retrieve chunks */
   const rawChunks = await retrieveChunks({
     question,
     domain,
@@ -15,20 +27,20 @@ export async function askRAGStream({
   });
 
   if (!rawChunks?.length) {
-    onToken("❌ **No suitable policy found**\n\nPlease provide more details.");
+    onToken("No suitable policy found.\n\nPlease provide more details.");
     return;
   }
 
-  /* 2️⃣ Rank (hybrid: rules + vector) */
+  /* Step 2: Rank (hybrid: rules + vector) */
   const chunks = rawChunks
-    .map(c => ({
+    .map((c) => ({
       ...c,
       score: scorePolicy(c, details) * 0.7 + c.similarity * 0.3,
     }))
     .sort((a, b) => b.score - a.score)
     .slice(0, 4);
 
-  /* 3️⃣ Compact context */
+  /* Step 3: Compact context */
   const context = chunks
     .map(
       (c, i) =>
@@ -38,7 +50,7 @@ export async function askRAGStream({
     )
     .join("\n\n");
 
-  /* 4️⃣ Tight prompt */
+  /* Step 4: Tight prompt */
   const prompt = `
 You are an insurance advisor. Use ONLY the policy excerpts below.
 If data is missing, say "data not available".
@@ -50,80 +62,38 @@ Policy excerpts:
 ${context}
 
 Answer in Markdown with:
-✅ **Recommended policy**
+**Recommended policy**
 ### Comparison (2-4 bullets)
 ### Why this is best (2-4 bullets)
 ### Claim process (3-6 steps)
 `;
 
-  /* 5️⃣ Stream from Ollama */
-  const controller = new AbortController();
-  const timeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || 60000);
-  const timeout =
-    timeoutMs > 0 ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  /* Step 5: Stream from OpenAI */
+  const maxTokens = Number(process.env.OPENAI_MAX_TOKENS || 350);
 
-  const ollamaBase = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
-  const ollamaModel = process.env.OLLAMA_CHAT_MODEL || "llama3";
-
-  const response = await fetch(`${ollamaBase}/api/generate`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal: controller.signal,
-    body: JSON.stringify({
-      model: ollamaModel,
-      prompt,
+  if (openai) {
+    const stream = await openai.chat.completions.create({
+      model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+      temperature: 0.2,
+      top_p: 0.9,
+      max_tokens: maxTokens,
       stream: true,
-      options: {
-        temperature: 0.2,
-        top_p: 0.9,
-        top_k: 40,
-        repeat_penalty: 1.1,
-        num_ctx: Number(process.env.OLLAMA_NUM_CTX || 2048),
-        num_predict: Number(process.env.OLLAMA_MAX_TOKENS || 350),
-      },
-    }),
-  });
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an insurance advisor. Answer only with the given policy excerpts.",
+        },
+        { role: "user", content: prompt },
+      ],
+    });
 
-  if (!response.body) {
-    throw new Error("Ollama streaming not supported");
-  }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-
-  try {
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-
-      const lines = buffer.split("\n");
-      buffer = lines.pop(); // keep incomplete chunk
-
-      for (const line of lines) {
-        if (!line.trim()) continue;
-
-        let json;
-        try {
-          json = JSON.parse(line);
-        } catch {
-          continue; // ⚠️ skip malformed chunks safely
-        }
-
-        if (json.response) {
-          onToken(json.response);
-        }
-
-        if (json.done) {
-          return;
-        }
-      }
+    for await (const chunk of stream) {
+      const token = chunk?.choices?.[0]?.delta?.content;
+      if (token) onToken(token);
     }
-  } finally {
-    if (timeout) clearTimeout(timeout);
-    controller.abort(); // ✅ ensure Ollama stops
+    return;
   }
-}
 
+  throw new Error("OpenAI API key not configured");
+}

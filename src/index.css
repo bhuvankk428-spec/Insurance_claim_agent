@@ -9,7 +9,17 @@ html, body, #root {
   padding: 0;
 }
 @layer base {
-  body { @apply bg-black min-h-screen; }
+  body {
+    @apply bg-black min-h-screen;
+    font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: "Fraunces", "Space Grotesk", system-ui, sans-serif;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 .right-image-wrapper {
   border-top-left-radius: 60px;
@@ -19,4 +29,51 @@ html, body, #root {
 .right-image-wrapper:hover {
   transform: translateY(-8px);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes float-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slow-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.reveal {
+  animation: float-up 0.7s ease both;
+}
+
+.reveal-delay-1 { animation-delay: 0.08s; }
+.reveal-delay-2 { animation-delay: 0.16s; }
+.reveal-delay-3 { animation-delay: 0.24s; }
+.reveal-delay-4 { animation-delay: 0.32s; }
+
+.slow-spin {
+  animation: slow-rotate 28s linear infinite;
+}
+
+.accent-shimmer {
+  background-size: 200% 200%;
+  animation: shimmer 6s ease infinite;
 }

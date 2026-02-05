@@ -1,6 +1,7 @@
 import { extractText } from "./ocr.service.js";
 import { extractPolicyFields } from "./extractFields.service.js";
 import { claimStore } from "../store/claimStore.js";
+import { detectDomain } from "./match.service.js";
 
 /* ---------------- CLAIM ID GENERATOR ---------------- */
 function generateClaimId() {
@@ -16,11 +17,12 @@ export async function checkPolicy(req, res) {
 
   const text = await extractText(file.buffer, file.mimetype);
   const fields = extractPolicyFields(text);
+  const domain = detectDomain(text, fields);
 
-  if (!fields.ownerName) {
+  if (!fields.ownerName && !fields.companyName && !fields.patientName) {
     return res.json({
       valid: false,
-      message: "Owner name not found in policy",
+      message: "Primary insured/owner name not found in policy",
     });
   }
 
@@ -30,9 +32,13 @@ export async function checkPolicy(req, res) {
   // ✅ STORE IN claimStore
   claimStore.set(claimId, {
     email,
+    domain,
     policyData: fields,
+    policyText: text.slice(0, 20000),
     firData: null,
     imageLocation: null,
+    imageAnalysis: null,
+    evidenceRisk: null,
     matchLevel: null,
     riskLevel: null,
     claimCode: null,
@@ -45,5 +51,6 @@ export async function checkPolicy(req, res) {
     message: "Policy verified",
     claimId,              // ✅ SEND TO FRONTEND
     extracted: fields,
+    domain,
   });
 }

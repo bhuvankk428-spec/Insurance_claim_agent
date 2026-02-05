@@ -6,8 +6,8 @@ import { fileURLToPath } from "url";
 import { askRAGStream } from "./rag.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
+dotenv.config({ quiet: true });
 
 const app = express();
 const PORT = process.env.CHAT_PORT || process.env.PORT || 5174;
@@ -76,6 +76,4 @@ app.post("/api/rag-chat", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 RAG server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => {});

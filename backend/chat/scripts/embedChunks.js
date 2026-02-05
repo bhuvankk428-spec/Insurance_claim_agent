@@ -1,30 +1,43 @@
 import fs from "fs";
-import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import OpenAI from "openai";
 import { db } from "../db.js";
 
-const OLLAMA_URL = "http://localhost:11434/api/embeddings";
-const MODEL = "nomic-embed-text";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, "../../../.env"), quiet: true });
+dotenv.config({ quiet: true });
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  timeout: Number(process.env.OPENAI_TIMEOUT_MS || 60000),
+});
+
+const EMBED_MODEL = process.env.OPENAI_EMBED_MODEL || "text-embedding-3-small";
 
 const chunks = JSON.parse(
-  fs.readFileSync("policy_chunks.json", "utf-8")
+  fs.readFileSync(path.resolve(__dirname, "../policy_chunks.json"), "utf-8")
 );
 
-console.log(`🔢 Embedding ${chunks.length} chunks...`);
+console.log(`Embedding ${chunks.length} chunks...`);
 
 for (const chunk of chunks) {
-  const res = await fetch(OLLAMA_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: MODEL,
-      prompt: chunk.text.slice(0, 4000),
-    }),
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is missing");
+  }
+
+  const res = await openai.embeddings.create({
+    model: EMBED_MODEL,
+    input: chunk.text.slice(0, 4000),
   });
 
-  if (!res.ok) throw new Error("Ollama embedding failed");
+  const vector = res.data?.[0]?.embedding;
+  if (!vector?.length) {
+    throw new Error("Embedding failed");
+  }
 
-  const data = await res.json();
-  const vector = `[${data.embedding.join(",")}]`;
+  const vectorString = `[${vector.join(",")}]`;
 
   await db.query(
     `
@@ -38,10 +51,10 @@ for (const chunk of chunks) {
       chunk.policy_name,
       chunk.section,
       chunk.text,
-      vector,
+      vectorString,
     ]
   );
 }
 
-console.log("✅ All chunks embedded & stored");
+console.log("All chunks embedded and stored");
 process.exit();

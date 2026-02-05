@@ -1,11 +1,30 @@
 export const DOMAIN_RULES = {
+  automobile: {
+    assetMatch: ["vehicleNumber"],
+    optionalMatch: ["ownerName", "chassisNumber", "engineNumber", "policyNumber"],
+  },
   bike: {
-    assetMatch: ["bikeNumber"]
+    assetMatch: ["vehicleNumber"],
+    optionalMatch: ["ownerName", "chassisNumber", "engineNumber", "policyNumber"],
   },
-  agri: {
-    assetMatch: ["landLocation"]
+  crop: {
+    assetMatch: ["landLocation"],
+    optionalMatch: ["ownerName", "surveyNumber", "cropType", "policyNumber"],
   },
-  business: {
-    assetMatch: ["businessLocation"]
-  }
+  business_property: {
+    assetMatch: ["businessLocation"],
+    optionalMatch: ["businessName", "propertyAddress", "policyNumber"],
+  },
+  property: {
+    assetMatch: ["propertyAddress"],
+    optionalMatch: ["ownerName", "policyNumber"],
+  },
+  cyber: {
+    assetMatch: ["companyName"],
+    optionalMatch: ["domainName", "policyNumber"],
+  },
+  health: {
+    assetMatch: ["patientName"],
+    optionalMatch: ["policyNumber", "hospitalName"],
+  },
 };

@@ -14,13 +14,14 @@ backend/chat/server.js
 
 backend/chat/rag.js
 - askRAGStream orchestration.
-- Steps: retrieve chunks, rank, build prompt, stream Ollama tokens.
-- Uses AbortController for timeouts.
+- Steps: retrieve chunks, rank, build prompt, stream OpenAI tokens.
+- Uses OpenAI SDK with streaming.
 
 backend/chat/retrieval.js
-- embed(): calls Ollama /api/embeddings to create vectors.
+- embed(): calls OpenAI embeddings to create vectors.
 - retrieveChunks(): SQL query to policy_chunks with pgvector similarity.
 - Optional domain filtering.
+- If OpenAI key is missing, falls back to keyword search.
 
 backend/chat/rules.js
 - scorePolicy(): rule-based score only.
@@ -38,7 +39,7 @@ backend/chat/scripts/buildChunks.js
 
 backend/chat/scripts/embedChunks.js
 - Reads policy_chunks.json.
-- Embeds each chunk with Ollama.
+- Embeds each chunk with OpenAI embeddings.
 - Inserts into policy_chunks table with pgvector.
 
 backend/chat/data/*.json
@@ -53,7 +54,6 @@ Claimcheck Service (backend/claimcheck)
 backend/claimcheck/server.js
 - Express server for claim flow.
 - Loads env, sets CORS, mounts /api routes.
-- Logs Groq key status on startup.
 
 backend/claimcheck/routes/claim.routes.js
 - Defines API routes and admin endpoints.
@@ -84,6 +84,8 @@ backend/claimcheck/services/evidence.service.js
 - checkEvidence(): validates claimId, runs OCR, EXIF, and match.
 - STRICT_GEO enforces geo-tagged images.
 - Updates in-memory claimStore with match result and evidence metadata.
+- Requires evidence document to be PDF.
+- Runs OpenAI Vision check if configured.
 
 backend/claimcheck/services/policy.service.js
 - checkPolicy(): OCR policy PDF and extract fields.
@@ -91,10 +93,19 @@ backend/claimcheck/services/policy.service.js
 - Returns { valid, message, claimId, extracted }.
 
 backend/claimcheck/services/story.service.js
-- analyzeStory(): validates claim context, uses Groq if configured.
-- Extracts JSON decision from LLM; falls back to deterministic approval.
+- analyzeStory(): validates claim context, uses OpenAI if configured.
+- Falls back to deterministic approval when OpenAI is missing.
 - Generates claim codes for full/partial approval.
 - Persists decision via Supabase.
+
+backend/claimcheck/services/coverage.service.js
+- checkCoverage(): validates if incident is covered by policy text.
+- Uses OpenAI; heuristic fallback if unavailable.
+- Returns covered/related/unknown/ambiguous/excluded/not_covered with confidence.
+
+backend/claimcheck/services/image.service.js
+- verifyIncidentWithVision(): optional Vision check on incident photos (OpenAI).
+- Returns ok/partial/reject or skipped when not configured.
 
 backend/claimcheck/services/supabase.service.js
 - ensureSupabase(): initializes Supabase client from env.

@@ -6,11 +6,11 @@ import cors from "cors";
 import claimRoutes from "./routes/claim.routes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
+dotenv.config({ quiet: true });
 
 const app = express();
-const PORT = process.env.CLAIM_PORT || 5174;
+const PORT = process.env.PORT || process.env.CLAIM_PORT || 5174;
 
 const corsOrigin =
   process.env.CORS_ORIGIN ||
@@ -38,7 +38,4 @@ app.get("/", (_, res) => {
   res.send("Claim backend running");
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend running on http://localhost:${PORT}`);
-  console.log("🔑 GROQ_API_KEY =", process.env.GROQ_API_KEY ? "LOADED" : "MISSING");
-});
+app.listen(PORT, () => {});

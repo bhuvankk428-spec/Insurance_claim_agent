@@ -6,7 +6,7 @@ export default function AboutQKAI() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#0b0f14] text-white px-4 py-12 sm:py-16">
+      <div className="min-h-screen bg-[#0b0f14] text-white  px-4 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto w-full grid gap-8 sm:gap-10 md:grid-cols-[1.2fr_1fr] items-start md:items-center">
           
           {/* Left: Text */}

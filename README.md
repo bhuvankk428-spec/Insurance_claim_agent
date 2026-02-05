@@ -44,14 +44,14 @@ Steps:
 1. Upload Policy PDF to verify coverage and generate a claim ID
 2. Upload FIR/complaint document
 3. Upload incident photos
-4. Submit evidence to continue to the claim story and result
+4. Submit evidence (PDF + photos) to continue to the claim story and result
 
 This flow requires the `backend/claimcheck` server running.
 
 ## Admin Dashboard & Supabase
 The claim decision (approved, rejected, partial) is persisted to Supabase and shown on the admin dashboard.
 
-Required env vars in `backend/claimcheck/.env`:
+Required env vars in root `.env`:
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_TOKEN` (default is `qk-admin-2026`)
@@ -127,6 +127,8 @@ Note: Claim eligibility requires the claimcheck backend running. The policy advi
 ## Environment Setup (Single Root .env)
 All environment variables now live in the root `.env`.
 
+Use `example.env` as a template and copy it to `.env`, then fill in the real values.
+
 Example `.env` (edit your keys/URLs):
 ```env
 VITE_API_URL=http://localhost:5174
@@ -135,16 +137,16 @@ VITE_CLAIM_API_URL=http://localhost:5174
 
 # Chat backend (RAG)
 DATABASE_URL=postgresql://<user>:<pass>@<host>:5432/postgres
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_CHAT_MODEL=phi3
-OLLAMA_EMBED_MODEL=nomic-embed-text
-OLLAMA_NUM_CTX=2048
-OLLAMA_MAX_TOKENS=350
-OLLAMA_TIMEOUT_MS=20000
+OPENAI_API_KEY=your_openai_key
+OPENAI_CHAT_MODEL=gpt-4o-mini
+OPENAI_EMBED_MODEL=text-embedding-3-small
+OPENAI_MAX_TOKENS=350
+OPENAI_TIMEOUT_MS=60000
+OPENAI_VISION_MODEL=gpt-4o-mini
+OPENAI_VISION_MIN_CONFIDENCE=0.6
 CHAT_PORT=5175
 
 # Claimcheck backend
-GROQ_API_KEY=your_groq_key
 ALLOW_FAKE_GEO=true
 STRICT_GEO=true
 SUPABASE_URL=https://your-project.supabase.co
@@ -160,18 +162,12 @@ VITE_ADMIN_TOKEN=qk-admin-2026
 ```
 
 
-## Ollama (Local LLM)
-For faster, hackathon-friendly responses, use `phi3` with Ollama.
+## Claim Evidence (PDF Only)
+Evidence documents are accepted as PDF only. Photos remain required for incident verification.
+Image checks include incident matching and quality validation (blur/fake/irrelevant).
 
-Install the model:
-```bash
-ollama pull phi3
-```
-
-Set in root `.env`:
-```env
-OLLAMA_CHAT_MODEL=phi3
-```
+## LLM Fallback
+Only OpenAI is supported. If `OPENAI_API_KEY` is missing, chat retrieval falls back to keyword search when embeddings are unavailable.
 
 ## Authentication
 - Email & Password login

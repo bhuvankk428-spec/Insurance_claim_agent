@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaClipboardCheck } from "react-icons/fa";
+import { FaSearch, FaClipboardCheck, FaRegLightbulb } from "react-icons/fa";
 import Navbar from "./ui/Navbar.jsx"
 export default function ChooserPage() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0b0f14] text-white flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#0b0f14] text-white flex flex-col  relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-48 -left-32 h-96 w-96 rounded-full bg-cyan-500/12 blur-[140px]" />
         <div className="absolute top-40 -right-24 h-80 w-80 rounded-full bg-amber-400/12 blur-[130px]" />
@@ -31,8 +31,28 @@ export default function ChooserPage() {
             Choose a tool below to get instant insights about your insurance policies and claims.
           </p>
 
+          <div className="mb-8 mx-auto max-w-4xl rounded-2xl border border-emerald-400/40 bg-emerald-500/10 px-6 py-5 sm:py-6 flex flex-col sm:flex-row items-center gap-4 backdrop-blur-sm">
+            <span className="px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-emerald-600/80 text-emerald-50 shadow-lg">
+              Guidance
+            </span>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-sm sm:text-base text-emerald-100 font-semibold">
+                Want more guidance? Our expert team is just a click away.
+              </p>
+              <p className="text-xs sm:text-sm text-emerald-100/80 mt-1">
+                Get tailored help on policies, claims, and next steps.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/contact")}
+              className="rounded-full bg-emerald-400/90 hover:bg-emerald-300/90 text-emerald-950 font-semibold px-5 py-2 transition"
+            >
+              Talk to an expert
+            </button>
+          </div>
+
           {/* Cards - responsive grid */}
-          <div className="grid  gap-6 sm:gap-8 md:grid-cols-2 lg:justify-items-center w-full">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 lg:justify-items-center w-full">
             <HoverCard
               icon={<FaSearch className="text-4xl sm:text-5xl lg:text-6xl text-cyan-200 mb-4 sm:mb-6" />}
               title="Policy Summarizer"
@@ -48,6 +68,14 @@ export default function ChooserPage() {
               tag="Best for Claims"
               tagColor="bg-amber-500/80 text-amber-50 hover:bg-amber-400/80"
               onClick={() => navigate("/claim-checker")}
+            />
+            <HoverCard
+              icon={<FaRegLightbulb className="text-4xl sm:text-5xl lg:text-6xl text-emerald-200 mb-4 sm:mb-6" />}
+              title="Plan Builder"
+              desc="If you want a secure retirement click here"
+              tag="Lets Plan"
+              tagColor="bg-emerald-500/80 text-emerald-50 hover:bg-emerald-400/80"
+              onClick={() => navigate("/plan")}
             />
           </div>
 
@@ -120,5 +148,4 @@ function HoverCard({ icon, title, desc, tag, tagColor, onClick }) {
     </div>
   );
 }
-
 
