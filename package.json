@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\"",
-    "postinstall": "npm --prefix backend/chat install --omit=dev --no-audit --no-fund && npm --prefix backend/claimcheck install --omit=dev --no-audit --no-fund"
+    "postinstall": "sh -c \"if [ -f backend/chat/package.json ]; then npm --prefix backend/chat install --omit=dev --no-audit --no-fund && npm --prefix backend/claimcheck install --omit=dev --no-audit --no-fund; else echo 'Skipping backend installs (backend not present yet)'; fi\""
   },
   "dependencies": {
     "cors": "^2.8.5",
