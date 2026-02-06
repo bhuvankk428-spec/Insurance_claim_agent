@@ -1,0 +1,159 @@
+Backend System Design
+=====================
+
+Purpose
+-------
+QK.AI backend is split into two Express services:
+1. Chat (RAG): policy guidance and summarization with streaming LLM output.
+2. Claimcheck: document verification, evidence matching, and claim decisioning.
+
+This separation keeps the RAG runtime and the claim pipeline independent so
+they can scale and fail independently.
+
+Architecture Overview
+---------------------
+Clients call the backend through the frontend Vite app.
+Both services load the root .env, then fall back to local defaults.
+
+Service boundaries:
+- Chat service: vector retrieval + LLM synthesis.
+- Claimcheck service: OCR + rules +  OpenAI LLM or fallback logic + Supabase persistence.
+
+High-Level Data Flow
+--------------------
+Chat (RAG):
+1. Client sends POST /api/rag-chat with question, optional domain, optional details.
+2. The service embeds the question using OpenAI embeddings.
+3. It retrieves top chunks from Postgres (pgvector).
+4. It applies rule-based scoring + similarity blending to rank chunks.
+5. It builds a compact prompt and streams tokens from OpenAI to the client.
+
+Claimcheck:
+1. Client uploads policy PDF to POST /api/claim-check.
+2. OCR extracts policy text and regex parsing extracts fields.
+3. A claimId is created and stored in an in-memory claimStore map.
+4. Client uploads FIR/property PDF + photos to POST /api/claim-evidence.
+5. OCR extracts evidence fields; EXIF attempts to read geo from photos.
+6. Rule-based matching decides full or partial match.
+7. Client sends story text to POST /api/claim-story.
+8. OpenAI LLM (if configured) evaluates consistency; otherwise deterministic approval.
+9. Decision is persisted to Supabase "claims" table.
+
+Chat Service Design (backend/chat)
+----------------------------------
+Key files:
+- server.js: Express entrypoint, CORS, streaming response.
+- rag.js: Orchestrates retrieval, ranking, prompt construction, and streaming.
+- retrieval.js: Embedding + vector search.
+- rules.js: Heuristic scoring of policies.
+- db.js: Postgres pool for pgvector queries.
+
+Runtime lifecycle:
+1. server.js loads env, sets CORS, parses JSON.
+2. /api/rag-chat validates request and sets streaming headers.
+3. rag.js retrieves candidates and performs hybrid ranking.
+4. Tokens stream from OpenAI to the client.
+
+Retrieval + ranking:
+- retrieveChunks embeds the question via OpenAI and queries policy_chunks.
+- If OpenAI key is missing, retrieval falls back to keyword search.
+- scorePolicy adds domain-specific and user preference weights.
+- Final score = rules score * 0.7 + similarity * 0.3.
+
+Prompt shaping:
+- Uses only top 4 chunks (800 chars each) to cap token usage.
+- Forces a fixed Markdown structure for consistent UI rendering.
+
+Claimcheck Service Design (backend/claimcheck)
+----------------------------------------------
+Key files:
+- server.js: Express entrypoint, CORS, JSON parsing.
+- routes/claim.routes.js: multipart routes and admin endpoints.
+- services/ocr.service.js: OCR and PDF parsing.
+- services/extractFields.service.js: regex-based field extraction.
+- services/exif.service.js: geo extraction from images.
+- services/match.service.js: rule checks for asset and location match.
+- services/story.service.js: OpenAI-based claim evaluation + persistence.
+- services/image.service.js: Vision check for incident-photo alignment (OpenAI).
+- services/supabase.service.js: Supabase access and CRUD.
+- store/claimStore.js: in-memory claim session state.
+- config/domains.js: rule sets per claim domain.
+
+Claim flow details:
+- Step 1 policy check:
+  - Upload pdf field "pdf".
+  - OCR extracts text from PDF or images.
+  - extractPolicyFields pulls ownerName, bikeNumber, landLocation.
+  - If ownerName missing, claim is invalid.
+  - claimId is generated and stored in claimStore.
+
+- Step 2 evidence check:
+  - Upload "fir" (PDF) plus "photos" (1 to 5).
+  - extractFIRFields extracts incident, asset identifiers, location.
+  - extractExif tries to read GPS data from the first photo.
+  - Optional Vision check validates incident vs photo (OpenAI).
+  - STRICT_GEO=true enforces geotag presence.
+  - matchDocuments checks required fields by domain rules.
+  - Location mismatch rejects if similarity < 80%.
+
+- Step 3 story analysis:
+  - Requires claimId, story length >= 40 chars.
+  - If matchLevel is reject, a rejection is persisted immediately.
+  - Coverage check compares incident vs policy coverage (AI + fallback).
+  - If coverage is excluded/not covered, claim is rejected.
+  - If coverage is related, claim is pending manual review.
+  - If coverage is ambiguous/unknown, claim is partial and risk is high.
+  - If OpenAI is configured, it returns JSON with decision and risk.
+  - Otherwise a deterministic approval is used.
+  - Result is persisted to Supabase and returned to the client.
+
+Data Stores and Persistence
+---------------------------
+Chat:
+- Postgres with pgvector stores policy_chunks for similarity search.
+- policy_chunks generated by buildChunks.js and embedded by embedChunks.js.
+
+Claimcheck:
+- In-memory claimStore for transient session state between steps.
+- Supabase "claims" table for long-term persistence and admin workflows.
+
+Configuration and Environment
+-----------------------------
+Shared:
+- CORS_ORIGIN: comma-separated list for allowed origins.
+
+Chat:
+- CHAT_PORT or PORT: server port.
+- DATABASE_URL: Postgres connection string.
+- OPENAI_API_KEY: OpenAI API key.
+- OPENAI_CHAT_MODEL: model for chat completions.
+- OPENAI_EMBED_MODEL: model for embeddings.
+- OPENAI_TIMEOUT_MS, OPENAI_MAX_TOKENS: generation limits.
+
+Claimcheck:
+- CLAIM_PORT: server port.
+- OPENAI_API_KEY: enable OpenAI LLM decisions.
+- STRICT_GEO: if "true", requires geo-tagged photos.
+- ALLOW_FAKE_GEO: if "true", injects fake GPS in dev.
+- SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY: persistence.
+- ADMIN_TOKEN: admin API access.
+
+Failure Modes and Safeguards
+----------------------------
+- Chat:
+  - If no chunks retrieved, returns a fallback message.
+  - OpenAI timeouts abort the stream and return a warning.
+
+- Claimcheck:
+  - Missing policy/evidence returns explicit errors.
+  - Claim story fails gracefully with a fallback decision.
+  - Supabase errors are logged but do not block user response.
+
+Operational Notes
+-----------------
+- Both services use in-process memory for some state.
+- claimStore is not durable; restarting claimcheck loses in-progress claims.
+- OpenAI must be reachable for embeddings and streaming chat.
+- CORS is permissive by default for local development.
+- OPENAI_VISION_MODEL: model for vision checks.
+- OPENAI_VISION_MIN_CONFIDENCE: reject threshold for vision mismatch.

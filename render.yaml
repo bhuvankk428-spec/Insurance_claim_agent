@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: qk-ai-chat
+    env: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: node backend/chat/server.js
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+  - type: web
+    name: qk-ai-claimcheck
+    env: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: node backend/claimcheck/server.js
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

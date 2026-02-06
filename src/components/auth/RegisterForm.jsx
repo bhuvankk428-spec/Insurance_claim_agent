@@ -75,27 +75,27 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0a0e17] to-[#111827] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gradient-to-br from-[#0b0f14] via-[#0d1320] to-[#0f172a] flex flex-col lg:flex-row">
       {/* Left: Register Card - Full width mobile, 40% desktop */}
-      <div className="w-full lg:w-2/5 min-h-screen lg:min-h-0 flex flex-col justify-center items-center p-4 sm:p-6 lg:p-8 bg-black/50 backdrop-blur-sm lg:backdrop-blur-sm">
+      <div className="w-full lg:w-2/5 flex flex-col justify-center items-center px-4 py-6 sm:px-6 sm:py-8 lg:p-8 bg-black/50 backdrop-blur-sm lg:backdrop-blur-sm">
         <form
           onSubmit={handleSubmit}
-          className="bg-neutral-900/90 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md sm:max-w-lg lg:max-w-lg flex flex-col items-center p-6 sm:p-8 lg:p-10 border border-neutral-800/50"
+          className="bg-neutral-900/90 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md sm:max-w-lg lg:max-w-lg flex flex-col items-center p-4 sm:p-6 lg:p-8 border border-neutral-800/50"
         >
           {/* Logo */}
-          <div className="flex justify-center mb-6 sm:mb-8 lg:mb-10">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-2xl border-4 border-emerald-500/60 bg-gradient-to-br from-emerald-900/50 to-sky-900/50 flex items-center justify-center shadow-2xl">
+          <div className="flex justify-center mb-4 sm:mb-6 lg:mb-8">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-2xl border-4 border-emerald-500/60 bg-gradient-to-br from-emerald-900/50 to-sky-900/50 flex items-center justify-center shadow-2xl">
               <img
                 src="/logo.png"
                 alt="QK.AI Logo"
-                className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain drop-shadow-lg"
+                className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain drop-shadow-lg"
               />
             </div>
           </div>
 
           {/* Title */}
-          <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 bg-gradient-to-r from-emerald-400 via-sky-400 to-violet-400 bg-clip-text text-transparent drop-shadow-2xl">
+          <div className="text-center mb-5 sm:mb-6 lg:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2 bg-gradient-to-r from-emerald-400 via-cyan-400 to-sky-400 bg-clip-text text-transparent drop-shadow-2xl">
               Create Account
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md mx-auto">
@@ -104,11 +104,11 @@ export default function RegisterForm() {
           </div>
 
           {/* Form inputs */}
-          <div className="w-full space-y-4 sm:space-y-5 mb-6 lg:mb-8">
+          <div className="w-full space-y-4 sm:space-y-5 mb-5 lg:mb-6">
             {/* Username */}
             <div>
               <input
-                className="block w-full p-4 sm:p-5 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
+                className="block w-full p-3 sm:p-4 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
                 type="text"
                 name="username"
                 autoComplete="username"
@@ -123,7 +123,7 @@ export default function RegisterForm() {
             {/* Email */}
             <div>
               <input
-                className="block w-full p-4 sm:p-5 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
+                className="block w-full p-3 sm:p-4 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
                 type="email"
                 name="email"
                 autoComplete="email"
@@ -138,7 +138,7 @@ export default function RegisterForm() {
             {/* Passwords */}
             <div className="space-y-3 sm:space-y-4">
               <input
-                className="block w-full p-4 sm:p-5 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
+                className="block w-full p-3 sm:p-4 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
                 type="password"
                 name="password"
                 autoComplete="new-password"
@@ -149,7 +149,7 @@ export default function RegisterForm() {
                 required
               />
               <input
-                className="block w-full p-4 sm:p-5 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
+                className="block w-full p-3 sm:p-4 rounded-2xl bg-[#0f1117]/80 backdrop-blur-sm text-white border-2 border-neutral-700/50 hover:border-neutral-600/50 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500/60 transition-all duration-300 text-base sm:text-lg placeholder-neutral-400 disabled:opacity-50"
                 type="password"
                 name="confirm"
                 autoComplete="new-password"
@@ -193,12 +193,12 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="group w-full p-4 sm:p-5 lg:p-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-sky-600 text-white font-bold text-base sm:text-lg shadow-2xl hover:from-emerald-500 hover:to-sky-500 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 transition-all duration-300 hover:shadow-3xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mb-6 sm:mb-8"
+            className="group w-full p-3 sm:p-4 lg:p-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-sky-600 text-white font-bold text-base sm:text-lg shadow-2xl hover:from-emerald-500 hover:to-sky-500 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 transition-all duration-300 hover:shadow-3xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mb-5 sm:mb-6"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin w-6 h-6" fill="none" viewBox="0 0 24 24">
-                  <rcle
+                  <circle
                     className="opacity-25"
                     cx="12"
                     cy="12"
@@ -220,7 +220,7 @@ export default function RegisterForm() {
           </button>
 
           {/* Login link */}
-          <div className="text-center mb-6 sm:mb-8">
+          <div className="text-center mb-5 sm:mb-6">
             <p className="text-neutral-400 text-sm sm:text-base">
               Already have an account?{" "}
               <button
@@ -235,7 +235,7 @@ export default function RegisterForm() {
           </div>
 
           {/* Divider */}
-          <div className="relative mb-6 sm:mb-8">
+          <div className="relative mb-5 sm:mb-6">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-neutral-700/50" />
             </div>

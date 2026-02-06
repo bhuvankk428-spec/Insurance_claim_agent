@@ -6,18 +6,18 @@ export default function ContactQKAI() {
       <Navbar />
 
       {/* ⬇️ FIX */}
-      <div className="min-h-screen bg-black text-white px-4 pt-24 sm:pt-28 py-12 sm:py-16">
+      <div className="min-h-screen bg-[#0b0f14] text-white px-4 pt-24 sm:pt-28 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-[1.1fr_1fr] items-start">
 
           {/* Left */}
           <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-sky-400">
+            <p className="text-xs uppercase tracking-[0.25em] text-cyan-400">
               Contact
             </p>
 
             <h1 className="text-2xl sm:text-3xl font-black leading-tight">
               Get in touch with the
-              <span className="block bg-gradient-to-r from-sky-400 to-violet-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
                 QK.AI team
               </span>
             </h1>
@@ -34,13 +34,13 @@ export default function ContactQKAI() {
                   Full-Stack Developer • QK.AI
                 </p>
                 <p className="text-sm mt-2">
-                  📞 <span className="text-sky-300">+91 9036694320</span>
+                  📞 <span className="text-cyan-300">+91 9036694320</span>
                 </p>
                 <p className="text-sm">
                   ✉️{" "}
                   <a
                     href="mailto:bhuvankk2005@gmail.com"
-                    className="text-sky-300 underline"
+                    className="text-cyan-300 underline"
                   >
                     bhuvankk2005@gmail.com
                   </a>

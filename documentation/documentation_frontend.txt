@@ -1,0 +1,124 @@
+Frontend Documentation
+======================
+
+Overview
+--------
+The frontend is a Vite + React app with Tailwind styling.
+It provides three main user flows:
+1. Policy advisor chat (RAG).
+2. Claim checker (policy + evidence + story).
+3. Admin dashboard for reviewing claims.
+
+Entry Point and Routing
+-----------------------
+src/main.jsx
+- React root rendering with StrictMode.
+
+src/App.jsx
+- BrowserRouter routes:
+  - "/" -> LoginEntry (splash + login)
+  - "/register" -> RegisterForm
+  - "/choose" -> ChooserPage (feature selector)
+  - "/chatbot" -> Chatbot
+  - "/claim-checker" -> ClaimChecker
+  - "/claim-story/:claimId" -> ClaimStoryChatbot
+  - "/claim-result/:claimId" -> ClaimResult
+  - "/admin-dashboard" -> AdminDashboard
+  - "/about", "/help", "/faq", "/contact" -> UI pages
+  - "*" -> ChooserPage (fallback)
+
+Configuration
+-------------
+Environment variables (Vite):
+- VITE_CHAT_API_URL: base URL for RAG backend (optional).
+- VITE_CLAIM_API_URL: base URL for claim backend (optional).
+- VITE_API_URL: fallback base URL for claim + admin endpoints.
+- VITE_ADMIN_EMAIL, VITE_ADMIN_PASSWORD, VITE_ADMIN_TOKEN: admin login and API.
+
+If no base URLs are set, the app uses local defaults:
+- Chat: relative "/api/rag-chat"
+- Claim: "http://localhost:5174"
+
+Authentication
+--------------
+src/firebase.js
+- Firebase is initialized with project config.
+- getAuth + Google provider are exported.
+
+src/components/auth/LoginEntry.jsx
+- Shows a 2s splash screen then login form.
+
+src/components/auth/LoginForm.jsx
+- Email/password login via Firebase Auth.
+- Google login via Firebase popup.
+- Admin login uses a local credential check and stores a flag in localStorage.
+
+src/components/admin/adminAuth.js
+- ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_TOKEN are read from env with defaults.
+- isAdminAuthed() reads localStorage.
+- adminLogin() sets localStorage flag.
+- adminLogout() clears localStorage.
+
+Policy Advisor (Chatbot)
+------------------------
+src/components/Chatbot.jsx
+- Manages streaming responses from /api/rag-chat.
+- Auto-detects domain if "any" is selected.
+- Maintains message list and renders Markdown with react-markdown + remark-gfm.
+- Streams tokens incrementally and updates the latest AI message.
+- Optional speech synthesis to read responses aloud.
+
+Request structure:
+- POST { question, details, domain }
+- If domain is "any", the UI detects a domain from user text.
+
+Claim Checker Flow
+------------------
+Step 1: Policy upload
+src/components/ClaimChecker.jsx
+- Upload policy PDF to /api/claim-check.
+- Reads response { valid, claimId } and stores claimId for the session.
+
+Step 2: Evidence upload
+src/components/ClaimChecker.jsx
+- Upload FIR and photos to /api/claim-evidence.
+- Required fields: claimId, claimType, fir, photos.
+- On success, navigates to /claim-story/:claimId.
+
+Step 3: Story analysis
+src/components/ClaimStoryChatbot.jsx
+- Sends story + claimId to /api/claim-story.
+- On eligible response, navigates to /claim-result/:claimCode.
+- Passes decision details via location state.
+
+Step 4: Claim result
+src/components/ClaimResult.jsx
+- Renders decision summary and reasons.
+- Uses claimId from URL and details from navigation state.
+
+Admin Dashboard
+---------------
+src/components/admin/AdminDashboard.jsx
+- Requires admin auth flag in localStorage.
+- GET /api/admin/claims with x-admin-token header.
+- PATCH /api/admin/claims/:claimId to update admin decision and notes.
+- Includes search and PDF export via window.print.
+
+Navigation and UI Components
+----------------------------
+src/components/ChooserPage.jsx
+- Feature selector for chat and claim checker.
+
+src/components/ui/Navbar.jsx and UI pages
+- Top navigation and static pages (About, Help, FAQ, Contact).
+
+Styling
+-------
+- Tailwind classes are used heavily for layout and visuals.
+- Global styles live in src/index.css and src/App.css.
+
+Known UX Constraints
+--------------------
+- Claim flow relies on a server-side in-memory claimStore between steps.
+- Refreshing the browser or restarting the claim server invalidates claimId.
+- Admin login is client-side only and uses environment defaults.

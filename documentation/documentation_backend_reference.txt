@@ -1,0 +1,149 @@
+Backend Reference
+=================
+
+This reference maps backend files to responsibilities, inputs, and outputs.
+Paths are relative to the repo root.
+
+Chat Service (backend/chat)
+---------------------------
+backend/chat/server.js
+- Express server for RAG.
+- CORS whitelist from CORS_ORIGIN.
+- POST /api/rag-chat streams text/plain response.
+- Validates that "question" exists in the body.
+
+backend/chat/rag.js
+- askRAGStream orchestration.
+- Steps: retrieve chunks, rank, build prompt, stream OpenAI tokens.
+- Uses OpenAI SDK with streaming.
+
+backend/chat/retrieval.js
+- embed(): calls OpenAI embeddings to create vectors.
+- retrieveChunks(): SQL query to policy_chunks with pgvector similarity.
+- Optional domain filtering.
+- If OpenAI key is missing, falls back to keyword search.
+
+backend/chat/rules.js
+- scorePolicy(): rule-based score only.
+- scorePolicyWithExplanation(): returns { score, reasons } based on heuristics.
+- Uses user preferences (health, family, budget) and similarity.
+
+backend/chat/db.js
+- Creates a pg.Pool using DATABASE_URL.
+- Exports db connection for queries.
+
+backend/chat/scripts/buildChunks.js
+- Reads JSON policy files in backend/chat/data.
+- Converts each policy to multiple text chunks per field.
+- Writes policy_chunks.json.
+
+backend/chat/scripts/embedChunks.js
+- Reads policy_chunks.json.
+- Embeds each chunk with OpenAI embeddings.
+- Inserts into policy_chunks table with pgvector.
+
+backend/chat/data/*.json
+- Raw policy data grouped by domain.
+- Each file can be an array or a single policy object.
+
+backend/chat/policy_chunks.json
+- Generated chunk file used for embedding and storage.
+
+Claimcheck Service (backend/claimcheck)
+---------------------------------------
+backend/claimcheck/server.js
+- Express server for claim flow.
+- Loads env, sets CORS, mounts /api routes.
+
+backend/claimcheck/routes/claim.routes.js
+- Defines API routes and admin endpoints.
+- POST /api/claim-check: policy verification.
+- POST /api/claim-evidence: FIR + photos evidence check.
+- POST /api/claim-story: story analysis and decision.
+- GET /api/admin/claims: list claims (admin token required).
+- PATCH /api/admin/claims/:claimId: update admin decision.
+
+backend/claimcheck/services/ocr.service.js
+- extractText(): supports PDFs and images.
+- Uses pdf-parse; falls back to Tesseract for scanned PDFs.
+
+backend/claimcheck/services/extractFields.service.js
+- extractPolicyFields(): regex parsing for ownerName, bikeNumber, landLocation.
+- extractFIRFields(): regex parsing for incident, bikeNumber, location.
+
+backend/claimcheck/services/exif.service.js
+- extractExif(): reads EXIF GPS using exiftool-vendored.
+- ALLOW_FAKE_GEO can inject a dummy location for dev.
+
+backend/claimcheck/services/match.service.js
+- matchDocuments(): hard checks for required fields, optional location match.
+- Uses rules from config/domains.js.
+- Returns { ok, level } with level "full" or "partial".
+
+backend/claimcheck/services/evidence.service.js
+- checkEvidence(): validates claimId, runs OCR, EXIF, and match.
+- STRICT_GEO enforces geo-tagged images.
+- Updates in-memory claimStore with match result and evidence metadata.
+- Requires evidence document to be PDF.
+- Runs OpenAI Vision check if configured.
+
+backend/claimcheck/services/policy.service.js
+- checkPolicy(): OCR policy PDF and extract fields.
+- Creates claimId and initializes claimStore entry.
+- Returns { valid, message, claimId, extracted }.
+
+backend/claimcheck/services/story.service.js
+- analyzeStory(): validates claim context, uses OpenAI if configured.
+- Falls back to deterministic approval when OpenAI is missing.
+- Generates claim codes for full/partial approval.
+- Persists decision via Supabase.
+
+backend/claimcheck/services/coverage.service.js
+- checkCoverage(): validates if incident is covered by policy text.
+- Uses OpenAI; heuristic fallback if unavailable.
+- Returns covered/related/unknown/ambiguous/excluded/not_covered with confidence.
+
+backend/claimcheck/services/image.service.js
+- verifyIncidentWithVision(): optional Vision check on incident photos (OpenAI).
+- Returns ok/partial/reject or skipped when not configured.
+
+backend/claimcheck/services/supabase.service.js
+- ensureSupabase(): initializes Supabase client from env.
+- upsertClaimDecision(): insert or update claim record.
+- listClaims(): returns recent claims.
+- updateAdminDecision(): patch admin decision and notes.
+
+backend/claimcheck/store/claimStore.js
+- In-memory Map for per-claim session state.
+- Not durable across server restarts.
+
+backend/claimcheck/config/domains.js
+- Domain rule sets for matchDocuments.
+- Defines required fields for asset match.
+
+API Contract Summary
+--------------------
+POST /api/rag-chat
+- Body: { question, domain?, details? }
+- Response: streaming text/plain chunks.
+
+POST /api/claim-check (multipart/form-data)
+- Field: "pdf" (policy document)
+- Response: { valid, message, claimId?, extracted? }
+
+POST /api/claim-evidence (multipart/form-data)
+- Fields: "claimId", "claimType", "fir", "photos"
+- Response: { status, message, geoTagged?, mode? }
+
+POST /api/claim-story
+- Body: { claimId, story }
+- Response: { eligible, claimCode?, level?, riskLevel?, explanation?, reasons? }
+
+GET /api/admin/claims
+- Header: x-admin-token
+- Response: { status, claims }
+
+PATCH /api/admin/claims/:claimId
+- Header: x-admin-token
+- Body: { adminDecision, adminNotes }
+- Response: { status, claim }

@@ -1,0 +1,626 @@
+[
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "coverage.perils",
+    "text": "coverage.perils: drought; flood; cyclone; hailstorm; pests; crop diseases; excess rainfall; prevented sowing; post-harvest loss; localised calamities"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "claims.timeline_goal",
+    "text": "claims.timeline_goal: approximately 2 months after final yield data"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "claims.payout_basis",
+    "text": "claims.payout_basis: threshold yield vs actual yield"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "exclusions",
+    "text": "exclusions: Farmer negligence or improper farming practices; Crops not notified by the state; Post-harvest losses beyond notified period; Non-compliance with scheme rules or false claims"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "best_for",
+    "text": "best_for: Loanee farmers; Non-loanee farmers growing notified crops; Farmers seeking low premium protection against weather and yield risks"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "enrolment.channels",
+    "text": "enrolment.channels: Banks and cooperative societies; Common Service Centres (CSC); PMFBY online portal; Authorised insurance agents; Agriculture department offices"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "enrolment.requirements",
+    "text": "enrolment.requirements: Land or cultivation records; Crop and season details; Bank account for DBT; KYC documents"
+  },
+  {
+    "domain": "Crop Insurance",
+    "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "section": "raw_text",
+    "text": "raw_text: PMFBY is a government-backed crop insurance scheme that protects farmers against crop loss due to natural calamities such as drought, flood, cyclone, hailstorm, pests, and diseases. It covers prevented sowing, post-harvest losses for notified crops, and localized calamities. Premium payable by farmers is capped at 2% for Kharif crops, 1.5% for Rabi crops, and 5% for annual commercial and horticultural crops, with the remaining actuarial premium heavily subsidized by the Central and State governments. Claims are triggered when actual yield in a notified area falls below the threshold yield and are aimed to be settled within about two months after yield data is finalized. Coverage, crops, and timelines vary by state."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Comprehensive Plan",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Cashless hospital network is a key strength; exclusions and waiting periods must be reviewed carefully."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Comprehensive Plan",
+    "section": "best_for",
+    "text": "best_for: Families wanting no room rent cap; Users prioritizing hospital choice flexibility"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Comprehensive Plan",
+    "section": "raw_text",
+    "text": "raw_text: Broad health insurance for individuals and families with extensive coverage and no room-rent cap in many variants. Covers in-patient hospitalization, pre and post hospitalization expenses, maternity and newborn benefits after waiting periods, modern treatments, bariatric surgery as per conditions, second medical opinion, and 100% restoration of sum insured once per policy year. Waiting periods and sub-limits apply for pre-existing diseases and specific procedures."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Family Health Optima",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Single shared sum insured across family members with restoration benefits."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Family Health Optima",
+    "section": "best_for",
+    "text": "best_for: Mid-sized families preferring a floater plan; Families needing restoration benefits"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Star Health Family Health Optima",
+    "section": "raw_text",
+    "text": "raw_text: Provides a single shared sum insured for the entire family under one health policy. Covers in-patient hospitalization, daycare procedures, organ donor expenses, restoration of sum insured, worldwide emergency coverage in some variants, maternity benefits after waiting periods, and cashless treatment at Star Health’s network hospitals. Waiting periods and sub-limits apply."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "section": "insurer_metrics.csr_confidence",
+    "text": "insurer_metrics.csr_confidence: indicative_not_product_specific"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Strong digital claim journey with wellness and preventive care focus."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "section": "best_for",
+    "text": "best_for: Large or joint families; Users valuing unlimited restoration and wellness benefits"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Niva Bupa Health Companion Plan",
+    "section": "raw_text",
+    "text": "raw_text: Comprehensive health insurance for individuals and families with in-patient hospitalization, daycare treatments, AYUSH coverage, organ donor expenses, pre and post hospitalization cover, unlimited restoration in many variants, annual health check-ups, and cashless treatment at Niva Bupa’s network hospitals. Optional riders include daily hospital cash and claim protection features."
+  },
+  {
+    "domain": "Health / Accident / Travel",
+    "policy_name": "Star Health Insurance (General Overview)",
+    "section": "insurer_metrics.notes",
+    "text": "insurer_metrics.notes: One of the largest standalone health insurers by retail volume."
+  },
+  {
+    "domain": "Health / Accident / Travel",
+    "policy_name": "Star Health Insurance (General Overview)",
+    "section": "raw_text",
+    "text": "raw_text: Large standalone health insurer offering multiple products across health, personal accident and travel insurance. Known for a wide cashless hospital network, digital claim support, maternity and pre-existing disease coverage after waiting periods, and multiple add-ons such as critical illness and top-up covers."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "what_it_does",
+    "text": "what_it_does: Covers the structure and/or contents of a home against major natural and man-made risks."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "coverage",
+    "text": "coverage: Fire, lightning, explosion and implosion; Flood, inundation, storm, cyclone and other natural calamities; Earthquake damage to structure and contents; Burglary, housebreaking and attempted theft; Damage to household contents such as furniture, appliances and electronics; Optional cover for jewellery and valuables via add-ons (up to specified limits)"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "premium_example",
+    "text": "premium_example: ₹18/month for ₹5 lakh sum insured for a pucca building (illustrative only, not an actual quote)."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "premium_depends_on",
+    "text": "premium_depends_on: Total sum insured (structure + contents); Type of dwelling (pucca / kachcha, flat / independent house); Location risk (flood/quake zone, crime rate, etc.); Security features (locks, alarms, gated community, etc.); Policy term (1 year to multi-year options); Optional covers selected (jewellery, terrorism, etc.)"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "structure_and_contents_details.structure_cover",
+    "text": "structure_and_contents_details.structure_cover: Protects the building structure (walls, roof, floors, built-in fittings) usually on reinstatement value basis, for homes up to a certain age (e.g., 50 years)."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "structure_and_contents_details.contents_cover",
+    "text": "structure_and_contents_details.contents_cover: Protects household contents (furniture, appliances, electronics, personal belongings) usually on market value basis after depreciation."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "structure_and_contents_details.who_can_buy",
+    "text": "structure_and_contents_details.who_can_buy: Homeowners for structure + contents; Tenants for contents-only cover"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: Health/general CSR typically in a competitive band (approx. mid-80s to 90s depending on product/year)."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "insurer_metrics_notes.notes",
+    "text": "insurer_metrics_notes.notes: Large private general insurer with strong digital purchase and claim support."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "ICICI Lombard Complete Home Protect",
+    "section": "best_for",
+    "text": "best_for: Homeowners wanting low-cost protection for both structure and contents; Tenants wanting contents-only cover for appliances, furniture and valuables"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "what_it_does",
+    "text": "what_it_does: Protects the residential building and its contents against major natural and man-made risks, with useful living-expense add-ons."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "coverage",
+    "text": "coverage: Loss or damage to building and contents due to fire, lightning and explosion; Damage due to flood, storm, cyclone and other specified natural disasters; Earthquake cover for structure and contents (if opted); Burglary, theft and housebreaking losses to contents; Electrical and mechanical breakdown cover for specified appliances (if selected); Coverage for reconstruction/repair of building and replacement of contents after covered events; Rent for alternative accommodation if the insured house becomes uninhabitable (as per chosen limit)"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "additional_features",
+    "text": "additional_features: Option to cover jewellery on worldwide basis (up to defined limits); Option to cover portable equipment like mobiles, laptops and cameras on all-risk basis; New-for-old replacement for contents up to a certain age (typically 10 years) in many variants; Auto restoration of loss limit for contents after a claim in some options; Optional covers like hotel stay, brokerage and shifting expenses when moving to alternate accommodation; Discounts based on security and long-term coverage options"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "who_can_buy",
+    "text": "who_can_buy: Homeowners for structure-only, contents-only, or combined structure + contents; Tenants for contents-only cover"
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: Overall claim settlement ratios for general/health business generally in the 90%+ band in recent disclosures (exact numbers vary by segment and year)."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "insurer_metrics_notes.notes",
+    "text": "insurer_metrics_notes.notes: Known for digital-first processes and wide partner network; home product positioned as long-term, discounted cover."
+  },
+  {
+    "domain": "Home Insurance",
+    "policy_name": "HDFC ERGO Home Shield",
+    "section": "best_for",
+    "text": "best_for: Flat or house owners concerned about natural disasters and burglary; Customers who want structure + contents cover plus temporary accommodation benefits"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "plan_type",
+    "text": "plan_type: Whole life with income (participating, non-linked)"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "what_it_does",
+    "text": "what_it_does: Combines lifelong life cover with guaranteed yearly income after the premium paying term and a maturity benefit at age 100."
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "benefits.survival_benefit",
+    "text": "benefits.survival_benefit: Guaranteed annual survival benefit of 8% of the Basic Sum Assured every year after the premium paying term, payable till age 100 or death, whichever is earlier.[web:155][web:156][web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "benefits.maturity_benefit",
+    "text": "benefits.maturity_benefit: At age 100, if the life assured survives, a lump sum equal to Sum Assured + vested simple reversionary bonus + final additional bonus (if any) is paid.[web:156][web:158][web:161][web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "benefits.death_benefit",
+    "text": "benefits.death_benefit: If death occurs during the policy term (any time up to age 100), the nominee receives a lump sum death benefit (typically Sum Assured on Death + bonuses as per policy rules). Life cover is active from day one.[web:154][web:161][web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "benefits.loan_facility",
+    "text": "benefits.loan_facility: Policy loans allowed after acquiring surrender value, giving liquidity while continuing cover.[web:161][web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "nature",
+    "text": "nature: Savings + protection plan (not a pure term plan) – premium per ₹1 lakh cover is higher compared to pure term insurance but provides income plus maturity value.[web:155][web:158][web:161]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "key_parameters.coverage_upto_age",
+    "text": "key_parameters.coverage_upto_age: Coverage and benefits available up to 100 years of age of the life assured.[web:155][web:158][web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "key_parameters.premium_paying_terms",
+    "text": "key_parameters.premium_paying_terms: Common PPT options include 15, 20, 25 and 30 years; policy term is effectively 100 − entry age.[web:163]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "key_parameters.entry_age",
+    "text": "key_parameters.entry_age: Minimum and maximum entry age are defined by LIC (check latest brochure/UIN for exact numbers).[web:154][web:161]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: LIC’s overall life claim settlement ratio has been around 98–99% over recent years (e.g., ~98.15% in FY 2024–25).[web:159][web:164][web:167]"
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "insurer_metrics_notes.notes",
+    "text": "insurer_metrics_notes.notes: LIC handles the highest volume of life claims in India and is widely seen as one of the most reliable life insurers."
+  },
+  {
+    "domain": "Life Insurance",
+    "policy_name": "LIC Jeevan Umang",
+    "section": "best_for",
+    "text": "best_for: People who want guaranteed long-term yearly income plus life cover up to 100 years; Conservative investors who value guarantees and LIC’s high claim settlement record over maximum-return or low-premium term-only solutions"
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "what_it_does",
+    "text": "what_it_does: Helps build a dedicated corpus for children’s higher education while ensuring that funding continues even if the parent (life assured) dies."
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "features.savings_component",
+    "text": "features.savings_component: Part of each premium goes towards building an education corpus that can be used for future school, college, or higher education costs."
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "features.life_cover_on_parent",
+    "text": "features.life_cover_on_parent: Provides life insurance on the parent; on the parent’s death, the insurer may pay an immediate lump sum and/or continue future premiums (premium waiver) so that the child’s benefits are not disrupted.[web:160][web:162][web:165][web:168]"
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "features.loan_protection",
+    "text": "features.loan_protection: Can be structured to cover or support repayment of education loans in case the parent is no longer around."
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "features.flexible_payout_structure",
+    "text": "features.flexible_payout_structure: Lump sum at key milestones such as start of higher secondary, undergraduate, or postgraduate education; Periodic payouts to meet tuition fees and living expenses across multiple years rather than only one big payout[web:160][web:162][web:165][web:168]"
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "plan_nature",
+    "text": "plan_nature: Investment-cum-insurance child education plan; may be endowment-style (guaranteed) or market-linked (ULIP-type), depending on product design.[web:162][web:165][web:168]"
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "key_customisation_options",
+    "text": "key_customisation_options: Choice of policy term to align with child’s age and target education years; Choice of premium payment mode (monthly, quarterly, half-yearly, yearly or single)[web:162][web:165]; Choice of payout pattern: lump sum at maturity, staggered payouts at milestones, or a combination[web:160][web:162][web:165][web:168]"
+  },
+  {
+    "domain": "Education / Child Plan",
+    "policy_name": "BrightFuture EduPlan",
+    "section": "best_for",
+    "text": "best_for: Parents who want structured and disciplined savings for a child’s education plus protection if something happens to them; Families who prefer fixed, pre-planned payouts at school/UG/PG stages instead of ad-hoc investing"
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "what_it_does",
+    "text": "what_it_does: Protects a car against own damage and provides mandatory third-party liability cover."
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "coverage",
+    "text": "coverage: Own damage due to accident (collision, overturning, etc.); Fire, explosion, self-ignition and lightning damage; Theft or total loss of the vehicle; Damage due to natural calamities such as flood, cyclone, storm and earthquake; Damage due to man-made incidents such as riots, strikes, malicious acts and terrorism (as per policy terms); Third-party liability for bodily injury, death and property damage (as per Motor Vehicles Act); Cashless repairs at authorized network garages; Roadside assistance (towing, on-site repair, fuel delivery, etc., if opted)"
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "add_ons",
+    "text": "add_ons: Zero depreciation cover (no deduction for depreciation on parts during claim); Engine and gearbox protection cover; Return to invoice (RTI) cover for total loss/theft; No Claim Bonus (NCB) protection; Consumables cover (nuts, bolts, oils, etc.); Key and lock replacement cover; Tyre and rim protection (in some variants); Personal accident cover for owner-driver and optional for passengers"
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "premium_depends_on",
+    "text": "premium_depends_on: IDV (Insured Declared Value) of the car; Car make, model, fuel type and variant; Age of the vehicle; Geographical zone and parking location; Previous claim history and NCB level; Add-ons selected and voluntary deductible; Usage type (private vs commercial) where applicable"
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: Health/general CSR typically in an approximate 85–97% range depending on product and year (indicative)."
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "insurer_metrics_notes.garage_network",
+    "text": "insurer_metrics_notes.garage_network: Large network of authorized garages for cashless repairs across India."
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "insurer_metrics_notes.notes",
+    "text": "insurer_metrics_notes.notes: Strong digital purchase and claim intimation process, app-based status tracking and support."
+  },
+  {
+    "domain": "Motor Insurance",
+    "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+    "section": "best_for",
+    "text": "best_for: Car owners who want a comprehensive private-insurer package with multiple add-on choices; Users who prefer cashless repairs and digital-first claim handling"
+  },
+  {
+    "domain": "Gadget / Device Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "section": "what_it_does",
+    "text": "what_it_does: Protects eligible gadgets (smartphones, laptops, tablets, etc.) against accidental damage and theft."
+  },
+  {
+    "domain": "Gadget / Device Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "section": "coverage",
+    "text": "coverage: Accidental physical damage to the device (e.g., screen cracks, drops, liquid spills) as per policy terms; Repair or replacement of the device up to the sum insured or invoice value (after deductibles); Loss or theft of the device due to burglary, robbery or snatching (subject to police FIR and investigation); Worldwide protection for specified devices during travel; No-cost pick-up and drop service for repairs where service network is available"
+  },
+  {
+    "domain": "Gadget / Device Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "section": "key_checks_before_buying",
+    "text": "key_checks_before_buying: Maximum age of the device at the time of purchase (e.g., usually new or within a few months); Original purchase invoice and proof-of-ownership requirements; Whether data loss, software issues and unauthorized repairs are excluded; Excess/deductible amount per claim (how much the customer must pay from pocket); Number of claims allowed per year and any claim amount caps; Exclusions for intentional damage, cosmetic damage or unreported theft; Fraud checks, IMEI/device registration requirements and claim documentation needed"
+  },
+  {
+    "domain": "Gadget / Device Insurance",
+    "policy_name": "TechGuard Device Protect",
+    "section": "best_for",
+    "text": "best_for: Users buying expensive smartphones, laptops or tablets who want protection against accidental damage and theft; Frequent travellers who need worldwide protection for work or personal devices"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "what_it_does",
+    "text": "what_it_does: Provides a one-time payout if the insured dies or becomes disabled due to an accident, helping to support family income and medical needs."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "coverage_highlights",
+    "text": "coverage_highlights: Accidental death benefit up to 100% of the sum insured; Permanent total disability payouts as per policy schedule; Permanent partial disability payouts based on injury scale; Hospital cash benefit in selected variants; Ambulance cost coverage up to specified limits; Broken bones and burns cover in certain variants; OPD expenses in some variants; Financial support for dependent family members (e.g., education benefit in some plans)"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "sum_insured_range",
+    "text": "sum_insured_range: Approximately ₹10 lakhs – ₹1 crore (may vary by age, occupation and underwriting)."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "important_conditions",
+    "text": "important_conditions: No cover for death or disability that is not due to an accident (natural death excluded); No cover for self-harm, suicide attempt or intentional injury; No cover if under the influence of alcohol or drugs beyond legal limits; No cover for participation in criminal acts, war, civil commotion or terrorism unless specifically included; Territorial scope is often worldwide but subject to policy wording and local regulations"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: Health/Personal Accident claim settlement ratios for HDFC ERGO have broadly been in the ~90–95% zone in recent public disclosures (indicative)."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "insurer_metrics_notes.general_business_csr",
+    "text": "insurer_metrics_notes.general_business_csr: Overall general insurance CSR also typically lies around 90–95% depending on product and year (approximate range)."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "insurer_metrics_notes.service_profile",
+    "text": "insurer_metrics_notes.service_profile: Large hospital/partner network, digital-first claim notification and tracking, strong presence in health and PA segments."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "HDFC ERGO Personal Accident Cover",
+    "section": "best_for",
+    "text": "best_for: People with a risky commute (e.g., two-wheeler riders) or hazardous work conditions; Individuals who already have life insurance but want an additional high-sum accident cover at relatively low cost"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "what_it_does",
+    "text": "what_it_does: Provides lump-sum payouts on accidental death or disability with an option to cover hospitalization expenses due to accident."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "coverage_highlights",
+    "text": "coverage_highlights: Accidental death benefit; Permanent total disability benefit; Permanent partial disability benefit as per injury scale; Temporary total disability benefit (weekly compensation in some variants); Optional accidental hospitalization expense cover"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "premium_example",
+    "text": "premium_example: ₹15 for every ₹25,000 of sum insured under the National Janata Personal Accident Policy (illustrative)."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "premium_depends_on",
+    "text": "premium_depends_on: Chosen sum insured amount; Occupational risk class of the policyholder (normal, medium, heavy); Type of policy (individual vs. family floater); Age and any applicable loadings as per underwriting"
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "insurer_metrics_notes.claim_settlement_ratio_trend",
+    "text": "insurer_metrics_notes.claim_settlement_ratio_trend: As a PSU general insurer, National’s CSR and ICR are typically moderate to good, with relative stability over the years."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "insurer_metrics_notes.service_profile",
+    "text": "insurer_metrics_notes.service_profile: Strong legacy presence and trust; claim processes may be more traditional and sometimes slower than some private insurers."
+  },
+  {
+    "domain": "Personal Accident",
+    "policy_name": "National Personal Accident Policy",
+    "section": "best_for",
+    "text": "best_for: Very price-sensitive customers seeking basic personal accident protection; Buyers who prefer PSU backing and are comfortable with a more traditional servicing experience"
+  },
+  {
+    "domain": "Cyber Insurance",
+    "policy_name": "SecureNet Cyber Shield",
+    "section": "what_it_does",
+    "text": "what_it_does: Protects individuals and businesses against cyber-attacks, data breaches, and identity theft."
+  },
+  {
+    "domain": "Cyber Insurance",
+    "policy_name": "SecureNet Cyber Shield",
+    "section": "coverage",
+    "text": "coverage: Data loss recovery and restoration; Legal expenses for cybercrime defense and regulatory inquiries; Financial loss due to cyber theft or online fraud (as per policy limits); 24/7 incident response and cybersecurity support"
+  },
+  {
+    "domain": "Cyber Insurance",
+    "policy_name": "SecureNet Cyber Shield",
+    "section": "key_checks_before_buying",
+    "text": "key_checks_before_buying: Whether social-engineering scams and phishing are covered or excluded; Coverage and limits for business interruption due to cyber-attacks; Ransomware coverage, including ransom payment and negotiation support limits; Retroactive date (does it cover past unknown incidents discovered later?); Notification and PR costs for informing affected customers after a breach; Any deductibles or sub-limits for specific cyber events"
+  },
+  {
+    "domain": "Pet Insurance",
+    "policy_name": "PetCare Total Protection",
+    "section": "what_it_does",
+    "text": "what_it_does: Provides health and liability cover for pets, including illness, accidents, and some routine care."
+  },
+  {
+    "domain": "Pet Insurance",
+    "policy_name": "PetCare Total Protection",
+    "section": "coverage",
+    "text": "coverage: Veterinary bills for illness; Veterinary bills for accident-related treatment; Annual wellness or routine care in some variants; Third-party liability if the pet injures someone or damages property"
+  },
+  {
+    "domain": "Pet Insurance",
+    "policy_name": "PetCare Total Protection",
+    "section": "key_checks_before_buying",
+    "text": "key_checks_before_buying: Breed restrictions or higher premiums for certain breeds; Waiting periods for illness and accident claims; Whether hereditary or congenital conditions are covered or excluded; Minimum and maximum age limits for entry and renewal; Vaccination and medical history requirements for claims; Any sub-limits per condition or per policy year"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "section": "what_it_does",
+    "text": "what_it_does: Protects travellers against medical and journey-related risks during domestic or international trips."
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "section": "coverage",
+    "text": "coverage: Emergency hospitalization during travel; Emergency medical evacuation to nearest suitable facility or home country (as per policy terms); Dental emergencies due to accident; Trip cancellation or interruption due to covered reasons; Loss or delay of checked-in baggage; Personal accident cover in some variants"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "section": "policy_types",
+    "text": "policy_types: Leisure travel plans; Business travel plans; Student travel plans"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "HDFC ERGO Travel Insurance",
+    "section": "key_points",
+    "text": "key_points: Region-specific sum insured and sub-limits; benefits often defined in USD for international trips; Pre-existing illnesses usually excluded or covered only under specific add-ons/conditions; High-risk activities (adventure sports, etc.) often excluded unless add-on is taken; Maximum trip duration limits vary by plan (e.g., 30/60/90 days etc.); Cashless assistance through global assistance partners and 24x7 helpline"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "section": "what_it_does",
+    "text": "what_it_does: Multi-level travel insurance providing medical and non-medical protection during trips."
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "section": "plan_variants",
+    "text": "plan_variants: Standard; Silver; Gold; Platinum"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "section": "coverage",
+    "text": "coverage: Emergency medical expenses during travel; Hospitalization due to illness or accident; Emergency medical evacuation; Baggage loss or delay; Trip cancellation or interruption; Personal liability coverage; Repatriation of mortal remains; Dental treatment due to accidental injury"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "section": "best_for",
+    "text": "best_for: Travellers who want to choose coverage level based on budget and destination; People who prefer multiple plan tiers (Standard to Platinum) for flexibility"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Reliance Travel Care Policy",
+    "section": "key_checks_before_buying",
+    "text": "key_checks_before_buying: Whether pre-existing conditions are covered, partially covered, or excluded; Per-day and per-incident limits for medical and baggage claims; Coverage for adventure sports or high-risk activities, if required; Country-specific exclusions or restrictions (e.g., certain war-risk regions)"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "section": "what_it_does",
+    "text": "what_it_does: Overseas travel insurance providing protection against medical emergencies and trip-related risks."
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "section": "coverage",
+    "text": "coverage: Medical treatment and hospitalization abroad; Cashless medical facilities through global networks; Trip cancellation or interruption for covered reasons; Loss or delay of baggage; Passport theft and related assistance; 24x7 global assistance services; Compensation for flight or travel delays; Personal accident cover in many variants"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "section": "insurer_quality_notes",
+    "text": "insurer_quality_notes: Tata AIG is widely used for international travel insurance; Competitive claim settlement experience in travel segment as per public reviews; Strong assistance tie-ups for international claims and medical support"
+  },
+  {
+    "domain": "Travel Insurance",
+    "policy_name": "Tata AIG Travel Guard",
+    "section": "key_checks_before_buying",
+    "text": "key_checks_before_buying: Exact medical sum insured and sub-limits for OPD, IPD, and evacuation; Coverage for pre-existing diseases (often limited or excluded); Requirements for documentation and approvals for cashless treatment; Geographical coverage (Schengen, worldwide excluding USA/Canada, etc.)"
+  }
+]

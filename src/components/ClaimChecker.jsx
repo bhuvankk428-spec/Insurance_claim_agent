@@ -1,50 +1,60 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 import {
-  FaUpload,
   FaFilePdf,
   FaCheckCircle,
   FaExclamationTriangle,
   FaImages,
   FaFileAlt,
 } from "react-icons/fa";
+import Navbar from "./ui/Navbar";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+const API_BASE =
+  import.meta.env.VITE_CLAIM_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5174";
 
 export default function ClaimChecker() {
   const navigate = useNavigate();
 
-  // Step 1: Policy PDF
-  const [file, setFile] = useState(null);
+  /* ---------------- REFS ---------------- */
+  const fileInput = useRef(null);
+  const firInput = useRef(null);
+  const photoInput = useRef(null);
+
+  /* ---------------- POLICY ---------------- */
+  const [claimId, setClaimId] = useState(null);
+
   const [fileName, setFileName] = useState("");
   const [policyResult, setPolicyResult] = useState(null);
   const [policyLoading, setPolicyLoading] = useState(false);
-  const fileInput = useRef(null);
+  const policyVerified = policyResult?.status === "success";
 
-  // Step 2: FIR
+  /* ---------------- DOMAIN ---------------- */
+  const [claimType, setClaimType] = useState("automobile");
+
+  /* ---------------- FIR ---------------- */
   const [firFile, setFirFile] = useState(null);
   const [firName, setFirName] = useState("");
-  const firInput = useRef(null);
 
-  // Step 3: Photos
+  /* ---------------- PHOTOS ---------------- */
   const [photoFiles, setPhotoFiles] = useState([]);
   const [photoNames, setPhotoNames] = useState([]);
-  const photoInput = useRef(null);
 
-  // Shared evidence result
+  /* ---------------- EVIDENCE ---------------- */
   const [evidenceResult, setEvidenceResult] = useState(null);
   const [evidenceLoading, setEvidenceLoading] = useState(false);
 
-  async function handlePolicyUpload(e) {
-    e.preventDefault();
-    if (!file) return;
-
-    setPolicyLoading(true);
-    setPolicyResult(null);
+  /* ---------------- POLICY VERIFY ---------------- */
+  async function verifyPolicy(file) {
+    const formData = new FormData();
+    formData.append("pdf", file); // ? ONLY PDF
+    const email = auth.currentUser?.email;
+    if (email) formData.append("email", email);
 
     try {
-      const formData = new FormData();
-      formData.append("pdf", file);
+      setPolicyLoading(true);
 
       const res = await fetch(`${API_BASE}/api/claim-check`, {
         method: "POST",
@@ -52,32 +62,50 @@ export default function ClaimChecker() {
       });
 
       const data = await res.json();
+
       if (data.valid) {
-        setPolicyResult({ status: "success", message: data.message });
-      } else {
-        setPolicyResult({ status: "error", message: data.message });
+        setClaimId(data.claimId); // ? STORE claimId
       }
-    } catch (err) {
+
+      setPolicyResult({
+        status: data.valid ? "success" : "error",
+        message: data.message,
+      });
+    } catch {
       setPolicyResult({
         status: "error",
-        message: "Could not verify policy. Please try again.",
+        message: "Policy verification failed",
       });
     } finally {
       setPolicyLoading(false);
     }
   }
 
+
+  /* ---------------- EVIDENCE SUBMIT ---------------- */
   async function handleEvidenceUpload(e) {
     e.preventDefault();
-    if (!firFile && !photoFiles.length) return;
+
+    if (!policyVerified) {
+      setEvidenceResult({
+        status: "error",
+        message: "Please verify policy first",
+      });
+      return;
+    }
+
+    if (!firFile || photoFiles.length === 0) return;
 
     setEvidenceLoading(true);
     setEvidenceResult(null);
 
     try {
       const formData = new FormData();
-      if (firFile) formData.append("fir", firFile);
+      formData.append("claimId", claimId); // ? REQUIRED
+      formData.append("claimType", claimType);
+      formData.append("fir", firFile);
       photoFiles.forEach((f) => formData.append("photos", f));
+
 
       const res = await fetch(`${API_BASE}/api/claim-evidence`, {
         method: "POST",
@@ -88,9 +116,9 @@ export default function ClaimChecker() {
       setEvidenceResult(data);
 
       if (data.status === "success") {
-        navigate("/claim-story");
+        navigate(`/claim-story/${claimId}`);
       }
-    } catch (err) {
+    } catch {
       setEvidenceResult({
         status: "error",
         message: "Could not process evidence. Please try again.",
@@ -100,232 +128,217 @@ export default function ClaimChecker() {
     }
   }
 
-  const canSubmitEvidence = !!firFile || photoFiles.length > 0;
+  const canSubmitEvidence =
+    policyVerified && firFile && photoFiles.length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-[#050816] to-[#111827] px-4 py-8 sm:py-10 lg:py-12">
-      <div className="max-w-6xl w-full">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl mb-3 text-white font-black text-center leading-tight">
-          Policy Claim Workflow
-        </h1>
-        <p className="text-sm sm:text-base text-neutral-300 mb-8 sm:mb-10 text-center max-w-2xl mx-auto leading-relaxed">
-          Follow these three steps: verify your policy, attach FIR details, and
-          upload clear photos to build a strong claim.
-        </p>
-
-        {/* Single form handles the final submit (evidence). Policy is checked via its own button */}
-        <form
-          onSubmit={handleEvidenceUpload}
-          className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8"
-          encType="multipart/form-data"
-        >
-          {/* Card 1 – Policy PDF (blue) */}
-          <div className="bg-[#111827]/95 backdrop-blur-sm rounded-2xl border border-sky-700/50 p-5 sm:p-6 lg:p-8 flex flex-col items-center shadow-2xl hover:shadow-sky-500/25 transition-all">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-sky-900/50 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
-              <span className="text-lg sm:text-xl font-bold text-sky-300">1</span>
+    <>
+      <Navbar />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0b0f14] px-4 pt-24 pb-12 relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-cyan-500/12 blur-[140px]" />
+          <div className="absolute top-16 -right-24 h-80 w-80 rounded-full bg-amber-400/12 blur-[130px]" />
+          <div className="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[150px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.04)_1px,transparent_0)] [background-size:28px_28px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f14] via-[#0b0f14]/90 to-[#0b0f14]" />
+        </div>
+        <div className="max-w-6xl w-full relative z-10">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm text-cyan-200 mb-4">
+              Secure claim workflow
             </div>
-            <h2 className="text-base sm:text-lg font-semibold text-white mb-2 text-center">
-              Policy PDF
-            </h2>
-            <p className="text-xs sm:text-sm text-sky-300 mb-4 text-center font-medium">
-              Verify your policy
+            <h1 className="text-3xl sm:text-4xl font-black text-white mb-3">
+              Policy Claim Workflow
+            </h1>
+            <p className="text-sm sm:text-base text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+              Verify your policy, upload evidence, then proceed to the claim story.
             </p>
+          </div>
 
-            <div className="w-full flex flex-col items-center space-y-3 flex-1">
-              <label
-                htmlFor="claim-pdf"
-                className="flex flex-col items-center w-full border-2 border-dashed border-sky-600/60 rounded-xl p-5 sm:p-6 cursor-pointer hover:border-sky-500 hover:bg-sky-900/20 transition-all group"
+          <form
+            onSubmit={handleEvidenceUpload}
+            className="flex flex-col gap-6"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg sm:text-xl font-bold text-white">Steps</h2>
+              <span className="text-xs text-neutral-400">
+                Upload each item to continue
+              </span>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-3">
+              {/* DOMAIN */}
+              <div className="group bg-gradient-to-br from-[#111827]/95 to-[#0f172a]/95 rounded-2xl border border-sky-700/35 p-6 flex flex-col shadow-xl transition-all hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(14,165,233,0.18)] hover:border-sky-400/70 hover:bg-[#0f172a]">
+              <div className="w-full flex items-center justify-between mb-5">
+                <h2 className="text-white font-semibold">Claim Domain</h2>
+                <span className="text-xs text-sky-200/80 bg-sky-500/10 border border-sky-500/30 px-2.5 py-1 rounded-full">
+                  Step 0
+                </span>
+              </div>
+              <label className="w-full text-sm text-neutral-300 mb-2">
+                Select claim type
+              </label>
+              <select
+                value={claimType}
+                onChange={(e) => setClaimType(e.target.value)}
+                className="w-full rounded-xl border border-sky-600/50 bg-[#0f1522] text-white px-4 py-3 focus:outline-none focus:border-sky-400"
               >
-                <FaFilePdf className="text-3xl sm:text-4xl text-sky-300 mb-3 group-hover:scale-110 transition-transform" />
-                <span className="text-white font-semibold text-xs sm:text-sm text-center mb-1">
+                <option value="automobile">Automobile</option>
+                <option value="bike">Bike</option>
+                <option value="crop">Crop Failure</option>
+                <option value="business_property">Business Property Damage</option>
+                <option value="property">Property Damage</option>
+                <option value="cyber">Cyber Attack</option>
+                <option value="health">Health / Medical</option>
+              </select>
+              <p className="mt-3 text-xs text-neutral-400">
+                This helps apply the correct verification rules.
+              </p>
+              </div>
+              {/* POLICY */}
+              <div className="group bg-gradient-to-br from-[#111827]/95 to-[#0f172a]/95 rounded-2xl border border-cyan-700/35 p-6 flex flex-col shadow-xl transition-all hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(34,211,238,0.18)] hover:border-cyan-400/70 hover:bg-[#0f172a]">
+              <div className="w-full flex items-center justify-between mb-5">
+                <h2 className="text-white font-semibold">Policy PDF</h2>
+                <span className="text-xs text-cyan-200/80 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 rounded-full">
+                  Step 1
+                </span>
+              </div>
+
+              <label className="border-2 border-dashed border-cyan-600/60 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
+                <FaFilePdf className="mx-auto text-4xl text-cyan-300 mb-3" />
+                <span className="text-white text-sm sm:text-base">
                   {fileName || "Drop PDF or click"}
                 </span>
-                <span className="text-[10px] sm:text-xs text-sky-200 text-center">
-                  Only .pdf files (max 10MB)
-                </span>
+                <div className="mt-2 text-xs text-neutral-400">
+                  Accepted: PDF only
+                </div>
                 <input
-                  id="claim-pdf"
+                  ref={fileInput}
                   type="file"
                   accept="application/pdf"
                   className="hidden"
-                  ref={fileInput}
                   onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) {
-                      setFile(f);
-                      setFileName(f.name);
-                      setPolicyResult(null);
-                    }
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setFileName(file.name);
+                    setPolicyResult(null);
+                    verifyPolicy(file); // ? IMPORTANT
                   }}
                 />
               </label>
 
               {policyResult && (
                 <div
-                  className={`w-full px-3 py-2.5 rounded-lg text-center text-xs sm:text-sm font-medium ${
-                    policyResult.status === "success"
-                      ? "bg-emerald-800/90 border border-emerald-600/50 text-emerald-100"
-                      : "bg-red-800/90 border border-red-600/50 text-red-100"
-                  }`}
+                  className={`mt-4 text-sm px-3 py-2 rounded-xl border ${policyResult.status === "success"
+                      ? "bg-emerald-900/40 text-emerald-100 border-emerald-600/40"
+                      : "bg-red-900/40 text-red-100 border-red-600/40"
+                    }`}
                 >
                   {policyResult.status === "success" ? (
-                    <>
-                      <FaCheckCircle className="inline-block mr-1 w-4 h-4 text-emerald-300" />
-                      {policyResult.message}
-                    </>
+                    <FaCheckCircle className="inline mr-1" />
                   ) : (
-                    <>
-                      <FaExclamationTriangle className="inline-block mr-1 w-4 h-4 text-red-300" />
-                      {policyResult.message}
-                    </>
+                    <FaExclamationTriangle className="inline mr-1" />
                   )}
+                  {policyResult.message}
+                </div>
+              )}
+              </div>
+
+              {/* FIR */}
+              <div className="group bg-gradient-to-br from-[#121826]/95 to-[#0f172a]/95 rounded-2xl border border-emerald-700/40 p-6 flex flex-col shadow-xl transition-all hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(16,185,129,0.18)] hover:border-emerald-400/70 hover:bg-[#0f172a]">
+              <div className="w-full flex items-center justify-between mb-5">
+                <h2 className="text-white font-semibold">FIR / Complaint</h2>
+                <span className="text-xs text-emerald-200/80 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                  Step 2
+                </span>
+              </div>
+
+              <label className="border-2 border-dashed border-emerald-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
+                <FaFileAlt className="mx-auto text-4xl text-emerald-300 mb-3" />
+                <span className="text-white text-sm sm:text-base">
+                  {firName || "Drop FIR/Property PDF or click"}
+                </span>
+                <div className="mt-2 text-xs text-neutral-400">
+                  PDF only
+                </div>
+                <input
+                  ref={firInput}
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) {
+                      setFirFile(f);
+                      setFirName(f.name);
+                      setEvidenceResult(null);
+                    }
+                  }}
+                />
+              </label>
+              </div>
+
+              {/* PHOTOS */}
+              <div className="group lg:col-start-2 bg-gradient-to-br from-[#121826]/95 to-[#0f172a]/95 rounded-2xl border border-amber-700/40 p-6 flex flex-col shadow-xl transition-all hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(251,191,36,0.18)] hover:border-amber-400/70 hover:bg-[#0f172a]">
+              <div className="w-full flex items-center justify-between mb-5">
+                <h2 className="text-white font-semibold">Incident Photos</h2>
+                <span className="text-xs text-amber-200/80 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-full">
+                  Step 3
+                </span>
+              </div>
+
+              <label className="border-2 border-dashed border-amber-600/70 rounded-2xl p-6 w-full cursor-pointer text-center bg-[#0f1522]/70 hover:bg-[#111a29] transition-colors">
+                <FaImages className="mx-auto text-4xl text-amber-300 mb-3" />
+                <span className="text-white text-sm sm:text-base">
+                  {photoNames.length
+                    ? `${photoNames.length} photo(s)`
+                    : "Drop photos or click"}
+                </span>
+                <div className="mt-2 text-xs text-neutral-400">
+                  JPG or PNG
+                </div>
+                <input
+                  ref={photoInput}
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setPhotoFiles(files);
+                    setPhotoNames(files.map((f) => f.name));
+                    setEvidenceResult(null);
+                  }}
+                />
+              </label>
+              </div>
+            </div>
+
+            {/* SUBMIT */}
+            <div className="flex flex-col items-center mt-2">
+              <button
+                type="submit"
+                disabled={evidenceLoading || !canSubmitEvidence}
+                className="px-10 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-600 text-white font-bold shadow-xl hover:from-emerald-500 hover:to-cyan-500 transition-all disabled:opacity-40"
+              >
+                {evidenceLoading
+                  ? "Processing..."
+                  : "Next: Explain Story"}
+              </button>
+
+              {evidenceResult && (
+                <div
+                  className={`mt-4 px-4 py-3 rounded-xl text-sm border ${evidenceResult.status === "success"
+                      ? "bg-emerald-900/40 text-emerald-100 border-emerald-600/40"
+                      : "bg-red-900/40 text-red-100 border-red-600/40"
+                    }`}
+                >
+                  {evidenceResult.message}
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Card 2 – FIR (green) */}
-          <div className="bg-[#111827]/95 backdrop-blur-sm rounded-2xl border border-emerald-700/50 p-5 sm:p-6 lg:p-8 flex flex-col items-center shadow-2xl hover:shadow-emerald-500/25 transition-all">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-900/50 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
-              <span className="text-lg sm:text-xl font-bold text-emerald-300">2</span>
-            </div>
-            <h2 className="text-base sm:text-lg font-semibold text-white mb-2 text-center">
-              FIR / Complaint
-            </h2>
-            <p className="text-xs sm:text-sm text-emerald-300 mb-4 text-center font-medium">
-              Official documents
-            </p>
-
-            <label
-              htmlFor="fir-file"
-              className="flex flex-col items-center w-full border-2 border-dashed border-emerald-600/60 rounded-xl p-5 sm:p-6 flex-1 cursor-pointer hover:border-emerald-500 hover:bg-emerald-900/20 transition-all group"
-            >
-              <FaFileAlt className="text-3xl sm:text-4xl text-emerald-300 mb-3 group-hover:scale-110 transition-transform" />
-              <span className="text-white font-semibold text-xs sm:text-sm text-center mb-1">
-                {firName || "Drop FIR or click"}
-              </span>
-              <span className="text-[10px] sm:text-xs text-emerald-200 text-center">
-                PDF, JPG, PNG
-              </span>
-              <input
-                id="fir-file"
-                type="file"
-                accept="application/pdf,image/*"
-                className="hidden"
-                ref={firInput}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) {
-                    setFirFile(f);
-                    setFirName(f.name);
-                    setEvidenceResult(null);
-                  }
-                }}
-              />
-            </label>
-
-            <p className="text-[10px] sm:text-xs text-neutral-400 text-center mt-auto leading-tight max-w-[200px]">
-              Match dates & details with your story
-            </p>
-          </div>
-
-          {/* Card 3 – Photos (purple) */}
-          <div className="bg-[#111827]/95 backdrop-blur-sm rounded-2xl border border-violet-700/50 p-5 sm:p-6 lg:p-8 flex flex-col items-center shadow-2xl hover:shadow-violet-500/25 transition-all">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-violet-900/50 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
-              <span className="text-lg sm:text-xl font-bold text-violet-300">3</span>
-            </div>
-            <h2 className="text-base sm:text-lg font-semibold text-white mb-2 text-center">
-              Incident Photos
-            </h2>
-            <p className="text-xs sm:text-sm text-violet-300 mb-4 text-center font-medium">
-              Damage evidence
-            </p>
-
-            <label
-              htmlFor="photo-files"
-              className="flex flex-col items-center w-full border-2 border-dashed border-violet-600/60 rounded-xl p-5 sm:p-6 flex-1 cursor-pointer hover:border-violet-500 hover:bg-violet-900/20 transition-all group"
-            >
-              <FaImages className="text-3xl sm:text-4xl text-violet-300 mb-3 group-hover:scale-110 transition-transform" />
-              <span className="text-white font-semibold text-xs sm:text-sm text-center mb-1">
-                {photoNames.length
-                  ? `${photoNames.length} photo(s)`
-                  : "Drop photos or click"}
-              </span>
-              <span className="text-[10px] sm:text-xs text-violet-200 text-center">
-                JPG, PNG • Multiple OK
-              </span>
-              <input
-                id="photo-files"
-                type="file"
-                multiple
-                accept="image/*"
-                className="hidden"
-                ref={photoInput}
-                onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  setPhotoFiles(files);
-                  setPhotoNames(files.map((f) => f.name));
-                  setEvidenceResult(null);
-                }}
-              />
-            </label>
-
-            {photoNames.length > 0 && (
-              <div className="w-full mt-2 max-h-16 overflow-y-auto bg-black/50 rounded-lg p-2">
-                {photoNames.slice(0, 3).map((n, i) => (
-                  <div key={n} className="text-[10px] truncate text-gray-300">
-                    📷 {n}
-                    {photoNames.length > 3 && i === 2 && (
-                      <span className="ml-1">+{photoNames.length - 3}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <p className="text-[10px] sm:text-xs text-neutral-400 text-center mt-auto leading-tight max-w-[200px]">
-              Wide shots + close-ups of damage
-            </p>
-          </div>
-
-          {/* Bottom row: Next button + evidence status */}
-          <div className="col-span-full flex flex-col items-center mt-8 sm:mt-10 gap-4">
-            <button
-              type="submit"
-              disabled={evidenceLoading || !canSubmitEvidence}
-              className="w-full sm:w-auto px-8 sm:px-10 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-base font-bold shadow-2xl hover:from-emerald-500 hover:to-emerald-600 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed max-w-md"
-            >
-              {evidenceLoading ? "Processing..." : "✅ Next: Explain Story"}
-            </button>
-
-            {evidenceResult && (
-              <div
-                className={`w-full max-w-md px-4 py-3 rounded-xl text-center text-sm font-medium ${
-                  evidenceResult.status === "success"
-                    ? "bg-emerald-800/90 border-2 border-emerald-600/50 text-emerald-100 shadow-emerald-500/25"
-                    : "bg-red-800/90 border-2 border-red-600/50 text-red-100 shadow-red-500/25"
-                }`}
-              >
-                {evidenceResult.status === "success" ? (
-                  <>
-                    <FaCheckCircle className="inline-block mr-2 w-5 h-5 text-emerald-300" />
-                    {evidenceResult.message || "Evidence ready!"}
-                  </>
-                ) : (
-                  <>
-                    <FaExclamationTriangle className="inline-block mr-2 w-5 h-5 text-red-300" />
-                    {evidenceResult.message || "Upload issue detected"}
-                  </>
-                )}
-              </div>
-            )}
-
-            <p className="text-[11px] sm:text-xs text-neutral-400 text-center max-w-xl leading-relaxed">
-              Complete all steps above, then describe your incident story
-            </p>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
