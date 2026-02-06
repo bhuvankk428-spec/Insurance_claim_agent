@@ -19,12 +19,10 @@ export async function checkPolicy(req, res) {
   const fields = extractPolicyFields(text);
   const domain = detectDomain(text, fields);
 
-  if (!fields.ownerName && !fields.companyName && !fields.patientName) {
-    return res.json({
-      valid: false,
-      message: "Primary insured/owner name not found in policy",
-    });
-  }
+  const hasPrimaryName =
+    Boolean(fields.ownerName) ||
+    Boolean(fields.companyName) ||
+    Boolean(fields.patientName);
 
   // ✅ CREATE CLAIM
   const claimId = generateClaimId();
@@ -45,11 +43,13 @@ export async function checkPolicy(req, res) {
     createdAt: Date.now(),
   });
 
-
   return res.json({
     valid: true,
-    message: "Policy verified",
-    claimId,              // ✅ SEND TO FRONTEND
+    message: hasPrimaryName
+      ? "Policy verified"
+      : "Policy verified (owner name missing, continuing anyway)",
+    warning: hasPrimaryName ? null : "Owner/insured name not found in policy",
+    claimId,
     extracted: fields,
     domain,
   });

@@ -107,8 +107,10 @@ export default function PolicySummarizer() {
       : "/api/rag-chat";
     const payload = {
       question: request,
-      details,
     };
+    if (details && details.trim()) {
+      payload.details = { text: details.trim() };
+    }
     if (finalDomain !== "any") {
       payload.domain = finalDomain;
     }

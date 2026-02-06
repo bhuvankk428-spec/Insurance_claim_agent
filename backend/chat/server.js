@@ -83,7 +83,10 @@ const ragLimiter = rateLimit({
 const ragSchema = z.object({
   question: z.string().min(3).max(2000),
   domain: z.string().max(100).optional(),
-  details: z.record(z.any()).optional(),
+  details: z
+    .union([z.record(z.any()), z.string()])
+    .optional()
+    .transform((val) => (typeof val === "string" ? { text: val } : val)),
 });
 
 app.post("/api/rag-chat", ragLimiter, async (req, res) => {
