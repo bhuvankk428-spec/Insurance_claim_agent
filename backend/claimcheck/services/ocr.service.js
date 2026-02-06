@@ -1,5 +1,8 @@
-import pdf from "pdf-parse";
+import { createRequire } from "module";
 import Tesseract from "tesseract.js";
+
+const require = createRequire(import.meta.url);
+const pdf = require("pdf-parse");
 
 /**
  * Extract text from PDF or image
