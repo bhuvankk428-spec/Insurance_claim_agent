@@ -8,8 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\"",
-    "postinstall": "sh -c \"if [ -f backend/chat/package.json ]; then npm --prefix backend/chat install --omit=dev --no-audit --no-fund && npm --prefix backend/claimcheck install --omit=dev --no-audit --no-fund; else echo 'Skipping backend installs (backend not present yet)'; fi\""
+    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
