@@ -12,8 +12,10 @@
     "postinstall": "sh -c \"if [ -f backend/chat/package.json ]; then npm --prefix backend/chat install --omit=dev --no-audit --no-fund && npm --prefix backend/claimcheck install --omit=dev --no-audit --no-fund; else echo 'Skipping backend installs (backend not present yet)'; fi\""
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "exiftool-vendored": "^23.7.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "firebase": "^12.6.0",
@@ -21,6 +23,7 @@
     "multer": "^2.0.2",
     "openai": "^6.17.0",
     "pdf-parse": "^2.4.5",
+    "pg": "^8.16.3",
     "pino": "^9.7.1",
     "pino-http": "^10.5.0",
     "react": "^19.2.3",
