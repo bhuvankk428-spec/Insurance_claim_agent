@@ -12,16 +12,45 @@ const openai = hasOpenAIKey
   : null;
 
 const EMBED_MODEL = process.env.OPENAI_EMBED_MODEL || "text-embedding-3-small";
+const MAX_RETRIES = Number(process.env.OPENAI_MAX_RETRIES || 2);
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isRetryable(err) {
+  const status = err?.status;
+  if (!status) return false;
+  return [408, 429, 500, 502, 503, 504].includes(status);
+}
+
+async function withRetry(fn, retries = MAX_RETRIES) {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await fn();
+    } catch (err) {
+      attempt += 1;
+      if (attempt > retries || !isRetryable(err)) {
+        throw err;
+      }
+      const backoff = 300 * Math.pow(2, attempt);
+      await sleep(backoff);
+    }
+  }
+}
 
 async function embed(text) {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY is missing");
   }
 
-  const res = await openai.embeddings.create({
-    model: EMBED_MODEL,
-    input: text.slice(0, 4000),
-  });
+  const res = await withRetry(() =>
+    openai.embeddings.create({
+      model: EMBED_MODEL,
+      input: text.slice(0, 4000),
+    })
+  );
 
   const vector = res.data?.[0]?.embedding;
   if (!vector?.length) {
@@ -34,10 +63,11 @@ async function embed(text) {
 export async function retrieveChunks({
   question,
   domain = null,
+  policyName = null,
   limit = 6,
 }) {
   if (!hasOpenAIKey) {
-    return retrieveChunksByKeyword({ question, domain, limit });
+    return retrieveChunksByKeyword({ question, domain, policyName, limit });
   }
 
   const vector = await embed(question);
@@ -59,6 +89,11 @@ export async function retrieveChunks({
     params.push(domain);
   }
 
+  if (policyName) {
+    sql += domain ? ` AND policy_name = $3 ` : ` WHERE policy_name = $2 `;
+    params.push(policyName);
+  }
+
   sql += `
     ORDER BY embedding <-> $1::vector
     LIMIT ${limit}
@@ -68,7 +103,12 @@ export async function retrieveChunks({
   return rows;
 }
 
-async function retrieveChunksByKeyword({ question, domain = null, limit = 6 }) {
+async function retrieveChunksByKeyword({
+  question,
+  domain = null,
+  policyName = null,
+  limit = 6,
+}) {
   const terms = tokenize(question).slice(0, 6);
   if (!terms.length) return [];
 
@@ -94,12 +134,19 @@ async function retrieveChunksByKeyword({ question, domain = null, limit = 6 }) {
     FROM policy_chunks
   `;
 
+  const whereParts = [];
   if (domain) {
-    sql += ` WHERE domain = $${idx} AND (${clauses.join(" OR ")}) `;
+    whereParts.push(`domain = $${idx}`);
     params.push(domain);
-  } else {
-    sql += ` WHERE ${clauses.join(" OR ")} `;
+    idx += 1;
   }
+  if (policyName) {
+    whereParts.push(`policy_name = $${idx}`);
+    params.push(policyName);
+    idx += 1;
+  }
+  whereParts.push(`(${clauses.join(" OR ")})`);
+  sql += ` WHERE ${whereParts.join(" AND ")} `;
 
   sql += ` LIMIT ${limit} `;
 

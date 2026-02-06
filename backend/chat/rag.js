@@ -13,6 +13,34 @@ const openai = hasOpenAIKey
     })
   : null;
 
+const MAX_RETRIES = Number(process.env.OPENAI_MAX_RETRIES || 2);
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isRetryable(err) {
+  const status = err?.status;
+  if (!status) return false;
+  return [408, 429, 500, 502, 503, 504].includes(status);
+}
+
+async function withRetry(fn, retries = MAX_RETRIES) {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await fn();
+    } catch (err) {
+      attempt += 1;
+      if (attempt > retries || !isRetryable(err)) {
+        throw err;
+      }
+      const backoff = 300 * Math.pow(2, attempt);
+      await sleep(backoff);
+    }
+  }
+}
+
 export async function askRAGStream({
   question,
   domain = null,
@@ -20,9 +48,12 @@ export async function askRAGStream({
   onToken,
 }) {
   /* Step 1: Retrieve chunks */
+  const policyName =
+    details?.policy_name || details?.policyName || details?.policy;
   const rawChunks = await retrieveChunks({
     question,
     domain,
+    policyName,
     limit: 6,
   });
 
@@ -72,21 +103,23 @@ Answer in Markdown with:
   const maxTokens = Number(process.env.OPENAI_MAX_TOKENS || 350);
 
   if (openai) {
-    const stream = await openai.chat.completions.create({
-      model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
-      temperature: 0.2,
-      top_p: 0.9,
-      max_tokens: maxTokens,
-      stream: true,
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an insurance advisor. Answer only with the given policy excerpts.",
-        },
-        { role: "user", content: prompt },
-      ],
-    });
+    const stream = await withRetry(() =>
+      openai.chat.completions.create({
+        model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+        temperature: 0.2,
+        top_p: 0.9,
+        max_tokens: maxTokens,
+        stream: true,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an insurance advisor. Answer only with the given policy excerpts.",
+          },
+          { role: "user", content: prompt },
+        ],
+      })
+    );
 
     for await (const chunk of stream) {
       const token = chunk?.choices?.[0]?.delta?.content;
@@ -95,5 +128,7 @@ Answer in Markdown with:
     return;
   }
 
-  throw new Error("OpenAI API key not configured");
+  const err = new Error("OpenAI API key not configured");
+  err.status = 503;
+  throw err;
 }

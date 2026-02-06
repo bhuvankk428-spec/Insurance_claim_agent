@@ -92,6 +92,12 @@ export function extractFIRFields(text) {
     ]),
     vehicleNumber,
     bikeNumber: vehicleNumber,
+    chassisNumber: matchAny(text, [
+      /chassis\s*(no|number)\s*:\s*([A-Z0-9-]+)/i,
+    ]),
+    engineNumber: matchAny(text, [
+      /engine\s*(no|number)\s*:\s*([A-Z0-9-]+)/i,
+    ]),
     location: matchAny(text, [
       /(location|place of incident|place)\s*:\s*(.*)/i,
     ]),

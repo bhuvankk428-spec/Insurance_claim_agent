@@ -17,7 +17,7 @@ Both services load the root .env, then fall back to local defaults.
 
 Service boundaries:
 - Chat service: vector retrieval + LLM synthesis.
-- Claimcheck service: OCR + rules + optional OpenAI LLM + Supabase persistence.
+- Claimcheck service: OCR + rules +  OpenAI LLM or fallback logic + Supabase persistence.
 
 High-Level Data Flow
 --------------------

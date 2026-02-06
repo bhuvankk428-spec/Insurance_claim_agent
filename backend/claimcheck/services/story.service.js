@@ -54,7 +54,7 @@ export async function analyzeStory(req, res) {
     const { story, claimId } = req.body;
 
     if (!story || !claimId) {
-      return res.status(400).json({
+      return res.json({
         eligible: false,
         reason: "Story or claim reference missing.",
         message: "Story or claim reference missing.",
@@ -72,7 +72,7 @@ export async function analyzeStory(req, res) {
     const claim = claimStore.get(claimId);
 
     if (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) {
-      return res.status(400).json({
+      return res.json({
         eligible: false,
         reason: "Claim context missing. Please restart the claim process.",
         message: "Claim context missing. Please restart the claim process.",
@@ -464,7 +464,7 @@ Respond STRICTLY in JSON:
     });
   } catch (err) {
     console.error("Story analysis error:", err);
-    return res.status(500).json({
+    return res.json({
       eligible: false,
       reason: "Internal error while analyzing claim.",
       message: "Internal error while analyzing claim.",

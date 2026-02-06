@@ -12,9 +12,8 @@ export default function ClaimStoryChatbot() {
   const navigate = useNavigate();
 
   const [story, setStory] = useState("");
-  const [response, setResponse] = useState(null);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [claimCode, setClaimCode] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,13 +22,15 @@ export default function ClaimStoryChatbot() {
 
     // 🚨 Safety check (prevents silent failure)
     if (!claimId) {
-      setResponse("Claim session expired. Please restart the claim process.");
+      setResult({
+        status: "rejected",
+        message: "Claim session expired. Please restart the claim process.",
+      });
       return;
     }
 
     setLoading(true);
-    setResponse(null);
-    setClaimCode(null);
+    setResult(null);
 
     try {
       const res = await fetch(`${API_BASE}/api/claim-story`, {
@@ -43,24 +44,31 @@ export default function ClaimStoryChatbot() {
 
       const data = await res.json();
 
-      setResponse(data.answer || data.message || "No response generated.");
-
       if (data.eligible) {
-  navigate(`/claim-result/${data.claimCode}`, {
-  state: {
-    level: data.level,
-    riskLevel: data.riskLevel,
-    explanation: data.explanation,
-    reasons: data.reasons,
-  },
-});
-
-}
+        navigate(`/claim-result/${data.claimCode}`, {
+          state: {
+            level: data.level,
+            riskLevel: data.riskLevel,
+            explanation: data.explanation,
+            reasons: data.reasons,
+          },
+        });
+      } else {
+        setResult({
+          status: "rejected",
+          message:
+            data.reason ||
+            data.message ||
+            "Your claim could not be approved.",
+        });
+      }
 
     } catch (err) {
-      setResponse(
-        "Something went wrong while analyzing your story. Please try again."
-      );
+      setResult({
+        status: "rejected",
+        message:
+          "Something went wrong while analyzing your story. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -111,23 +119,12 @@ export default function ClaimStoryChatbot() {
             </form>
 
             {/* Response */}
-            {response && (
-              <div className="mt-6 p-6 rounded-2xl bg-[#0f1522] border border-neutral-700/80">
-                <h2 className="font-bold text-cyan-300 mb-2">
-                  QK.AI Assessment
+            {result?.status === "rejected" && (
+              <div className="mt-6 p-6 rounded-2xl bg-[#190b0b] border border-red-500/40">
+                <h2 className="font-bold text-red-300 mb-2">
+                  Claim Rejected
                 </h2>
-                <p className="text-neutral-100">{response}</p>
-
-                {claimCode && (
-                  <div className="mt-4 p-4 rounded-xl bg-emerald-900/30 border border-emerald-600/60">
-                    <span className="font-semibold text-emerald-200">
-                      ✅ Claim Eligible
-                    </span>
-                    <div className="mt-2 font-mono font-bold text-emerald-100">
-                      Claim Code: {claimCode}
-                    </div>
-                  </div>
-                )}
+                <p className="text-neutral-100">{result.message}</p>
               </div>
             )}
           </div>

@@ -11,13 +11,16 @@ export async function extractText(fileBuffer, mimeType) {
     return data.text;
   }
 
-  // PDF
-  const pdfData = await pdf(fileBuffer);
-  if (pdfData.text.trim().length > 50) {
-    return pdfData.text;
+  // PDF (text extraction only; no OCR on PDF buffer)
+  try {
+    const pdfData = await pdf(fileBuffer);
+    if (pdfData.text && pdfData.text.trim().length > 0) {
+      return pdfData.text;
+    }
+  } catch {
+    // fall through to return empty text
   }
 
-  // SCANNED PDF → OCR
-  const { data } = await Tesseract.recognize(fileBuffer, "eng");
-  return data.text;
+  // Scanned PDFs are not supported without conversion to images.
+  return "";
 }

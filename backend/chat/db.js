@@ -11,3 +11,7 @@ export const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+db.on("error", (err) => {
+  console.error("Postgres pool error:", err);
+});
+

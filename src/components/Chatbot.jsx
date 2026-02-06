@@ -45,7 +45,7 @@ function speak(text, muted, voices) {
   utterance.rate = 0.95;
   utterance.pitch = 1.1;
 
-  window.speechSynthesis.cancel(); // ✅ stop any previous speech
+  window.speechSynthesis.cancel(); 
   window.speechSynthesis.speak(utterance);
 }
 
@@ -58,7 +58,7 @@ export default function PolicySummarizer() {
   const [confidence, setConfidence] = useState(null);
   const [loading, setLoading] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [voices, setVoices] = useState([]); // ✅ NEW
+  const [voices, setVoices] = useState([]); 
   const messagesEndRef = useRef(null);
 
   /* -------- LOAD VOICES PROPERLY -------- */
@@ -173,15 +173,15 @@ export default function PolicySummarizer() {
     <Navbar />
 
     {/* MAIN LAYOUT */}
-    <div className="pt-16 min-h-[calc(100vh-4rem)] bg-gradient-to-b from-[#0b0f14] via-[#0f1624] to-[#0b0f14] text-white flex flex-col lg:flex-row">
+    <div className="pt-16 min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)] lg:overflow-hidden bg-black text-white flex flex-col lg:flex-row">
       
       {/* LEFT PANEL */}
-      <aside className="w-full lg:w-[420px] lg:h-full bg-gradient-to-b from-[#15181d] via-[#1a2130] to-[#232834] px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-gray-700 overflow-y-auto">
-        <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs text-cyan-200 inline-flex items-center gap-2 mb-4">
+      <aside className="w-full lg:w-[420px] lg:h-full lg:min-h-0 lg:overflow-y-auto bg-black px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-sky-500/30">
+        <div className="rounded-2xl border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-xs text-sky-200 inline-flex items-center gap-2 mb-4">
           Smart policy guidance
         </div>
         <h2 className="text-2xl font-bold mb-2">Policy Advisor</h2>
-        <p className="text-gray-400 mb-6 text-sm leading-relaxed">
+        <p className="text-white/70 mb-6 text-sm leading-relaxed">
           Compare, summarize, and ask questions in plain language.
         </p>
 
@@ -191,7 +191,7 @@ export default function PolicySummarizer() {
             {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
           </span>
           {loading && (
-            <span className="text-yellow-400 text-sm">⏳ Thinking...</span>
+            <span className="text-sky-300 text-sm">⏳ Thinking...</span>
           )}
         </div>
 
@@ -201,14 +201,14 @@ export default function PolicySummarizer() {
             if (!muted) window.speechSynthesis.cancel();
             setMuted(!muted);
           }}
-          className="mb-6 w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+          className="mb-6 w-full py-2 rounded-lg bg-sky-600/30 hover:bg-sky-500/40 border border-sky-400/30 transition"
         >
           {muted ? "Enable Voice" : "Mute Voice"}
         </button>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <select
-            className="w-full rounded-xl bg-[#232834] border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+            className="w-full rounded-xl bg-black border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
             value={domain}
             onChange={(e) => setDomain(e.target.value)}
             disabled={loading}
@@ -223,7 +223,7 @@ export default function PolicySummarizer() {
           </select>
 
           <input
-            className="w-full rounded-xl bg-[#232834] border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+            className="w-full rounded-xl bg-black border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
             placeholder="Ask your insurance question..."
             value={request}
             onChange={(e) => setRequest(e.target.value)}
@@ -232,7 +232,7 @@ export default function PolicySummarizer() {
           />
 
           <textarea
-            className="w-full rounded-xl bg-[#232834] border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+            className="w-full rounded-xl bg-black border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
             rows={4}
             placeholder="Optional details: age, city, budget, condition..."
             value={details}
@@ -243,7 +243,7 @@ export default function PolicySummarizer() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 transition ${
+            className={`w-full py-3 rounded-xl font-semibold bg-sky-500 hover:bg-sky-400 transition ${
               loading
                 ? "opacity-70 cursor-not-allowed"
                 : "hover:opacity-90"
@@ -255,22 +255,22 @@ export default function PolicySummarizer() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <main className="flex-1 bg-[#121316] p-4 sm:p-6 overflow-y-auto">
+      <main className="flex-1 bg-black p-4 sm:p-6 lg:min-h-0 lg:overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* CONFIDENCE CARD */}
           {confidence !== null && (
-            <div className="bg-[#1b1f2a] border border-gray-700 rounded-xl p-4">
+            <div className="bg-black border border-sky-500/20 rounded-xl p-4">
               <p className="font-semibold mb-2">
                 Recommendation Confidence
               </p>
-              <div className="w-full bg-gray-700 rounded h-3">
+              <div className="w-full bg-white/10 rounded h-3">
                 <div
-                  className="bg-green-500 h-3 rounded transition-all"
+                  className="bg-sky-400 h-3 rounded transition-all"
                   style={{ width: `${confidence}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-white/60 mt-1">
                 Based on policy data & rule validation
               </p>
             </div>
@@ -278,8 +278,8 @@ export default function PolicySummarizer() {
 
           {/* CHAT */}
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-20 sm:mt-32">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-gray-300">
+            <div className="text-center text-white/60 mt-20 sm:mt-32">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-2 text-xs text-sky-100">
                 Ask a question to get started
               </div>
             </div>
@@ -289,8 +289,8 @@ export default function PolicySummarizer() {
                 key={idx}
                 className={`max-w-[95%] sm:max-w-[85%] p-4 sm:p-5 rounded-2xl leading-relaxed shadow-xl ${
                   msg.from === "user"
-                    ? "ml-auto bg-gradient-to-r from-indigo-600 via-sky-500 to-cyan-500 text-white"
-                    : "bg-[#232834] border border-white/10 text-neutral-100"
+                    ? "ml-auto bg-sky-500 text-black"
+                    : "bg-black border border-sky-500/20 text-white"
                 }`}
               >
                 {msg.from === "ai" ? (

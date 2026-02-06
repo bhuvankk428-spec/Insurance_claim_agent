@@ -59,6 +59,10 @@ function getAgeGroup(age) {
 export default function PlanDashboard() {
   const navigate = useNavigate();
   const [riskLevel, setRiskLevel] = useState("medium");
+  const [projectionYearsInput, setProjectionYearsInput] = useState("20");
+
+  const parsedYears = Math.round(toNumber(projectionYearsInput));
+  const projectionYears = parsedYears > 0 ? Math.min(50, parsedYears) : 20;
 
   const saved = localStorage.getItem(STORAGE_KEY);
   let data = null;
@@ -171,7 +175,6 @@ export default function PlanDashboard() {
       investMonthly,
     };
 
-    const projectionYears = 20;
     const fdFuture = futureValue(breakdown.fd, returnRates.fd, projectionYears);
     const mutualFuture = futureValue(
       breakdown.mutual,
@@ -199,7 +202,7 @@ export default function PlanDashboard() {
         totalFuture,
       },
     };
-  }, [data, riskLevel]);
+  }, [data, riskLevel, projectionYears]);
 
   if (!data || !computed) {
     return (
@@ -528,7 +531,21 @@ export default function PlanDashboard() {
               )}
 
               <div className="bg-[#121827]/90 border border-[#1f2836]/80 rounded-2xl p-6 shadow-lg reveal reveal-delay-4">
-                <h2 className="text-lg font-bold mb-3">20-year estimate</h2>
+                <h2 className="text-lg font-bold mb-3">{projectionYears}-year estimate</h2>
+                <div className="mb-4">
+                  <label className="text-xs text-neutral-400 flex flex-col gap-2">
+                    <span className="font-semibold text-neutral-300">Projection years</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="50"
+                      value={projectionYearsInput}
+                      onChange={(event) => setProjectionYearsInput(event.target.value)}
+                      className="w-full rounded-2xl border border-[#263042] bg-[#0f1521] px-4 py-2 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                    />
+                  </label>
+                  <p className="mt-2 text-[11px] text-neutral-500">Enter 1 to 50 years.</p>
+                </div>
                 <p className="text-xs text-neutral-400 mb-4">
                   Estimated returns: FD 6%, Mutual funds 10%, Stocks 8% per year. This is an approximation, not a guarantee.
                 </p>
@@ -548,6 +565,51 @@ export default function PlanDashboard() {
                   <div className="border-t border-white/10 pt-3 flex items-center justify-between text-white">
                     <span>Total estimate</span>
                     <span className="font-bold">Rs {formatCurrency(computed.totals.totalFuture)}</span>
+                  </div>
+                </div>
+                <div className="mt-5 border-t border-white/10 pt-4">
+                  <h3 className="text-sm font-semibold text-white mb-2">Contributions over {projectionYears} years</h3>
+                  <div className="space-y-2 text-xs text-neutral-300">
+                    <div className="flex items-center justify-between">
+                      <span>Emergency fund</span>
+                      <span className="font-semibold">
+                        Rs {formatCurrency(computed.breakdown.emergency * 12 * projectionYears)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>FD / RD</span>
+                      <span className="font-semibold">
+                        Rs {formatCurrency(computed.breakdown.fd * 12 * projectionYears)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Mutual funds</span>
+                      <span className="font-semibold">
+                        Rs {formatCurrency(computed.breakdown.mutual * 12 * projectionYears)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Stocks</span>
+                      <span className="font-semibold">
+                        Rs {formatCurrency(computed.breakdown.stocks * 12 * projectionYears)}
+                      </span>
+                    </div>
+                    {computed.split.gold > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span>Gold</span>
+                        <span className="font-semibold">
+                          Rs {formatCurrency(computed.breakdown.gold * 12 * projectionYears)}
+                        </span>
+                      </div>
+                    )}
+                    {computed.split.realEstate > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span>Real estate</span>
+                        <span className="font-semibold">
+                          Rs {formatCurrency(computed.breakdown.realEstate * 12 * projectionYears)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

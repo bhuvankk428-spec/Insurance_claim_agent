@@ -31,8 +31,12 @@ This repo includes `render.yaml` so Render can create both backend services.
    - For **qk-ai-chat**:
      - `OPENAI_API_KEY` = your key
      - `CORS_ORIGIN` = your Vercel URL (example: `https://your-app.vercel.app`)
+     - Optional: `RATE_LIMIT_MAX` and `RATE_LIMIT_WINDOW_MS`
+     - Optional: `OPENAI_MAX_RETRIES`
    - For **qk-ai-claimcheck**:
      - `CORS_ORIGIN` = your Vercel URL
+     - `ADMIN_TOKEN` = secure random string (required in production)
+     - Optional: `MAX_PDF_MB`, `MAX_PHOTO_MB`, `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_MS`
 6. Click **Deploy**.
 
 ### Option B: Manual Deploy (if you don’t use render.yaml)
@@ -87,6 +91,12 @@ Open your Vercel URL and check:
 Open these in your browser:
 - `https://<chat-service>.onrender.com/`
 - `https://<claim-service>.onrender.com/`
+
+Additional health endpoints:
+- `https://<chat-service>.onrender.com/healthz`
+- `https://<chat-service>.onrender.com/readyz`
+- `https://<claim-service>.onrender.com/healthz`
+- `https://<claim-service>.onrender.com/readyz`
 
 You should see:
 - `RAG API running ✅` (chat)

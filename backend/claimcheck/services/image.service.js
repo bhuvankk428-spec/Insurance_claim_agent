@@ -119,7 +119,7 @@ Return STRICT JSON only:
       };
     }
 
-    if (parsed.consistent === false && confidence >= MIN_CONFIDENCE) {
+    if (parsed.consistent === false) {
       return {
         status: "reject",
         reason: parsed.reason || "Image does not match incident",
@@ -137,8 +137,11 @@ Return STRICT JSON only:
       };
     }
 
+    const okStatus =
+      confidence < MIN_CONFIDENCE ? "partial" : "ok";
+
     return {
-      status: "ok",
+      status: okStatus,
       reason: parsed.reason || "Image matches incident",
       confidence,
       quality,

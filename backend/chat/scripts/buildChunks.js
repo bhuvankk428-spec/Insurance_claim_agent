@@ -1,29 +1,91 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DATA_DIR = path.resolve(__dirname, "../data");
+const OUTPUT = path.resolve(__dirname, "../policy_chunks.json");
 
-// helper: safely convert anything to text
-function toText(value) {
-  if (!value) return "";
-  if (Array.isArray(value)) return value.join(", ");
-  if (typeof value === "object") {
-    return Object.values(value).map(toText).join(" ");
-  }
-  return String(value);
+function isPrimitive(value) {
+  return (
+    value === null ||
+    value === undefined ||
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  );
 }
 
-// load all json files
+function addChunk({ chunks, domain, policyName, sectionPath, text }) {
+  const cleanText = String(text || "").trim();
+  if (!cleanText || cleanText.length < 30) return;
+  chunks.push({
+    domain,
+    policy_name: policyName,
+    section: sectionPath,
+    text: `${sectionPath}: ${cleanText}`,
+  });
+}
+
+function walkValue({ chunks, domain, policyName, value, pathParts }) {
+  if (isPrimitive(value)) {
+    addChunk({
+      chunks,
+      domain,
+      policyName,
+      sectionPath: pathParts.join("."),
+      text: value,
+    });
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    const allPrimitive = value.every(isPrimitive);
+    if (allPrimitive) {
+      addChunk({
+        chunks,
+        domain,
+        policyName,
+        sectionPath: pathParts.join("."),
+        text: value.join("; "),
+      });
+      return;
+    }
+
+    value.forEach((item, idx) => {
+      walkValue({
+        chunks,
+        domain,
+        policyName,
+        value: item,
+        pathParts: [...pathParts, `[${idx}]`],
+      });
+    });
+    return;
+  }
+
+  if (typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      walkValue({
+        chunks,
+        domain,
+        policyName,
+        value: child,
+        pathParts: [...pathParts, key],
+      });
+    }
+  }
+}
+
 function loadAllPolicies() {
-  const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith(".json"));
-  let policies = [];
+  const files = fs.readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"));
+  const policies = [];
 
   for (const file of files) {
     const content = JSON.parse(
       fs.readFileSync(path.join(DATA_DIR, file), "utf-8")
     );
 
-    // ✅ SUPPORT both array and single object
     if (Array.isArray(content)) {
       policies.push(...content);
     } else {
@@ -34,7 +96,6 @@ function loadAllPolicies() {
   return policies;
 }
 
-// convert policies → chunks
 function buildChunks(policies) {
   const chunks = [];
 
@@ -44,15 +105,12 @@ function buildChunks(policies) {
 
     for (const [key, value] of Object.entries(policy)) {
       if (["domain", "policy_name", "insurer"].includes(key)) continue;
-
-      const text = toText(value).trim();
-      if (!text || text.length < 30) continue;
-
-      chunks.push({
+      walkValue({
+        chunks,
         domain,
-        policy_name: policyName,
-        section: key,
-        text,
+        policyName,
+        value,
+        pathParts: [key],
       });
     }
   }
@@ -60,14 +118,8 @@ function buildChunks(policies) {
   return chunks;
 }
 
-// RUN
 const policies = loadAllPolicies();
 const chunks = buildChunks(policies);
 
-// SAVE
-fs.writeFileSync(
-  "policy_chunks.json",
-  JSON.stringify(chunks, null, 2)
-);
-
+fs.writeFileSync(OUTPUT, JSON.stringify(chunks, null, 2));
 console.log(`✅ Built ${chunks.length} chunks`);

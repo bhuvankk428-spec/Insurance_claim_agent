@@ -6,7 +6,18 @@ import { analyzeStory } from "../services/story.service.js";
 import { listClaims, updateAdminDecision } from "../services/supabase.service.js";
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const MAX_PDF_MB = Number(process.env.MAX_PDF_MB || 10);
+const MAX_PHOTO_MB = Number(process.env.MAX_PHOTO_MB || 5);
+
+const uploadPolicy = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_PDF_MB * 1024 * 1024 },
+});
+
+const uploadEvidence = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: Math.max(MAX_PDF_MB, MAX_PHOTO_MB) * 1024 * 1024 },
+});
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "qk-admin-2026";
 
@@ -23,14 +34,14 @@ function requireAdmin(req, res, next) {
 // STEP 1: Policy check
 router.post(
   "/claim-check",
-  upload.single("pdf"),
+  uploadPolicy.single("pdf"),
   checkPolicy
 );
 
 // STEP 2: Evidence check
 router.post(
   "/claim-evidence",
-  upload.fields([
+  uploadEvidence.fields([
     { name: "fir", maxCount: 1 },
     { name: "photos", maxCount: 5 },
   ]),
