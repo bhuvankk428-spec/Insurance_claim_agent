@@ -1,8 +1,8 @@
-# Deployment Guide (Vercel + Render)
+# Deployment Guide (Vercel + Railway)
 
 This project is set up for:
 - Frontend on **Vercel** (Vite app)
-- Backend on **Render** (Node/Express services)
+- Backend on **Railway** (Node/Express services)
 
 After you push to GitHub, follow these steps.
 
@@ -10,54 +10,38 @@ After you push to GitHub, follow these steps.
 
 ## 1) Prerequisites
 - GitHub repo pushed
-- Render account
+- Railway account
 - Vercel account
 - Your backend API keys ready (ex: `OPENAI_API_KEY`)
 
 ---
 
-## 2) Deploy Backend on Render
+## 2) Deploy Backend on Railway
 
-This repo includes `render.yaml` so Render can create both backend services.
+Create **two services** in Railway from the same GitHub repo:
 
-### Option A: Blueprint Deploy (recommended)
-1. Go to Render dashboard.
-2. Click **New > Blueprint**.
-3. Connect your GitHub repo and select it.
-4. Render reads `render.yaml` and creates services:
-   - `qk-ai-chat`
-   - `qk-ai-claimcheck`
-5. Set environment variables:
-   - For **qk-ai-chat**:
-     - `OPENAI_API_KEY` = your key
-     - `CORS_ORIGIN` = your Vercel URL (example: `https://your-app.vercel.app`)
-     - Optional: `RATE_LIMIT_MAX` and `RATE_LIMIT_WINDOW_MS`
-     - Optional: `OPENAI_MAX_RETRIES`
-   - For **qk-ai-claimcheck**:
-     - `CORS_ORIGIN` = your Vercel URL
-     - `ADMIN_TOKEN` = secure random string (required in production)
-     - Optional: `MAX_PDF_MB`, `MAX_PHOTO_MB`, `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_MS`
-6. Click **Deploy**.
-
-### Option B: Manual Deploy (if you don’t use render.yaml)
-Create two Web Services:
-
-**Service 1: Chat**
+### Service 1: Chat (RAG)
 - Build command: `npm ci`
 - Start command: `node backend/chat/server.js`
 - Env:
   - `OPENAI_API_KEY`
-  - `CORS_ORIGIN`
+  - `DATABASE_URL`
+  - `CORS_ORIGIN` = your Vercel URL (example: `https://your-app.vercel.app`)
+  - Optional: `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_MS`, `OPENAI_MAX_RETRIES`
 
-**Service 2: Claimcheck**
+### Service 2: Claimcheck
 - Build command: `npm ci`
 - Start command: `node backend/claimcheck/server.js`
 - Env:
-  - `CORS_ORIGIN`
+  - `CORS_ORIGIN` = your Vercel URL
+  - `SUPABASE_URL`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `ADMIN_TOKEN` = secure random string (required in production)
+  - Optional: `MAX_PDF_MB`, `MAX_PHOTO_MB`, `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_MS`
 
-When deployed, copy both service URLs:
-- Chat URL: `https://<your-chat>.onrender.com`
-- Claim URL: `https://<your-claim>.onrender.com`
+When deployed, copy both Railway service URLs:
+- Chat URL: `https://<your-chat>.railway.app`
+- Claim URL: `https://<your-claim>.railway.app`
 
 ---
 
@@ -67,9 +51,9 @@ When deployed, copy both service URLs:
 2. Click **Add New Project** and select your GitHub repo.
 3. Framework preset: **Vite**
 4. Set Environment Variables:
-   - `VITE_CHAT_API_URL` = Render chat URL
-   - `VITE_CLAIM_API_URL` = Render claim URL
-   - `VITE_API_URL` = Render claim URL
+   - `VITE_CHAT_API_URL` = Railway chat URL
+   - `VITE_CLAIM_API_URL` = Railway claim URL
+   - `VITE_API_URL` = Railway claim URL
 5. Click **Deploy**.
 
 Vercel will build using:
@@ -89,14 +73,14 @@ Open your Vercel URL and check:
 
 ### Backend Health
 Open these in your browser:
-- `https://<chat-service>.onrender.com/`
-- `https://<claim-service>.onrender.com/`
+- `https://<chat-service>.railway.app/`
+- `https://<claim-service>.railway.app/`
 
 Additional health endpoints:
-- `https://<chat-service>.onrender.com/healthz`
-- `https://<chat-service>.onrender.com/readyz`
-- `https://<claim-service>.onrender.com/healthz`
-- `https://<claim-service>.onrender.com/readyz`
+- `https://<chat-service>.railway.app/healthz`
+- `https://<chat-service>.railway.app/readyz`
+- `https://<claim-service>.railway.app/healthz`
+- `https://<claim-service>.railway.app/readyz`
 
 You should see:
 - `RAG API running ✅` (chat)
@@ -107,21 +91,21 @@ You should see:
 ## 5) Common Issues + Fixes
 
 ### CORS Error
-Set `CORS_ORIGIN` on both Render services to your Vercel URL.
+Set `CORS_ORIGIN` on both Railway services to your Vercel URL.
 
 ### Chatbot not responding
-Make sure `OPENAI_API_KEY` is set in Render (chat service).
+Make sure `OPENAI_API_KEY` is set in Railway (chat service).
 
 ### Wrong API URLs in frontend
-Double‑check Vercel env vars and redeploy.
+Double-check Vercel env vars and redeploy.
 
 ---
 
 ## 6) Optional: Staging vs Production
-You can deploy two Render blueprints and two Vercel projects if you want
+You can deploy two Railway projects and two Vercel projects if you want
 staging and production with different environment variables.
 
 ---
 
 ## Done
-Once these are set, every push to `main` will auto‑deploy.
+Once these are set, every push to `main` will auto-deploy.
