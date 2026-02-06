@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\""
+    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\"",
+    "postinstall": "npm --prefix backend/chat install --omit=dev --no-audit --no-fund && npm --prefix backend/claimcheck install --omit=dev --no-audit --no-fund"
   },
   "dependencies": {
     "cors": "^2.8.5",
