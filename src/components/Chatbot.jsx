@@ -105,14 +105,18 @@ export default function PolicySummarizer() {
     const endpoint = CHAT_API_BASE
       ? `${CHAT_API_BASE}/api/rag-chat`
       : "/api/rag-chat";
+    const payload = {
+      question: request,
+      details,
+    };
+    if (finalDomain !== "any") {
+      payload.domain = finalDomain;
+    }
+
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: request,
-        details,
-        domain: finalDomain === "any" ? null : finalDomain,
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!response.body) {
