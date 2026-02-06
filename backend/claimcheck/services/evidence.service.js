@@ -5,7 +5,7 @@ import { matchDocuments, detectDomain } from "./match.service.js";
 import { verifyIncidentWithVision } from "./image.service.js";
 import { claimStore } from "../store/claimStore.js";
 
-// TOGGLE HERE
+// Geo is a positive signal only (no hard rejection)
 const STRICT_GEO_VALIDATION = process.env.STRICT_GEO === "true";
 
 export async function checkEvidence(req, res) {
@@ -63,12 +63,7 @@ export async function checkEvidence(req, res) {
     // ignore EXIF errors in dev
   }
 
-  if (STRICT_GEO_VALIDATION && !geoTagged) {
-    return res.json({
-      status: "error",
-      message: "Image must be geo-tagged",
-    });
-  }
+  // If geo is missing, continue. Geo is a bonus signal only.
 
 
   /* ---------------- MATCH ---------------- */
@@ -111,6 +106,9 @@ export async function checkEvidence(req, res) {
   let riskScore = result.ok ? result.riskScore : 80;
   if (vision.status === "ok" && visionConfidence >= 0.6) {
     riskScore = Math.max(0, riskScore - 10);
+  }
+  if (geoTagged) {
+    riskScore = Math.max(0, riskScore - 5);
   }
   if (vision.status === "partial") {
     riskScore = Math.min(100, riskScore + 10);
@@ -155,11 +153,11 @@ export async function checkEvidence(req, res) {
     riskLevel: riskScore >= 70 ? "high" : riskScore >= 40 ? "medium" : "low",
     riskScore,
     visionStatus: vision.status,
-    mode: STRICT_GEO_VALIDATION ? "production" : "development",
+    mode: STRICT_GEO_VALIDATION ? "geo-optional" : "development",
     message: evidenceIssues.length
       ? `Evidence uploaded with warnings: ${evidenceIssues[0]}`
-      : STRICT_GEO_VALIDATION
+      : geoTagged
         ? "Documents matched successfully (geo verified)"
-        : "Documents matched successfully (geo skipped for demo)",
+        : "Documents matched successfully (geo not provided)",
   });
 }
