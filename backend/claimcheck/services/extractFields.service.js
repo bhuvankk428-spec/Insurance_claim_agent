@@ -98,6 +98,10 @@ export function extractFIRFields(text) {
     engineNumber: matchAny(text, [
       /engine\s*(no|number)\s*:\s*([A-Z0-9-]+)/i,
     ]),
+    policyNumber: matchAny(text, [
+      /policy\s*(no|number)\s*:\s*([A-Z0-9-]+)/i,
+      /policy\s*id\s*:\s*([A-Z0-9-]+)/i,
+    ]),
     location: matchAny(text, [
       /(location|place of incident|place)\s*:\s*(.*)/i,
     ]),

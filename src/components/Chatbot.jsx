@@ -76,6 +76,13 @@ export default function PolicySummarizer() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    document.body.classList.add("page-chatbot");
+    return () => {
+      document.body.classList.remove("page-chatbot");
+    };
+  }, []);
+
   async function handleSubmit(e) {
   e.preventDefault();
   if (!request.trim()) return;
@@ -179,10 +186,10 @@ export default function PolicySummarizer() {
     <Navbar />
 
     {/* MAIN LAYOUT */}
-    <div className="pt-16 min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)] lg:overflow-hidden bg-black text-white flex flex-col lg:flex-row">
+    <div className="pt-16 box-border h-[100dvh] overflow-hidden bg-black text-white flex flex-col lg:flex-row">
       
       {/* LEFT PANEL */}
-      <aside className="w-full lg:w-[420px] lg:h-full lg:min-h-0 lg:overflow-y-auto bg-black px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-sky-500/30">
+      <aside className="w-full lg:w-[420px] h-full min-h-0 overflow-y-auto bg-black px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-sky-500/30">
         <div className="rounded-2xl border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-xs text-sky-200 inline-flex items-center gap-2 mb-4">
           Smart policy guidance
         </div>
@@ -261,7 +268,7 @@ export default function PolicySummarizer() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <main className="flex-1 bg-black p-4 sm:p-6 lg:min-h-0 lg:overflow-y-auto">
+      <main className="flex-1 bg-black p-4 sm:p-6 min-h-0 overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* CONFIDENCE CARD */}
