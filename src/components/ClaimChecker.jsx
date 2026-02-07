@@ -10,10 +10,15 @@ import {
 } from "react-icons/fa";
 import Navbar from "./ui/Navbar";
 
-const API_BASE =
-  import.meta.env.VITE_CLAIM_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5174";
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+const API_BASE = isLocalhost
+  ? "http://localhost:5174"
+  : import.meta.env.VITE_CLAIM_API_URL ||
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5174";
 
 export default function ClaimChecker() {
   const navigate = useNavigate();

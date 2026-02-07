@@ -51,7 +51,7 @@ function futureValue(monthly, annualRate, years) {
 }
 
 function getAgeGroup(age) {
-  if (age < 35) return "young";
+  if (age < 30) return "young";
   if (age < 60) return "mid";
   return "senior";
 }
@@ -78,14 +78,18 @@ export default function PlanDashboard() {
     if (!data) return null;
 
     const age = toNumber(data.age);
-    const investMonthly = toNumber(data.investMonthly);
     const salary = toNumber(data.salary);
     const familyIncome = toNumber(data.familyIncome);
     const expenses = toNumber(data.expenses);
     const loanEmi = toNumber(data.loanEmi);
     const insuranceMonthly = toNumber(data.insuranceMonthly);
+    const familyInvestable = toNumber(data.familySavings);
     const totalIncome = salary + familyIncome;
     const debtRatio = totalIncome > 0 ? loanEmi / totalIncome : 0;
+    const investMonthly = Math.max(
+      0,
+      salary + familyInvestable - expenses - insuranceMonthly - loanEmi
+    );
 
     const group = getAgeGroup(age);
     const baseSplit = percentConfig[group];
@@ -186,8 +190,21 @@ export default function PlanDashboard() {
       returnRates.stocks,
       projectionYears
     );
+    const emergencyTarget = breakdown.expenses * 6;
+    const emergencyMonthsToGoal =
+      emergencyMonthly > 0 ? Math.ceil(emergencyTarget / emergencyMonthly) : 0;
+    const emergencyMonthsUsed = Math.min(projectionYears * 12, emergencyMonthsToGoal);
+    const emergencyFuture = emergencyMonthly * emergencyMonthsUsed;
+    const goldFuture = breakdown.gold * 12 * projectionYears;
+    const realEstateFuture = breakdown.realEstate * 12 * projectionYears;
 
-    const totalFuture = fdFuture + mutualFuture + stockFuture;
+    const totalFuture =
+      fdFuture +
+      mutualFuture +
+      stockFuture +
+      emergencyFuture +
+      goldFuture +
+      realEstateFuture;
 
     return {
       age,
@@ -199,7 +216,11 @@ export default function PlanDashboard() {
         fdFuture,
         mutualFuture,
         stockFuture,
+        emergencyFuture,
+        goldFuture,
+        realEstateFuture,
         totalFuture,
+        emergencyMonthsUsed,
       },
     };
   }, [data, riskLevel, projectionYears]);
@@ -295,7 +316,7 @@ export default function PlanDashboard() {
                 Edit details
               </button>
               <div className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs text-neutral-300">
-                Investable: Rs {formatCurrency(toNumber(data.investMonthly))}/mo
+                Investable: Rs {formatCurrency(computed.breakdown.investMonthly)}/mo
               </div>
             </div>
           </div>
@@ -321,7 +342,9 @@ export default function PlanDashboard() {
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="h-28 w-28 rounded-full bg-[#0f1521] border border-white/10 flex flex-col items-center justify-center text-center">
                           <div className="text-xs text-neutral-400">Investable</div>
-                          <div className="text-sm font-semibold">Rs {formatCurrency(toNumber(data.investMonthly))}</div>
+                          <div className="text-sm font-semibold">
+                            Rs {formatCurrency(computed.breakdown.investMonthly)}
+                          </div>
                           <div className="text-[10px] text-neutral-500">per month</div>
                         </div>
                       </div>
@@ -547,9 +570,15 @@ export default function PlanDashboard() {
                   <p className="mt-2 text-[11px] text-neutral-500">Enter 1 to 50 years.</p>
                 </div>
                 <p className="text-xs text-neutral-400 mb-4">
-                  Estimated returns: FD 6%, Mutual funds 10%, Stocks 8% per year. This is an approximation, not a guarantee.
+                  Estimated returns: FD 6%, Mutual funds 10%, Stocks 8% per year. Emergency fund, gold, and real estate are shown as contributions only.
                 </p>
                 <div className="space-y-2 text-sm text-neutral-300">
+                  <div className="flex items-center justify-between">
+                    <span>Emergency fund</span>
+                    <span className="font-semibold">
+                      Rs {formatCurrency(computed.totals.emergencyFuture)}
+                    </span>
+                  </div>
                   <div className="flex items-center justify-between">
                     <span>FD / RD</span>
                     <span className="font-semibold">Rs {formatCurrency(computed.totals.fdFuture)}</span>
@@ -562,6 +591,18 @@ export default function PlanDashboard() {
                     <span>Stocks</span>
                     <span className="font-semibold">Rs {formatCurrency(computed.totals.stockFuture)}</span>
                   </div>
+                  {computed.split.gold > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span>Gold</span>
+                      <span className="font-semibold">Rs {formatCurrency(computed.totals.goldFuture)}</span>
+                    </div>
+                  )}
+                  {computed.split.realEstate > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span>Real estate</span>
+                      <span className="font-semibold">Rs {formatCurrency(computed.totals.realEstateFuture)}</span>
+                    </div>
+                  )}
                   <div className="border-t border-white/10 pt-3 flex items-center justify-between text-white">
                     <span>Total estimate</span>
                     <span className="font-bold">Rs {formatCurrency(computed.totals.totalFuture)}</span>
@@ -573,7 +614,7 @@ export default function PlanDashboard() {
                     <div className="flex items-center justify-between">
                       <span>Emergency fund</span>
                       <span className="font-semibold">
-                        Rs {formatCurrency(computed.breakdown.emergency * 12 * projectionYears)}
+                        Rs {formatCurrency(computed.breakdown.emergency * computed.totals.emergencyMonthsUsed)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">

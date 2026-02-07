@@ -1,15 +1,6 @@
-Claim Story
-Owner/Insured Name: Ravi Kumar
-Policy Number: BIKE-INS-2024-458921
-Policy Valid From: 01-04-2024
-Policy Valid Till: 31-03-2025
-Vehicle Number: KA01AB1234
-Chassis Number: ME4JF50A9M1234567
-Engine Number: JF50E9123456
-FIR Number: FIR-2024-789
-Police Station: Indiranagar Police Station
-Date of Incident: 15-12-2024
-Time of Incident: 18:45
-Location: 100 Feet Road, Indiranagar, Bengaluru
+While returning home on 15-12-2024 at around 18:45, my bike (KA01AB1234) was
+ slowing at a traffic signal on 100 Feet Road, Indiranagar, Bengaluru when a car hit it from behind.
+  The impact damaged the rear and side panels. I reported the incident at Indiranagar Police Station and FIR No. 
+  FIR-2024-789 was registered. I am submitting this claim for repair and settlement as per my policy coverage.
 
-While returning home, the insured bike was involved in a road accident when a car hit it from behind as it slowed at a traffic signal. The impact damaged the rear and side panels. The incident was reported to Indiranagar Police Station and FIR No. FIR-2024-789 was registered. Photo evidence of the damaged motorcycle is provided for verification. The claim is submitted for repair and settlement as per policy coverage.
+

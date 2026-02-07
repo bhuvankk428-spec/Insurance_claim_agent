@@ -71,7 +71,7 @@ export default function Navbar({ className = "" }) {
             onClick={() => navigate("/")}
             className="hidden md:inline-flex px-4 py-2 sm:py-1.5 rounded-full text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 transition-all text-white shadow-sm"
           >
-            Login
+            Log out
           </button>
 
           {/* Mobile menu button */}

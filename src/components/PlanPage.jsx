@@ -55,14 +55,14 @@ export default function PlanPage() {
   const showHealthSuggestion = form.hasHealthInsurance === "no";
   const showFamilyInsuranceSuggestion =
     form.hasFamilyIncome === "yes" && form.hasFamilyInsurance === "no";
-  const incomeTotal =
+  const investableMonthly = Math.max(
+    0,
     toNumber(form.salary) +
-    (showFamilyFields ? toNumber(form.familyIncome) : 0);
-  const mandatoryTotal =
-    toNumber(form.expenses) +
-    toNumber(form.loanEmi) +
-    toNumber(form.insuranceMonthly);
-  const investableMonthly = Math.max(0, incomeTotal - mandatoryTotal);
+      (showFamilyFields ? toNumber(form.familySavings) : 0) -
+      toNumber(form.expenses) -
+      toNumber(form.insuranceMonthly) -
+      toNumber(form.loanEmi)
+  );
 
   const updateField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
