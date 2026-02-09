@@ -8,7 +8,7 @@ const API_BASE =
   "http://localhost:5174";
 
 export default function ClaimStoryChatbot() {
-  const { claimId } = useParams(); // ✅ GET claimId
+  const { claimId } = useParams(); 
   const navigate = useNavigate();
 
   const [story, setStory] = useState("");
@@ -20,7 +20,6 @@ export default function ClaimStoryChatbot() {
 
     if (!story.trim()) return;
 
-    // 🚨 Safety check (prevents silent failure)
     if (!claimId) {
       setResult({
         status: "rejected",
@@ -37,7 +36,7 @@ export default function ClaimStoryChatbot() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          claimId, // ✅ REQUIRED
+          claimId, 
           story,
         }),
       });

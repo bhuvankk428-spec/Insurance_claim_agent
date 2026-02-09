@@ -30,7 +30,6 @@ export default function ChooserPage() {
           <p className="text-sm sm:text-base lg:text-lg text-neutral-300 mb-10 lg:mb-12 max-w-2xl mx-auto leading-relaxed">
             Choose a tool below to get instant insights about your insurance policies and claims.
           </p>
-
           <div className="mb-8 mx-auto max-w-4xl rounded-2xl border border-emerald-400/40 bg-emerald-500/10 px-6 py-5 sm:py-6 flex flex-col sm:flex-row items-center gap-4 backdrop-blur-sm">
             <span className="px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-emerald-600/80 text-emerald-50 shadow-lg">
               Guidance
@@ -51,7 +50,7 @@ export default function ChooserPage() {
             </button>
           </div>
 
-          {/* Cards - responsive grid */}
+          {/* Cards */}
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 lg:justify-items-center w-full">
             <HoverCard
               icon={<FaSearch className="text-4xl sm:text-5xl lg:text-6xl text-cyan-200 mb-4 sm:mb-6" />}
@@ -120,7 +119,7 @@ export default function ChooserPage() {
   );
 }
 
-// Reusable animated card - Mobile optimized
+
 function HoverCard({ icon, title, desc, tag, tagColor, onClick }) {
   return (
     <div

@@ -98,10 +98,10 @@ export default function PolicySummarizer() {
 
   setLoading(true);
 
-  // 1️⃣ Push user message
+
   setMessages(prev => [...prev, { from: "user", text: userText }]);
 
-  // 2️⃣ Create empty AI message (important)
+ 
   let aiIndex;
   setMessages(prev => {
     aiIndex = prev.length;
@@ -145,7 +145,7 @@ export default function PolicySummarizer() {
       const chunk = decoder.decode(value, { stream: true });
       fullText += chunk;
 
-      // 3️⃣ Incrementally update AI message
+      
       setMessages(prev => {
         const updated = [...prev];
         updated[aiIndex] = {
@@ -155,7 +155,7 @@ export default function PolicySummarizer() {
         return updated;
       });
 
-      // 🔊 Start voice early (optional but awesome)
+      
       if (!firstSpeechTriggered && fullText.length > 200) {
         firstSpeechTriggered = true;
         speak(fullText, muted, voices);

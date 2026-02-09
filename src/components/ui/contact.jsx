@@ -5,7 +5,7 @@ export default function ContactQKAI() {
     <>
       <Navbar />
 
-      {/* ⬇️ FIX */}
+      {/*  FIX */}
       <div className="min-h-screen bg-[#0b0f14] text-white px-4 pt-24 sm:pt-28 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-[1.1fr_1fr] items-start">
 
