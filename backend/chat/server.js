@@ -48,9 +48,12 @@ app.use(
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "X-Admin-Token"],
+    optionsSuccessStatus: 204,
   })
 );
+app.options("*", cors());
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
