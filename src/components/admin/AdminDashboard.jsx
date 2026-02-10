@@ -23,6 +23,8 @@ export default function AdminDashboard() {
   const [error, setError] = useState("");
   const [savingId, setSavingId] = useState(null);
   const [search, setSearch] = useState("");
+  const [limit, setLimit] = useState(10);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (!isAdminAuthed()) {
@@ -34,12 +36,14 @@ export default function AdminDashboard() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`${API_BASE}/api/admin/claims`, {
+        const res = await fetch(`${API_BASE}/api/admin/claims?limit=${limit}`, {
           headers: { "x-admin-token": ADMIN_TOKEN },
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to load");
-        setClaims(data.claims || []);
+        const nextClaims = data.claims || [];
+        setClaims(nextClaims);
+        setHasMore(nextClaims.length >= limit);
       } catch (err) {
         setError(err.message || "Failed to load claims");
       } finally {
@@ -48,7 +52,7 @@ export default function AdminDashboard() {
     }
 
     loadClaims();
-  }, [navigate]);
+  }, [navigate, limit]);
 
   const filteredClaims = useMemo(() => {
     if (!search.trim()) return claims;
@@ -305,6 +309,18 @@ export default function AdminDashboard() {
             {!loading && filteredClaims.length === 0 && (
               <div className="text-center text-neutral-400 py-10">
                 No claims found.
+              </div>
+            )}
+
+            {!loading && filteredClaims.length > 0 && (
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => setLimit((prev) => prev + 10)}
+                  disabled={!hasMore}
+                  className="px-5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-sm font-semibold hover:bg-white/20 transition disabled:opacity-50"
+                >
+                  {hasMore ? "Load more" : "No more claims"}
+                </button>
               </div>
             )}
 

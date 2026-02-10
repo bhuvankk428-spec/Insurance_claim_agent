@@ -54,7 +54,9 @@ router.post("/claim-story", analyzeStory);
 /* ------------------ ADMIN ------------------ */
 router.get("/admin/claims", requireAdmin, async (req, res) => {
   try {
-    const claims = await listClaims();
+    const rawLimit = Number.parseInt(req.query.limit, 10);
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? rawLimit : 50;
+    const claims = await listClaims(limit);
     return res.json({ status: "success", claims });
   } catch (err) {
     return res.status(500).json({
