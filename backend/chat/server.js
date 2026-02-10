@@ -53,7 +53,7 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
-app.options("*", cors());
+app.options(/.*/, cors());
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
