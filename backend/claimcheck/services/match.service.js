@@ -21,6 +21,20 @@ export function matchDocuments({
     return { ok: false, level: "reject", reason: "Unsupported claim domain" };
   }
 
+  // Match all overlapping fields between policy and FIR
+  const overlappingFields = Object.keys(policyData || {}).filter(
+    (field) => policyData[field] && firData?.[field]
+  );
+  for (const field of overlappingFields) {
+    if (normalize(policyData[field]) !== normalize(firData[field])) {
+      return {
+        ok: false,
+        level: "reject",
+        reason: `${field} mismatch between policy and FIR`,
+      };
+    }
+  }
+
   let partial = false;
   const reasons = [];
   const signals = [];

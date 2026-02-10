@@ -1,10 +1,10 @@
 import OpenAI from "openai";
 
-const hasOpenAIKey =
+export const VISION_ENABLED =
   Boolean(process.env.OPENAI_API_KEY) &&
   !process.env.OPENAI_API_KEY.startsWith("your_");
 
-const openai = hasOpenAIKey
+const openai = VISION_ENABLED
   ? new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
       timeout: Number(process.env.OPENAI_TIMEOUT_MS || 60000),

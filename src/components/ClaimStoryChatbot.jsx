@@ -12,7 +12,6 @@ export default function ClaimStoryChatbot() {
   const navigate = useNavigate();
 
   const [story, setStory] = useState("");
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -21,15 +20,16 @@ export default function ClaimStoryChatbot() {
     if (!story.trim()) return;
 
     if (!claimId) {
-      setResult({
-        status: "rejected",
-        message: "Claim session expired. Please restart the claim process.",
+      navigate(`/claim-result/unknown`, {
+        state: {
+          status: "rejected",
+          message: "Claim session expired. Please restart the claim process.",
+        },
       });
       return;
     }
 
     setLoading(true);
-    setResult(null);
 
     try {
       const res = await fetch(`${API_BASE}/api/claim-story`, {
@@ -53,20 +53,24 @@ export default function ClaimStoryChatbot() {
           },
         });
       } else {
-        setResult({
-          status: "rejected",
-          message:
-            data.reason ||
-            data.message ||
-            "Your claim could not be approved.",
+        navigate(`/claim-result/${claimId}`, {
+          state: {
+            status: "rejected",
+            message:
+              data.reason ||
+              data.message ||
+              "Your claim could not be approved.",
+          },
         });
       }
 
     } catch (err) {
-      setResult({
-        status: "rejected",
-        message:
-          "Something went wrong while analyzing your story. Please try again.",
+      navigate(`/claim-result/${claimId || "unknown"}`, {
+        state: {
+          status: "rejected",
+          message:
+            "Something went wrong while analyzing your story. Please try again.",
+        },
       });
     } finally {
       setLoading(false);
@@ -118,14 +122,7 @@ export default function ClaimStoryChatbot() {
             </form>
 
             {/* Response */}
-            {result?.status === "rejected" && (
-              <div className="mt-6 p-6 rounded-2xl bg-[#190b0b] border border-red-500/40">
-                <h2 className="font-bold text-red-300 mb-2">
-                  Claim Rejected
-                </h2>
-                <p className="text-neutral-100">{result.message}</p>
-              </div>
-            )}
+            {/* Rejections now shown on Claim Result page */}
           </div>
 
           {/* Disclaimer */}

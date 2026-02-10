@@ -164,11 +164,13 @@ export async function analyzeStory(req, res) {
     }
 
     const coverageRisk =
-      coverage?.status === "related" ||
-      coverage?.status === "ambiguous" ||
-      coverage?.status === "unknown"
-        ? "high"
-        : "medium";
+      coverage?.status === "covered"
+        ? "low"
+        : coverage?.status === "related" ||
+            coverage?.status === "ambiguous" ||
+            coverage?.status === "unknown"
+          ? "high"
+          : "medium";
 
     /* ---------------- OPENAI ---------------- */
     let aiResult = null;
@@ -392,7 +394,7 @@ Respond STRICTLY in JSON:
       });
     }
 
-    const finalRiskLevel = mergeRiskLevels(
+    let finalRiskLevel = mergeRiskLevels(
       aiResult.riskLevel,
       mergeRiskLevels(evidenceRisk?.riskLevel, coverageRisk)
     );
@@ -400,6 +402,10 @@ Respond STRICTLY in JSON:
     const claimCode = isPartial
       ? generatePartialClaimCode()
       : generateFullClaimCode();
+
+    if (!isPartial && finalRiskLevel !== "high") {
+      finalRiskLevel = claim.geoTagged ? "low" : "medium";
+    }
 
     claim.claimCode = claimCode;
     claim.riskLevel = finalRiskLevel;

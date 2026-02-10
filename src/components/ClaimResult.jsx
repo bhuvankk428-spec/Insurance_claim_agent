@@ -11,9 +11,12 @@ export default function ClaimResult() {
     explanation,
     reasons = [],
     riskLevel,
+    status,
+    message,
   } = location.state || {};
 
   const isPartial = level === "partial";
+  const isRejected = status === "rejected";
 
   return (
     <div className="min-h-screen bg-[#0b0f14] flex items-center justify-center px-4 pt-24 pb-12 relative overflow-hidden">
@@ -43,12 +46,18 @@ export default function ClaimResult() {
         {/* STATUS */}
         <div
           className={`mb-6 p-4 rounded-2xl text-center font-semibold border ${
-            isPartial
-              ? "bg-yellow-900/30 text-yellow-200 border-yellow-700/40"
-              : "bg-emerald-900/30 text-emerald-200 border-emerald-700/40"
+            isRejected
+              ? "bg-red-900/30 text-red-200 border-red-700/40"
+              : isPartial
+                ? "bg-yellow-900/30 text-yellow-200 border-yellow-700/40"
+                : "bg-emerald-900/30 text-emerald-200 border-emerald-700/40"
           }`}
         >
-          {isPartial ? "Partially Approved" : "Approved"}
+          {isRejected
+            ? "Rejected"
+            : isPartial
+              ? "Partially Approved"
+              : "Approved"}
         </div>
 
         {/* CLAIM ID */}
@@ -68,21 +77,29 @@ export default function ClaimResult() {
         )}
 
         {/* EXPLANATION */}
-        {(reasons.length > 0 || explanation) && (
+        {(reasons.length > 0 || explanation || message) && (
           <div className="mt-6 p-5 bg-black/40 border border-neutral-800/70 rounded-2xl text-sm text-neutral-200">
             <p className="font-semibold mb-2 text-white">
-              Why this claim was approved
+              {isRejected ? "Why this claim was rejected" : "Why this claim was approved"}
             </p>
 
-            <ul className="list-disc list-inside space-y-1">
-              {reasons.map((r, i) => (
-                <li key={i}>{r}</li>
-              ))}
-            </ul>
+            {reasons.length > 0 && (
+              <ul className="list-disc list-inside space-y-1">
+                {reasons.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            )}
 
             {explanation && (
               <p className="mt-3 text-neutral-300 italic">
                 {explanation}
+              </p>
+            )}
+
+            {message && (
+              <p className="mt-3 text-neutral-300">
+                {message}
               </p>
             )}
           </div>
@@ -90,9 +107,11 @@ export default function ClaimResult() {
 
         {/* NEXT STEPS */}
         <div className="mt-6 text-center text-neutral-400 text-sm">
-          {isPartial
-            ? "This claim requires manual review before payout."
-            : "Your claim has been sent for financial processing."}
+          {isRejected
+            ? "This claim was not approved. Please review the details and resubmit if needed."
+            : isPartial
+              ? "This claim requires manual review before payout."
+              : "Your claim has been sent for financial processing."}
         </div>
 
         {/* ACTION */}

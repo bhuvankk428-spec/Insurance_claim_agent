@@ -2,7 +2,7 @@ import { extractText } from "./ocr.service.js";
 import { extractFIRFields } from "./extractFields.service.js";
 import { extractExif } from "./exif.service.js";
 import { matchDocuments, detectDomain } from "./match.service.js";
-import { verifyIncidentWithVision } from "./image.service.js";
+import { verifyIncidentWithVision, VISION_ENABLED } from "./image.service.js";
 import { claimStore } from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
