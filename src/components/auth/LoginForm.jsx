@@ -181,19 +181,57 @@ export default function LoginForm() {
 
           {/* Google login */}
           <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="group w-full p-4 rounded-2xl bg-[#1f1f1f]/80 hover:bg-[#2a2a2a]/80 backdrop-blur-sm border border-neutral-600/50 hover:border-neutral-500/70 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 text-neutral-200 hover:text-neutral-100"
-          >
-            <svg width="22" height="22" fill="currentColor" className="drop-shadow-sm group-hover:scale-110 transition-transform">
-              <path d="M19.6 10.2c0-.7-.1-1.5-.2-2.2H10v4.4h5.3c-.2 1.2-.8 2.3-1.8 3.1v2.6h2.9c1.6-1.5 2.5-3.7 2.5-6z" />
-              <path d="M10 20c2.4 0 4.4-.8 5.8-2.1l-2.9-2.6c-.8.6-1.9.9-2.9.9-2.3 0-4.2-1.6-4.8-3.8H2.1v2.4C3.6 18.5 6.6 20 10 20z" />
-              <path d="M5.2 12.4C4.9 11.6 4.7 10.8 4.7 10s.2-1.6.4-2.4V5.2H2.1C1.4 6.6 1 8.2 1 10s.4 3.4 1.1 4.8l2.9-2.4z" />
-              <path d="M10 3.8c1.3 0 2.4.4 3.2 1.3l2.3-2.3C15.1 1.1 12.7 0 10 0 6.6 0 3.6 1.5 2.1 5.2l2.9 2.4C5.7 6.1 7.7 3.8 10 3.8z" />
-            </svg>
-            <span className="font-semibold text-sm sm:text-base">Continue with Google</span>
-          </button>
+  type="button"
+  onClick={handleGoogleLogin}
+  disabled={loading}
+  className="
+    group relative w-full p-4 rounded-2xl
+    bg-gradient-to-br from-[#2b2b2b] via-[#1f1f1f] to-[#111]
+    hover:from-[#323232] hover:via-[#252525] hover:to-[#141414]
+    backdrop-blur-md
+    border border-white/10 hover:border-white/20
+    transition-all duration-300 ease-out
+    hover:shadow-[0_0_35px_rgba(255,255,255,0.12)]
+    hover:scale-[1.03] active:scale-[0.97]
+    disabled:opacity-50 disabled:cursor-not-allowed
+    flex items-center justify-center gap-3
+    text-neutral-100
+  "
+>
+  {/* glow ring */}
+  <div
+    className="
+      absolute inset-0 rounded-2xl
+      opacity-0 group-hover:opacity-100
+      transition-opacity duration-300
+      bg-gradient-to-r from-red-500/10 via-yellow-500/10 to-blue-500/10
+      blur-xl
+    "
+  />
+
+  {/* content */}
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 20 20"
+    className="
+      relative z-10
+      drop-shadow
+      transition-transform duration-300
+      group-hover:scale-110
+    "
+  >
+    <path fill="#4285F4" d="M19.6 10.2c0-.7-.1-1.5-.2-2.2H10v4.4h5.3c-.2 1.2-.8 2.3-1.8 3.1v2.6h2.9c1.6-1.5 2.5-3.7 2.5-6z"/>
+    <path fill="#34A853" d="M10 20c2.4 0 4.4-.8 5.8-2.1l-2.9-2.6c-.8.6-1.9.9-2.9.9-2.3 0-4.2-1.6-4.8-3.8H2.1v2.4C3.6 18.5 6.6 20 10 20z"/>
+    <path fill="#FBBC05" d="M5.2 12.4C4.9 11.6 4.7 10.8 4.7 10s.2-1.6.4-2.4V5.2H2.1C1.4 6.6 1 8.2 1 10s.4 3.4 1.1 4.8l2.9-2.4z"/>
+    <path fill="#EA4335" d="M10 3.8c1.3 0 2.4.4 3.2 1.3l2.3-2.3C15.1 1.1 12.7 0 10 0 6.6 0 3.6 1.5 2.1 5.2l2.9 2.4C5.7 6.1 7.7 3.8 10 3.8z"/>
+  </svg>
+
+  <span className="relative z-10 font-semibold text-sm sm:text-base tracking-wide">
+    Continue with Google
+  </span>
+</button>
+
         </div>
       </div>
 
