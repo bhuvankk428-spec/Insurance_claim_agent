@@ -63,6 +63,13 @@ export default function Navbar({ className = "" }) {
           >
             FAQ
           </button>
+          <button
+            className="relative py-1 px-3 rounded-full border border-red-400/70 bg-red-500/15 text-red-200 hover:text-white hover:bg-red-500/30 transition-colors shadow-sm overflow-hidden animate-[pulse_2.4s_ease-in-out_infinite]"
+            onClick={() => navigate("/finance-news")}
+          >
+            <span className="absolute inset-0 rounded-full shadow-[0_0_22px_rgba(248,113,113,0.75)] opacity-80" />
+            <span className="relative">Finance News</span>
+          </button>
         </div>
 
         {/* Right side */}
@@ -111,15 +118,23 @@ export default function Navbar({ className = "" }) {
               { label: "Contact", path: "/contact" },
               { label: "Help", path: "/help" },
               { label: "FAQ", path: "/faq" },
+              { label: "Finance News", path: "/finance-news", highlight: true },
             ].map(item => (
               <button
                 key={item.label}
-                className="block w-full text-left py-3 px-4 rounded-xl hover:text-cyan-300 hover:bg-neutral-900/50 transition-all"
+                className={`relative block w-full text-left py-3 px-4 rounded-xl transition-all ${
+                  item.highlight
+                    ? "text-red-200 bg-red-500/15 hover:bg-red-500/25 hover:text-white border border-red-400/40"
+                    : "hover:text-cyan-300 hover:bg-neutral-900/50"
+                }`}
                 onClick={() => {
                   setMenuOpen(false);
                   navigate(item.path);
                 }}
               >
+                {item.highlight && (
+                  <span className="pointer-events-none absolute inset-0 rounded-xl shadow-[0_0_18px_rgba(248,113,113,0.65)] opacity-80 animate-[pulse_2.6s_ease-in-out_infinite]" />
+                )}
                 {item.label}
               </button>
             ))}

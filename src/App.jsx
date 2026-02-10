@@ -13,6 +13,7 @@ import ClaimResult from "./components/ClaimResult";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import PlanPage from "./components/PlanPage";
 import PlanDashboard from "./components/PlanDashboard";
+import FinanceNews from "./components/FinanceNews";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/claim-checker" element={<ClaimChecker />} />
         <Route path="/plan" element={<PlanPage />} />
         <Route path="/plan-dashboard" element={<PlanDashboard />} />
+        <Route path="/finance-news" element={<FinanceNews />} />
         <Route path="/claim-story/:claimId" element={<ClaimStoryChatbot />} />
         <Route path="/claim-result/:claimId" element={<ClaimResult />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />

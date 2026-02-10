@@ -54,7 +54,7 @@ export default function ClaimChecker() {
   /* ---------------- POLICY VERIFY ---------------- */
   async function verifyPolicy(file) {
     const formData = new FormData();
-    formData.append("pdf", file); // ? ONLY PDF
+    formData.append("pdf", file); 
     const email = auth.currentUser?.email;
     if (email) formData.append("email", email);
 
@@ -69,7 +69,7 @@ export default function ClaimChecker() {
       const data = await res.json();
 
       if (data.valid) {
-        setClaimId(data.claimId); // ? STORE claimId
+        setClaimId(data.claimId); 
       }
 
       setPolicyResult({
@@ -106,7 +106,7 @@ export default function ClaimChecker() {
 
     try {
       const formData = new FormData();
-      formData.append("claimId", claimId); // ? REQUIRED
+      formData.append("claimId", claimId); 
       formData.append("claimType", claimType);
       formData.append("fir", firFile);
       photoFiles.forEach((f) => formData.append("photos", f));
@@ -226,7 +226,7 @@ export default function ClaimChecker() {
                     if (!file) return;
                     setFileName(file.name);
                     setPolicyResult(null);
-                    verifyPolicy(file); // ? IMPORTANT
+                    verifyPolicy(file); 
                   }}
                 />
               </label>

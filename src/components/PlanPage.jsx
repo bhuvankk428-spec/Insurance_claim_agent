@@ -46,7 +46,7 @@ export default function PlanPage() {
         const parsed = JSON.parse(saved);
         setForm((prev) => ({ ...prev, ...parsed }));
       } catch {
-        // Ignore invalid saved data
+        
       }
     }
   }, []);
