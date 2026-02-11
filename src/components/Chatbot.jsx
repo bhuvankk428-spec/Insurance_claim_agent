@@ -2,9 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navbar from "./ui/Navbar.jsx";
-const CHAT_API_BASE = import.meta.env.VITE_CHAT_API_URL
-  ? import.meta.env.VITE_CHAT_API_URL.replace(/\/$/, "")
-  : "";
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+const CHAT_API_BASE = (
+  import.meta.env.VITE_CHAT_API_URL ||
+  (isLocalhost ? "http://localhost:5175" : "")
+).replace(/\/$/, "");
 
 /* ---------------- AUTO DOMAIN DETECTION ---------------- */
 function detectDomain(text) {
@@ -109,6 +114,11 @@ export default function PolicySummarizer() {
   });
 
   try {
+    if (!CHAT_API_BASE) {
+      throw new Error(
+        "Missing chat API URL. Set VITE_CHAT_API_URL in Vercel."
+      );
+    }
     const endpoint = CHAT_API_BASE
       ? `${CHAT_API_BASE}/api/rag-chat`
       : "/api/rag-chat";
@@ -127,6 +137,11 @@ export default function PolicySummarizer() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
+
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || "Chat service request failed");
+    }
 
     if (!response.body) {
       throw new Error("Streaming not supported");

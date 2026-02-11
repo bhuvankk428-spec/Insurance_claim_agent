@@ -4,6 +4,7 @@ export const ADMIN_PASSWORD =
   import.meta.env.VITE_ADMIN_PASSWORD || "QKAdmin#2026";
 export const ADMIN_TOKEN =
   import.meta.env.VITE_ADMIN_TOKEN || "qk-admin-2026";
+export const HAS_CONFIGURED_ADMIN_TOKEN = Boolean(import.meta.env.VITE_ADMIN_TOKEN);
 
 export function isAdminAuthed() {
   return localStorage.getItem("qk_admin_authed") === "true";

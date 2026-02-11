@@ -36,19 +36,37 @@ const corsOrigin =
   "http://localhost:5173,http://127.0.0.1:5173";
 const allowedOrigins = corsOrigin
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/$/, "").toLowerCase())
   .filter(Boolean);
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes("*")) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
-    },
-    methods: ["GET", "POST", "PATCH"],
-  })
-);
+
+function isOriginAllowed(origin) {
+  if (!origin) return true;
+  const normalized = origin.replace(/\/$/, "").toLowerCase();
+  if (allowedOrigins.includes("*")) return true;
+  if (allowedOrigins.includes(normalized)) return true;
+
+  return allowedOrigins.some((allowed) => {
+    if (!allowed.includes("*")) return false;
+    const regexPattern = allowed
+      .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/\*/g, ".*");
+    const regex = new RegExp(`^${regexPattern}$`, "i");
+    return regex.test(normalized);
+  });
+}
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "X-Admin-Token"],
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(logger);
 app.use(helmet());
 app.use(express.json({ limit: "1mb" }));

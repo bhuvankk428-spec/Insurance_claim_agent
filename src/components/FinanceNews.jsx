@@ -11,7 +11,7 @@ const API_BASE = isLocalhost
   ? "http://localhost:5174"
   : import.meta.env.VITE_CLAIM_API_URL ||
     import.meta.env.VITE_API_URL ||
-    "http://localhost:5174";
+    "";
 
 const REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const FALLBACK_IMAGE = "/finance-news-fallback.svg";
@@ -24,6 +24,13 @@ export default function FinanceNews() {
   const [error, setError] = useState("");
 
   async function loadNews(signal) {
+    if (!API_BASE) {
+      setLoading(false);
+      setError(
+        "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel."
+      );
+      return;
+    }
     setLoading(true);
     setError("");
     try {

@@ -18,7 +18,7 @@ const API_BASE = isLocalhost
   ? "http://localhost:5174"
   : import.meta.env.VITE_CLAIM_API_URL ||
     import.meta.env.VITE_API_URL ||
-    "http://localhost:5174";
+    "";
 
 export default function ClaimChecker() {
   const navigate = useNavigate();
@@ -53,6 +53,14 @@ export default function ClaimChecker() {
 
   /* ---------------- POLICY VERIFY ---------------- */
   async function verifyPolicy(file) {
+    if (!API_BASE) {
+      setPolicyResult({
+        status: "error",
+        message:
+          "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("pdf", file); 
     const email = auth.currentUser?.email;
@@ -90,6 +98,14 @@ export default function ClaimChecker() {
   /* ---------------- EVIDENCE SUBMIT ---------------- */
   async function handleEvidenceUpload(e) {
     e.preventDefault();
+    if (!API_BASE) {
+      setEvidenceResult({
+        status: "error",
+        message:
+          "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
+      });
+      return;
+    }
 
     if (!policyVerified) {
       setEvidenceResult({

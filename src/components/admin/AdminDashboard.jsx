@@ -4,11 +4,21 @@ import Navbar from "../ui/Navbar";
 import {
   ADMIN_EMAIL,
   ADMIN_TOKEN,
+  HAS_CONFIGURED_ADMIN_TOKEN,
   adminLogout,
   isAdminAuthed,
 } from "./adminAuth";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5174";
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+
+const API_BASE = (
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_CLAIM_API_URL ||
+  (isLocalhost ? "http://localhost:5174" : "")
+).replace(/\/$/, "");
 
 const decisionOptions = [
   { value: "pending", label: "Pending" },
@@ -29,6 +39,20 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!isAdminAuthed()) {
       navigate("/");
+      return;
+    }
+    if (!API_BASE) {
+      setLoading(false);
+      setError(
+        "Missing claim API URL. Set VITE_API_URL or VITE_CLAIM_API_URL in Vercel."
+      );
+      return;
+    }
+    if (!isLocalhost && !HAS_CONFIGURED_ADMIN_TOKEN) {
+      setLoading(false);
+      setError(
+        "Missing VITE_ADMIN_TOKEN in production environment for admin API access."
+      );
       return;
     }
 

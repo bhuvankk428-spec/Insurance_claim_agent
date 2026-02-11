@@ -2,10 +2,15 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./ui/Navbar";
 
-const API_BASE =
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+const API_BASE = (
   import.meta.env.VITE_CLAIM_API_URL ||
   import.meta.env.VITE_API_URL ||
-  "http://localhost:5174";
+  (isLocalhost ? "http://localhost:5174" : "")
+).replace(/\/$/, "");
 
 export default function ClaimStoryChatbot() {
   const { claimId } = useParams(); 
@@ -24,6 +29,16 @@ export default function ClaimStoryChatbot() {
         state: {
           status: "rejected",
           message: "Claim session expired. Please restart the claim process.",
+        },
+      });
+      return;
+    }
+    if (!API_BASE) {
+      navigate(`/claim-result/${claimId}`, {
+        state: {
+          status: "rejected",
+          message:
+            "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
         },
       });
       return;

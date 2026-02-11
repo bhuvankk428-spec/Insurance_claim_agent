@@ -38,23 +38,36 @@ const allowedOrigins = corsOrigin
   .map((origin) => origin.trim().replace(/\/$/, "").toLowerCase())
   .filter(Boolean);
 
+function isOriginAllowed(origin) {
+  if (!origin) return true;
+  const normalized = origin.replace(/\/$/, "").toLowerCase();
+  if (allowedOrigins.includes("*")) return true;
+  if (allowedOrigins.includes(normalized)) return true;
+
+  return allowedOrigins.some((allowed) => {
+    if (!allowed.includes("*")) return false;
+    const regexPattern = allowed
+      .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/\*/g, ".*");
+    const regex = new RegExp(`^${regexPattern}$`, "i");
+    return regex.test(normalized);
+  });
+}
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "X-Admin-Token"],
+  optionsSuccessStatus: 204,
+};
+
 app.use(logger);
 app.use(helmet());
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      const normalized = origin.replace(/\/$/, "").toLowerCase();
-      if (allowedOrigins.includes("*")) return callback(null, true);
-      if (allowedOrigins.includes(normalized)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "X-Admin-Token"],
-    optionsSuccessStatus: 204,
-  })
-);
-app.options(/.*/, cors());
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
