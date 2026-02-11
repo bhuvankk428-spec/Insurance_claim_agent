@@ -106,7 +106,7 @@ const ragSchema = z.object({
   question: z.string().min(3).max(2000),
   domain: z.string().max(100).optional(),
   details: z
-    .union([z.record(z.any()), z.string()])
+    .union([z.record(z.string(), z.any()), z.string()])
     .optional()
     .transform((val) => (typeof val === "string" ? { text: val } : val)),
 });
