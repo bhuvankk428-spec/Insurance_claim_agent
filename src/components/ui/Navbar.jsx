@@ -1,10 +1,51 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 export default function Navbar({ className = "" }) {
- 
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [userId, setUserId] = useState("");
+  const profileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserEmail(user?.email || "");
+      setUserId(user?.uid || "");
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setProfileMenuOpen(false);
+      }
+    }
+
+    if (profileMenuOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [profileMenuOpen]);
+
+  async function handleLogout() {
+    try {
+      await signOut(auth);
+    } finally {
+      setProfileMenuOpen(false);
+      navigate("/");
+    }
+  }
+
+  const profileInitial = (userEmail?.trim()?.[0] || "U").toUpperCase();
+  const userLabel = userEmail || userId || "Unknown user";
 
   return (
    <nav
@@ -74,12 +115,31 @@ export default function Navbar({ className = "" }) {
 
         {/* Right side */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <button
-            onClick={() => navigate("/")}
-            className="hidden md:inline-flex px-4 py-2 sm:py-1.5 rounded-full text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 transition-all text-white shadow-sm"
-          >
-            Log out
-          </button>
+          <div className="relative" ref={profileMenuRef}>
+            <button
+              type="button"
+              onClick={() => setProfileMenuOpen((open) => !open)}
+              className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-cyan-700 hover:bg-cyan-600 text-white font-semibold text-sm transition-colors"
+              aria-label="Open profile menu"
+            >
+              {profileInitial}
+            </button>
+
+            {profileMenuOpen && (
+              <div className="absolute right-0 top-11 min-w-40 rounded-xl border border-neutral-800 bg-neutral-950 shadow-lg p-2 z-50">
+                <p className="px-3 py-2 text-xs text-neutral-300 truncate" title={userLabel}>
+                  {userLabel}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-red-200 hover:text-white hover:bg-red-500/25 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Mobile menu button */}
           <button
@@ -140,13 +200,13 @@ export default function Navbar({ className = "" }) {
             ))}
 
             <button
-              onClick={() => {
+              onClick={async () => {
                 setMenuOpen(false);
-                navigate("/");
+                await handleLogout();
               }}
-              className="mt-4 w-full text-left py-3 px-4 rounded-xl text-cyan-400 bg-cyan-900/40 hover:bg-cyan-800/50 transition-all font-semibold"
+              className="mt-4 w-full text-left py-3 px-4 rounded-xl text-red-200 bg-red-500/15 hover:bg-red-500/30 transition-all font-semibold"
             >
-              Login
+              Logout
             </button>
           </div>
         </div>
