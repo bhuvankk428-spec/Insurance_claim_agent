@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./ui/Navbar";
 
@@ -18,6 +18,79 @@ export default function ClaimStoryChatbot() {
 
   const [story, setStory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceError, setVoiceError] = useState("");
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) return;
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      let transcript = "";
+      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+        if (event.results[i].isFinal) {
+          transcript += event.results[i][0].transcript;
+        }
+      }
+
+      if (transcript.trim()) {
+        setStory((prev) => {
+          const base = prev.trimEnd();
+          if (!base) return transcript.trim();
+          return `${base} ${transcript.trim()}`.trim();
+        });
+      }
+    };
+
+    recognition.onerror = () => {
+      setVoiceError("Voice input failed. Please try again.");
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.stop();
+      recognitionRef.current = null;
+    };
+  }, []);
+
+  function startListening() {
+    setVoiceError("");
+    const recognition = recognitionRef.current;
+    if (!recognition) {
+      setVoiceError("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    try {
+      recognition.start();
+      setIsListening(true);
+    } catch {
+      setVoiceError("Microphone is busy. Stop and try again.");
+    }
+  }
+
+  function stopListening() {
+    const recognition = recognitionRef.current;
+    if (!recognition) return;
+    recognition.stop();
+    setIsListening(false);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -126,6 +199,28 @@ export default function ClaimStoryChatbot() {
                 onChange={(e) => setStory(e.target.value)}
                 disabled={loading}
               />
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={isListening ? stopListening : startListening}
+                  disabled={loading}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
+                    isListening
+                      ? "bg-red-600 hover:bg-red-500 text-white"
+                      : "bg-cyan-700 hover:bg-cyan-600 text-white"
+                  } disabled:opacity-50`}
+                >
+                  {isListening ? "Stop Voice Input" : "Start Voice Input"}
+                </button>
+                <span className="text-xs text-neutral-400">
+                  {isListening ? "Listening..." : "Tap and speak to fill story"}
+                </span>
+              </div>
+
+              {voiceError && (
+                <p className="text-xs text-red-300 -mt-2">{voiceError}</p>
+              )}
 
               <button
                 type="submit"
