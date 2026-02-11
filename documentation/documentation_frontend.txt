@@ -3,122 +3,83 @@ Frontend Documentation
 
 Overview
 --------
-The frontend is a Vite + React app with Tailwind styling.
-It provides three main user flows:
-1. Policy advisor chat (RAG).
-2. Claim checker (policy + evidence + story).
-3. Admin dashboard for reviewing claims.
+Frontend is a Vite + React app with Tailwind styling.
+Main flows:
+1. Policy advisor chat (RAG)
+2. Claim checker (policy + evidence + story)
+3. Admin dashboard for claim review
 
 Entry Point and Routing
 -----------------------
-src/main.jsx
-- React root rendering with StrictMode.
+`src/main.jsx`
+- React root setup.
 
-src/App.jsx
-- BrowserRouter routes:
-  - "/" -> LoginEntry (splash + login)
-  - "/register" -> RegisterForm
-  - "/choose" -> ChooserPage (feature selector)
-  - "/chatbot" -> Chatbot
-  - "/claim-checker" -> ClaimChecker
-  - "/claim-story/:claimId" -> ClaimStoryChatbot
-  - "/claim-result/:claimId" -> ClaimResult
-  - "/admin-dashboard" -> AdminDashboard
-  - "/about", "/help", "/faq", "/contact" -> UI pages
-  - "*" -> ChooserPage (fallback)
+`src/App.jsx`
+- Route map:
+  - `/` -> LoginEntry
+  - `/register` -> RegisterForm
+  - `/choose` -> ChooserPage
+  - `/chatbot` -> Chatbot
+  - `/claim-checker` -> ClaimChecker
+  - `/claim-story/:claimId` -> ClaimStoryChatbot
+  - `/claim-result/:claimId` -> ClaimResult
+  - `/admin-dashboard` -> AdminDashboard
+  - `/about`, `/help`, `/faq`, `/contact`
 
 Configuration
 -------------
-Environment variables (Vite):
-- VITE_CHAT_API_URL: base URL for RAG backend (optional).
-- VITE_CLAIM_API_URL: base URL for claim backend (optional).
-- VITE_API_URL: fallback base URL for claim + admin endpoints.
-- VITE_ADMIN_EMAIL, VITE_ADMIN_PASSWORD, VITE_ADMIN_TOKEN: admin login and API.
+Vite environment variables:
+- `VITE_CHAT_API_URL`: chat backend URL (required in production)
+- `VITE_CLAIM_API_URL`: claim backend URL (recommended in production)
+- `VITE_API_URL`: fallback for claim/admin endpoints
+- `VITE_ADMIN_EMAIL`, `VITE_ADMIN_PASSWORD`, `VITE_ADMIN_TOKEN`
 
-If no base URLs are set, the app uses local defaults:
-- Chat: relative "/api/rag-chat"
-- Claim: "http://localhost:5174"
+Runtime behavior:
+- On localhost, frontend falls back to local backend URLs.
+- In production, missing API URLs show explicit UI errors.
+- Admin dashboard requires `VITE_ADMIN_TOKEN` only outside localhost.
 
 Authentication
 --------------
-src/firebase.js
-- Firebase is initialized with project config.
-- getAuth + Google provider are exported.
+`src/firebase.js`
+- Firebase init + auth exports.
 
-src/components/auth/LoginEntry.jsx
-- Shows a 2s splash screen then login form.
+`src/components/auth/LoginForm.jsx`
+- Firebase login (email/password + Google).
+- Admin login uses `adminAuth.js` local credential check.
 
-src/components/auth/LoginForm.jsx
-- Email/password login via Firebase Auth.
-- Google login via Firebase popup.
-- Admin login uses a local credential check and stores a flag in localStorage.
-
-src/components/admin/adminAuth.js
-- ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_TOKEN are read from env with defaults.
-- isAdminAuthed() reads localStorage.
-- adminLogin() sets localStorage flag.
-- adminLogout() clears localStorage.
+`src/components/admin/adminAuth.js`
+- Reads admin config from Vite env with local defaults.
+- Stores admin auth flag in localStorage.
 
 Policy Advisor (Chatbot)
 ------------------------
-src/components/Chatbot.jsx
-- Manages streaming responses from /api/rag-chat.
-- Auto-detects domain if "any" is selected.
-- Maintains message list and renders Markdown with react-markdown + remark-gfm.
-- Streams tokens incrementally and updates the latest AI message.
-- Optional speech synthesis to read responses aloud.
-
-Request structure:
-- POST { question, details, domain }
-- If domain is "any", the UI detects a domain from user text.
+`src/components/Chatbot.jsx`
+- Calls `POST /api/rag-chat` on chat backend.
+- Streams plain text response chunks.
+- Shows clear error if `VITE_CHAT_API_URL` is missing in production.
 
 Claim Checker Flow
 ------------------
-Step 1: Policy upload
-src/components/ClaimChecker.jsx
-- Upload policy PDF to /api/claim-check.
-- Reads response { valid, claimId } and stores claimId for the session.
+`src/components/ClaimChecker.jsx`
+- Step 1: `POST /api/claim-check` (policy PDF)
+- Step 2: `POST /api/claim-evidence` (FIR + photos)
+- On success navigates to story page.
 
-Step 2: Evidence upload
-src/components/ClaimChecker.jsx
-- Upload FIR and photos to /api/claim-evidence.
-- Required fields: claimId, claimType, fir, photos.
-- On success, navigates to /claim-story/:claimId.
-
-Step 3: Story analysis
-src/components/ClaimStoryChatbot.jsx
-- Sends story + claimId to /api/claim-story.
-- On eligible response, navigates to /claim-result/:claimCode.
-- Passes decision details via location state.
-
-Step 4: Claim result
-src/components/ClaimResult.jsx
-- Renders decision summary and reasons.
-- Uses claimId from URL and details from navigation state.
+`src/components/ClaimStoryChatbot.jsx`
+- Step 3: `POST /api/claim-story` with `{ claimId, story }`
+- Navigates to result page with decision data.
 
 Admin Dashboard
 ---------------
-src/components/admin/AdminDashboard.jsx
-- Requires admin auth flag in localStorage.
-- GET /api/admin/claims with x-admin-token header.
-- PATCH /api/admin/claims/:claimId to update admin decision and notes.
-- Includes search and PDF export via window.print.
+`src/components/admin/AdminDashboard.jsx`
+- Requires local admin auth flag.
+- Loads claims via `GET /api/admin/claims` with `x-admin-token`.
+- Updates decisions via `PATCH /api/admin/claims/:claimId`.
+- Shows explicit configuration errors for missing production env.
 
-Navigation and UI Components
-----------------------------
-src/components/ChooserPage.jsx
-- Feature selector for chat and claim checker.
-
-src/components/ui/Navbar.jsx and UI pages
-- Top navigation and static pages (About, Help, FAQ, Contact).
-
-Styling
--------
-- Tailwind classes are used heavily for layout and visuals.
-- Global styles live in src/index.css and src/App.css.
-
-Known UX Constraints
---------------------
-- Claim flow relies on a server-side in-memory claimStore between steps.
-- Refreshing the browser or restarting the claim server invalidates claimId.
-- Admin login is client-side only and uses environment defaults.
+Known Constraints
+-----------------
+- Claim flow depends on server in-memory claim session state.
+- Refreshing during claim flow may require restarting from Step 1.
+- Production setup must align frontend and backend admin tokens.
