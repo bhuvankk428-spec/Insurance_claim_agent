@@ -26,6 +26,7 @@ Claimcheck Service (`backend/claimcheck`)
 -----------------------------------------
 `backend/claimcheck/server.js`
 - Express server for claim flow + admin endpoints.
+- Exposes `GET /api/finance-news`.
 - CORS uses `CORS_ORIGIN` with support for explicit and wildcard origins.
 - Health endpoints: `/healthz`, `/readyz`.
 
@@ -33,7 +34,7 @@ Claimcheck Service (`backend/claimcheck`)
 - `POST /api/claim-check`
 - `POST /api/claim-evidence`
 - `POST /api/claim-story`
-- `GET /api/admin/claims` (requires `x-admin-token`)
+- `GET /api/admin/claims?limit=<n>` (requires `x-admin-token`)
 - `PATCH /api/admin/claims/:claimId` (requires `x-admin-token`)
 
 `backend/claimcheck/services/*.js`
@@ -47,7 +48,7 @@ State and Persistence
 API Contract Summary
 --------------------
 `POST /api/rag-chat`
-- Body: `{ question, domain?, details? }`
+- Body: `{ question, language?, domain?, details? }`
 - Response: streaming plain text.
 
 `POST /api/claim-check` (multipart)
@@ -64,10 +65,14 @@ API Contract Summary
 
 `GET /api/admin/claims`
 - Header: `x-admin-token`
+- Query: `limit` (optional, positive integer)
 
 `PATCH /api/admin/claims/:claimId`
 - Header: `x-admin-token`
 - Body: `{ adminDecision, adminNotes }`
+
+`GET /api/finance-news`
+- Response: `{ status, updatedAt, from, to, articles[] }`
 
 Required Production Variables
 -----------------------------
@@ -83,3 +88,8 @@ Claim service:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_TOKEN` (non-default)
 - `CORS_ORIGIN`
+- `NEWS_API_KEY`
+
+Recommended local run variables:
+- `CHAT_PORT=5175`
+- `CLAIM_PORT=5174`

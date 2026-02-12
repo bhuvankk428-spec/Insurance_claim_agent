@@ -8,6 +8,8 @@ Main flows:
 1. Policy advisor chat (RAG)
 2. Claim checker (policy + evidence + story)
 3. Admin dashboard for claim review
+4. Plan builder + plan dashboard
+5. Finance news view
 
 Entry Point and Routing
 -----------------------
@@ -21,6 +23,9 @@ Entry Point and Routing
   - `/choose` -> ChooserPage
   - `/chatbot` -> Chatbot
   - `/claim-checker` -> ClaimChecker
+  - `/plan` -> PlanPage
+  - `/plan-dashboard` -> PlanDashboard
+  - `/finance-news` -> FinanceNews
   - `/claim-story/:claimId` -> ClaimStoryChatbot
   - `/claim-result/:claimId` -> ClaimResult
   - `/admin-dashboard` -> AdminDashboard
@@ -57,6 +62,9 @@ Policy Advisor (Chatbot)
 `src/components/Chatbot.jsx`
 - Calls `POST /api/rag-chat` on chat backend.
 - Streams plain text response chunks.
+- Sends `language` (`en`, `hi`, `te`, `kn`) and optional `domain` + `details`.
+- Auto-detects insurance domain from query when domain is set to "Any".
+- Supports speech synthesis voice playback and mute toggle.
 - Shows clear error if `VITE_CHAT_API_URL` is missing in production.
 
 Claim Checker Flow
@@ -74,9 +82,19 @@ Admin Dashboard
 ---------------
 `src/components/admin/AdminDashboard.jsx`
 - Requires local admin auth flag.
-- Loads claims via `GET /api/admin/claims` with `x-admin-token`.
+- Loads claims via `GET /api/admin/claims?limit=<n>` with `x-admin-token`.
 - Updates decisions via `PATCH /api/admin/claims/:claimId`.
+- Supports client-side search (claim ID, code, email, owner, status).
+- Supports load-more pattern by increasing `limit`.
+- Supports export to printable PDF summary from filtered claim list.
 - Shows explicit configuration errors for missing production env.
+
+Finance News
+------------
+`src/components/FinanceNews.jsx`
+- Calls `GET /api/finance-news` on claim backend.
+- Shows latest items and refreshes automatically every 24 hours.
+- Supports manual refresh and fallback image handling.
 
 Known Constraints
 -----------------

@@ -5,7 +5,7 @@ Purpose
 -------
 Backend is split into two independent services:
 1. Chat service (RAG)
-2. Claimcheck service (claim verification + admin)
+2. Claimcheck service (claim verification + admin + finance news proxy)
 
 This separation allows independent scaling and fault isolation.
 
@@ -14,6 +14,7 @@ Architecture
 - Frontend calls chat and claim APIs directly by configured base URLs.
 - Both services load environment variables and enforce startup checks.
 - Both services apply CORS from `CORS_ORIGIN`.
+- Finance news is fetched server-side by claimcheck (`/api/finance-news`) and returned to frontend.
 
 CORS Model
 ----------
@@ -40,6 +41,7 @@ Flow:
 2. `POST /api/claim-evidence` processes FIR + photos and match rules
 3. `POST /api/claim-story` evaluates narrative + coverage and persists decision
 4. Admin routes read/update persisted decisions in Supabase
+5. Finance route fetches latest market headlines for frontend cards
 
 Startup constraints:
 - In production, `ADMIN_TOKEN` must be set and non-default.
@@ -55,4 +57,5 @@ Operational Notes
 -----------------
 - Frontend production requires explicit backend URLs.
 - Admin API requires token alignment between frontend and claim backend.
+- For local `npm run backend`, set distinct ports (for example `CHAT_PORT=5175` and `CLAIM_PORT=5174`).
 - Recommended deploy order: chat backend, claim backend, then frontend.
