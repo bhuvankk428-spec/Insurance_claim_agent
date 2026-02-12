@@ -105,6 +105,7 @@ const ragLimiter = rateLimit({
 const ragSchema = z.object({
   question: z.string().min(3).max(2000),
   domain: z.string().max(100).optional(),
+  language: z.enum(["en", "hi", "te", "kn"]).optional(),
   details: z
     .union([z.record(z.string(), z.any()), z.string()])
     .optional()
@@ -121,7 +122,7 @@ app.post("/api/rag-chat", ragLimiter, async (req, res) => {
       });
     }
 
-    const { question, domain, details } = parsed.data;
+    const { question, domain, details, language } = parsed.data;
 
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Transfer-Encoding", "chunked");
@@ -131,6 +132,7 @@ app.post("/api/rag-chat", ragLimiter, async (req, res) => {
     await askRAGStream({
       question,
       domain,
+      language,
       details,
       onToken: (token) => {
         res.write(token);

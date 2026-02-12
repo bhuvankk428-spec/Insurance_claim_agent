@@ -36,6 +36,19 @@ export default function AdminDashboard() {
   const [limit, setLimit] = useState(10);
   const [hasMore, setHasMore] = useState(true);
 
+  function normalizeForSearch(value) {
+    return String(value || "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  function normalizeId(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  }
+
   useEffect(() => {
     if (!isAdminAuthed()) {
       navigate("/");
@@ -80,14 +93,30 @@ export default function AdminDashboard() {
 
   const filteredClaims = useMemo(() => {
     if (!search.trim()) return claims;
-    const q = search.toLowerCase();
-    return claims.filter(
-      (c) =>
-        String(c.claim_id || "").toLowerCase().includes(q) ||
-        String(c.email || "").toLowerCase().includes(q) ||
-        String(c.eligibility_status || "").toLowerCase().includes(q) ||
-        String(c.admin_decision || "").toLowerCase().includes(q)
-    );
+    const q = normalizeForSearch(search);
+    const qId = normalizeId(search);
+
+    return claims.filter((c) => {
+      const claimId = normalizeForSearch(c.claim_id);
+      const claimIdCompact = normalizeId(c.claim_id);
+      const claimCode = normalizeForSearch(c.claim_code);
+      const claimCodeCompact = normalizeId(c.claim_code);
+      const email = normalizeForSearch(c.email);
+      const owner = normalizeForSearch(c.policy_owner_name);
+      const eligibility = normalizeForSearch(c.eligibility_status);
+      const adminDecision = normalizeForSearch(c.admin_decision);
+
+      return (
+        claimId.includes(q) ||
+        (qId.length > 0 && claimIdCompact.includes(qId)) ||
+        claimCode.includes(q) ||
+        (qId.length > 0 && claimCodeCompact.includes(qId)) ||
+        email.includes(q) ||
+        owner.includes(q) ||
+        eligibility.includes(q) ||
+        adminDecision.includes(q)
+      );
+    });
   }, [claims, search]);
 
   const stats = useMemo(() => {
