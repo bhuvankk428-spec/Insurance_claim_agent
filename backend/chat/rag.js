@@ -44,10 +44,10 @@ async function withRetry(fn, retries = MAX_RETRIES) {
 export async function askRAGStream({
   question,
   domain = null,
+  language = "en",
   details = {},
   onToken,
 }) {
-  /* Step 1: Retrieve chunks */
   const policyName =
     details?.policy_name || details?.policyName || details?.policy;
   const rawChunks = await retrieveChunks({
@@ -62,7 +62,6 @@ export async function askRAGStream({
     return;
   }
 
-  /* Step 2: Rank (hybrid: rules + vector) */
   const chunks = rawChunks
     .map((c) => ({
       ...c,
@@ -71,7 +70,6 @@ export async function askRAGStream({
     .sort((a, b) => b.score - a.score)
     .slice(0, 4);
 
-  /* Step 3: Compact context */
   const context = chunks
     .map(
       (c, i) =>
@@ -81,10 +79,53 @@ export async function askRAGStream({
     )
     .join("\n\n");
 
-  /* Step 4: Tight prompt */
+  const languageConfig = {
+    en: {
+      label: "English",
+      rule: "Respond only in English.",
+      structure: `Answer in Markdown with:
+**Recommended policy**
+### Comparison (2-4 bullets)
+### Why this is best (2-4 bullets)
+### Claim process (3-6 steps)`,
+    },
+    hi: {
+      label: "Hindi",
+      rule:
+        "Respond only in Hindi (Devanagari script). Do not answer in English except exact policy/product names.",
+      structure: `उत्तर Markdown में इस संरचना में दें:
+**सुझाई गई पॉलिसी**
+### तुलना (2-4 बिंदु)
+### यह सबसे बेहतर क्यों है (2-4 बिंदु)
+### क्लेम प्रक्रिया (3-6 चरण)`,
+    },
+    te: {
+      label: "Telugu",
+      rule:
+        "Respond only in Telugu script. Do not answer in English except exact policy/product names.",
+      structure: `Markdown లో ఈ నిర్మాణంలో సమాధానం ఇవ్వండి:
+**సిఫారసు చేసిన పాలసీ**
+### పోలిక (2-4 పాయింట్లు)
+### ఇది ఎందుకు ఉత్తమం (2-4 పాయింట్లు)
+### క్లెయిమ్ ప్రక్రియ (3-6 దశలు)`,
+    },
+    kn: {
+      label: "Kannada",
+      rule:
+        "Respond only in Kannada script. Do not answer in English except exact policy/product names.",
+      structure: `Markdown ನಲ್ಲಿ ಈ ರಚನೆಯಲ್ಲಿ ಉತ್ತರಿಸಿ:
+**ಶಿಫಾರಸು ಮಾಡಿದ ಪಾಲಿಸಿ**
+### ಹೋಲಿಕೆ (2-4 ಅಂಶಗಳು)
+### ಇದು ಏಕೆ ಉತ್ತಮ (2-4 ಅಂಶಗಳು)
+### ಕ್ಲೇಮ್ ಪ್ರಕ್ರಿಯೆ (3-6 ಹಂತಗಳು)`,
+    },
+  };
+  const selectedLanguage = languageConfig[language] || languageConfig.en;
+
   const prompt = `
 You are an insurance advisor. Use ONLY the policy excerpts below.
 If data is missing, say "data not available".
+${selectedLanguage.rule}
 
 Question:
 ${question}
@@ -92,14 +133,9 @@ ${question}
 Policy excerpts:
 ${context}
 
-Answer in Markdown with:
-**Recommended policy**
-### Comparison (2-4 bullets)
-### Why this is best (2-4 bullets)
-### Claim process (3-6 steps)
+${selectedLanguage.structure}
 `;
 
-  /* Step 5: Stream from OpenAI */
   const maxTokens = Number(process.env.OPENAI_MAX_TOKENS || 350);
 
   if (openai) {
@@ -113,8 +149,7 @@ Answer in Markdown with:
         messages: [
           {
             role: "system",
-            content:
-              "You are an insurance advisor. Answer only with the given policy excerpts.",
+            content: `You are an insurance advisor. Answer only with the given policy excerpts. The response language must be ${selectedLanguage.label}. Follow language strictly.`,
           },
           { role: "user", content: prompt },
         ],

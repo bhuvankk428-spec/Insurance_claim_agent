@@ -29,29 +29,41 @@ function detectDomain(text) {
   return null;
 }
 
-/* ---------------- VOICE ---------------- */
-function speak(text, muted, voices) {
-  if (muted || !window.speechSynthesis || voices.length === 0) return;
-
-  const preferred =
-    voices.find(v => v.lang === "hi-IN") ||
-    voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("female")) ||
-    voices.find(v => v.lang.startsWith("en")) ||
-    voices[0];
-
-  if (!preferred) return;
-
-  const utterance = new SpeechSynthesisUtterance(
-    text.replace(/[#*]/g, "")
+function getVoiceByLanguage(voices, responseLanguage) {
+  if (!voices.length) return null;
+  if (responseLanguage === "hi") {
+    return (
+      voices.find((v) => v.lang === "hi-IN") ||
+      voices.find((v) => v.lang.startsWith("hi")) ||
+      voices.find((v) => v.lang === "en-IN") ||
+      voices[0]
+    );
+  }
+  if (responseLanguage === "te") {
+    return (
+      voices.find((v) => v.lang === "te-IN") ||
+      voices.find((v) => v.lang.startsWith("te")) ||
+      voices.find((v) => v.lang === "en-IN") ||
+      voices[0]
+    );
+  }
+  if (responseLanguage === "kn") {
+    return (
+      voices.find((v) => v.lang === "kn-IN") ||
+      voices.find((v) => v.lang.startsWith("kn")) ||
+      voices.find((v) => v.lang === "en-IN") ||
+      voices[0]
+    );
+  }
+  return (
+    voices.find(
+      (v) =>
+        v.lang === "en-IN" && v.name.toLowerCase().includes("female")
+    ) ||
+    voices.find((v) => v.lang.startsWith("en")) ||
+    voices.find((v) => v.lang === "hi-IN") ||
+    voices[0]
   );
-
-  utterance.voice = preferred;
-  utterance.lang = preferred.lang;
-  utterance.rate = 0.95;
-  utterance.pitch = 1.1;
-
-  window.speechSynthesis.cancel(); 
-  window.speechSynthesis.speak(utterance);
 }
 
 
@@ -63,6 +75,7 @@ export default function PolicySummarizer() {
   const [confidence, setConfidence] = useState(null);
   const [loading, setLoading] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [responseLanguage, setResponseLanguage] = useState("en");
   const [voices, setVoices] = useState([]); 
   const messagesEndRef = useRef(null);
 
@@ -122,9 +135,7 @@ export default function PolicySummarizer() {
     const endpoint = CHAT_API_BASE
       ? `${CHAT_API_BASE}/api/rag-chat`
       : "/api/rag-chat";
-    const payload = {
-      question: request,
-    };
+    const payload = { question: request, language: responseLanguage };
     if (details && details.trim()) {
       payload.details = { text: details.trim() };
     }
@@ -173,7 +184,18 @@ export default function PolicySummarizer() {
       
       if (!firstSpeechTriggered && fullText.length > 200) {
         firstSpeechTriggered = true;
-        speak(fullText, muted, voices);
+        const selectedVoice = getVoiceByLanguage(voices, responseLanguage);
+        if (selectedVoice && !muted && window.speechSynthesis) {
+          const utterance = new SpeechSynthesisUtterance(
+            fullText.replace(/[#*]/g, "")
+          );
+          utterance.voice = selectedVoice;
+          utterance.lang = selectedVoice.lang;
+          utterance.rate = 0.95;
+          utterance.pitch = 1.1;
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
       }
     }
 
@@ -201,10 +223,10 @@ export default function PolicySummarizer() {
     <Navbar />
 
     {/* MAIN LAYOUT */}
-    <div className="pt-16 box-border h-[100dvh] overflow-hidden bg-black text-white flex flex-col lg:flex-row">
+    <div className="pt-16 box-border min-h-[100dvh] lg:h-[100dvh] overflow-y-auto lg:overflow-hidden bg-black text-white flex flex-col lg:flex-row">
       
       {/* LEFT PANEL */}
-      <aside className="w-full lg:w-[420px] h-full min-h-0 overflow-y-auto bg-black px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-sky-500/30">
+      <aside className="w-full lg:w-[420px] h-auto lg:h-full min-h-0 overflow-visible lg:overflow-y-auto bg-black px-4 sm:px-6 py-6 sm:py-8 border-b lg:border-b-0 lg:border-r border-sky-500/30">
         <div className="rounded-2xl border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-xs text-sky-200 inline-flex items-center gap-2 mb-4">
           Smart policy guidance
         </div>
@@ -235,6 +257,18 @@ export default function PolicySummarizer() {
         </button>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <select
+            className="w-full rounded-xl bg-black border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+            value={responseLanguage}
+            onChange={(e) => setResponseLanguage(e.target.value)}
+            disabled={loading}
+          >
+            <option value="en">Response language: English</option>
+            <option value="hi">Response language: Hindi</option>
+            <option value="te">Response language: Telugu</option>
+            <option value="kn">Response language: Kannada</option>
+          </select>
+
           <select
             className="w-full rounded-xl bg-black border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
             value={domain}
@@ -283,7 +317,7 @@ export default function PolicySummarizer() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <main className="flex-1 bg-black p-4 sm:p-6 min-h-0 overflow-y-auto">
+      <main className="flex-1 bg-black p-4 sm:p-6 min-h-0 overflow-visible lg:overflow-y-auto">
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* CONFIDENCE CARD */}
