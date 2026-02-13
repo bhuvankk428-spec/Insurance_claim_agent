@@ -3,7 +3,11 @@ import multer from "multer";
 import { checkPolicy } from "../services/policy.service.js";
 import { checkEvidence } from "../services/evidence.service.js";
 import { analyzeStory } from "../services/story.service.js";
-import { listClaims, updateAdminDecision } from "../services/supabase.service.js";
+import {
+  listClaims,
+  listClaimsByEmail,
+  updateAdminDecision,
+} from "../services/supabase.service.js";
 
 const router = express.Router();
 const MAX_PDF_MB = Number(process.env.MAX_PDF_MB || 10);
@@ -79,7 +83,7 @@ router.patch("/admin/claims/:claimId", requireAdmin, async (req, res) => {
 
     if (
       adminDecision &&
-      !["approved", "rejected", "pending"].includes(adminDecision)
+      !["approved", "partial", "rejected", "pending"].includes(adminDecision)
     ) {
       return res.status(400).json({
         status: "error",
@@ -97,6 +101,31 @@ router.patch("/admin/claims/:claimId", requireAdmin, async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: err.message || "Failed to update claim",
+    });
+  }
+});
+
+router.get("/my-claims", async (req, res) => {
+  try {
+    const email = String(
+      req.query.email || req.headers["x-user-email"] || ""
+    ).trim();
+
+    if (!email) {
+      return res.status(400).json({
+        status: "error",
+        message: "Email is required",
+      });
+    }
+
+    const rawLimit = Number.parseInt(req.query.limit, 10);
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? rawLimit : 100;
+    const claims = await listClaimsByEmail(email, limit);
+    return res.json({ status: "success", claims });
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err.message || "Failed to load claims",
     });
   }
 });

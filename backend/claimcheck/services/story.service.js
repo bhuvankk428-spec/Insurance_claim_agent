@@ -24,6 +24,16 @@ const openai = hasOpenAIKey
     })
   : null;
 
+let openAICallCount = 0;
+
+if (hasOpenAIKey) {
+  console.log("[claim-story] OpenAI key detected. OpenAI checks are enabled.");
+} else {
+  console.log(
+    "[claim-story] OpenAI key not detected. Falling back to local rule-based check."
+  );
+}
+
 /* ---------------- JSON EXTRACT ---------------- */
 function extractJSON(text) {
   try {
@@ -90,17 +100,17 @@ export async function analyzeStory(req, res) {
       policyText,
       domain,
     } = claim;
+    const evidenceReasons = evidenceRisk?.reasons || [];
+    const geoMismatch = evidenceReasons.some((reason) =>
+      reason
+        ?.toString()
+        .toLowerCase()
+        .includes("image location does not match incident location")
+    );
 
     /* ---------------- PRECHECK ---------------- */
     const incidentCheck = checkIncidentConsistency(story, firData?.incident);
-
-    if (!incidentCheck.ok) {
-      return res.json({
-        eligible: false,
-        reason: incidentCheck.reason,
-        message: incidentCheck.reason,
-      });
-    }
+    const storyMismatch = !incidentCheck.ok;
 
     /* ---------------- COVERAGE CHECK ---------------- */
     const coverage = await checkCoverage({
@@ -172,11 +182,84 @@ export async function analyzeStory(req, res) {
           ? "high"
           : "medium";
 
+    if (storyMismatch && geoMismatch) {
+      const reason =
+        "Story and geo evidence both mismatch with the reported incident.";
+      return res.json({
+        eligible: false,
+        reason,
+        message: reason,
+      });
+    }
+
+    if ((storyMismatch && !geoMismatch) || (!storyMismatch && geoMismatch)) {
+      const claimCode = generatePartialClaimCode();
+      claim.claimCode = claimCode;
+      claim.riskLevel = "high";
+      claim.matchLevel = "partial";
+      claimStore.set(claimId, claim);
+
+      try {
+        await upsertClaimDecision({
+          claim_id: claimId,
+          email: claim.email || null,
+          eligibility_status: "partial",
+          risk_level: "high",
+          claim_code: claimCode,
+          match_level: claim.matchLevel || null,
+          image_location: claim.imageLocation || null,
+          geo_tagged: claim.geoTagged ?? null,
+          policy_owner_name: claim.policyData?.ownerName || null,
+          policy_bike_number:
+            claim.policyData?.vehicleNumber ||
+            claim.policyData?.bikeNumber ||
+            null,
+          policy_land_location: claim.policyData?.landLocation || null,
+          fir_incident: claim.firData?.incident || null,
+          fir_bike_number:
+            claim.firData?.vehicleNumber || claim.firData?.bikeNumber || null,
+          fir_location: claim.firData?.location || null,
+          admin_decision: null,
+          admin_notes: storyMismatch
+            ? "Story mismatch with incident; manual review required"
+            : "Geo mismatch with incident location; manual review required",
+          created_at: claim.createdAt
+            ? new Date(claim.createdAt).toISOString()
+            : new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error("Supabase save error:", err.message || err);
+      }
+
+      return res.json({
+        eligible: true,
+        claimCode,
+        level: "partial",
+        riskLevel: "high",
+        explanation:
+          storyMismatch
+            ? "Story does not fully match incident evidence. Manual review required."
+            : "Image geo location does not match the incident location. Manual review required.",
+        eligibilityStatus: "partial",
+        reasons: [
+          storyMismatch ? incidentCheck.reason : null,
+          geoMismatch ? "Image location does not match incident location" : null,
+          "Manual review required",
+        ].filter(Boolean),
+      });
+    }
+
     /* ---------------- OPENAI ---------------- */
     let aiResult = null;
 
     if (openai) {
       try {
+        openAICallCount += 1;
+        console.log(
+          `[claim-story] OpenAI used for claimId=${claimId}. total_calls=${openAICallCount}`
+        );
+
         const evidenceSummary = {
           domain: evidenceRisk?.domain || claim.domain || "automobile",
           riskLevel: evidenceRisk?.riskLevel || "medium",
@@ -246,15 +329,25 @@ Respond STRICTLY in JSON:
 
     /* ---------------- FALLBACK ---------------- */
     if (!aiResult) {
-      aiResult = {
-        consistent: true,
-        decision: "approved",
-        reason: "Story is consistent with verified documents.",
-        riskLevel: evidenceRisk?.riskLevel || "medium",
-      };
+      if (!hasOpenAIKey) {
+        aiResult = {
+          consistent: true,
+          decision: "partially_approved",
+          reason:
+            "OpenAI verification unavailable. Claim marked partial for manual review.",
+          riskLevel: "medium",
+        };
+      } else {
+        aiResult = {
+          consistent: true,
+          decision: "approved",
+          reason: "Story is consistent with verified documents.",
+          riskLevel: evidenceRisk?.riskLevel || "medium",
+        };
+      }
     }
 
-    if (evidenceRejected) {
+    if (evidenceRejected && !geoMismatch) {
       const reason =
         evidenceRisk?.reasons?.[0] ||
         "Evidence does not sufficiently match policy details.";
@@ -378,7 +471,7 @@ Respond STRICTLY in JSON:
       }
 
       return res.json({
-        eligible: false,
+        eligible: true,
         claimCode,
         level: "partial",
         riskLevel: "high",
@@ -443,7 +536,6 @@ Respond STRICTLY in JSON:
     }
 
     const evidenceSignals = evidenceRisk?.signals || [];
-    const evidenceReasons = evidenceRisk?.reasons || [];
 
     const coverageNote =
       coverage?.status === "related"

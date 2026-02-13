@@ -23,6 +23,7 @@ const API_BASE = (
 const decisionOptions = [
   { value: "pending", label: "Pending" },
   { value: "approved", label: "Approved" },
+  { value: "partial", label: "Partially Approved" },
   { value: "rejected", label: "Rejected" },
 ];
 
