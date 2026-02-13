@@ -30,6 +30,14 @@ export default function ChooserPage() {
           <p className="text-sm sm:text-base lg:text-lg text-neutral-300 mb-10 lg:mb-12 max-w-2xl mx-auto leading-relaxed">
             Choose a tool below to get instant insights about your insurance policies and claims.
           </p>
+          <div className="mb-6">
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="text-xs px-3 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-200 hover:bg-cyan-500/20 transition"
+            >
+              My Claims Dashboard
+            </button>
+          </div>
           <div className="mb-8 mx-auto max-w-4xl rounded-2xl border border-emerald-400/40 bg-emerald-500/10 px-6 py-5 sm:py-6 flex flex-col sm:flex-row items-center gap-4 backdrop-blur-sm">
             <span className="px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-emerald-600/80 text-emerald-50 shadow-lg">
               Guidance

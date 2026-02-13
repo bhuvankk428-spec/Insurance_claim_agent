@@ -5,6 +5,7 @@ export function matchDocuments({
   policyData,
   firData,
   imageLocation,
+  geoTagged = false,
 }) {
   /* ---------------- HARD GUARDS ---------------- */
   if (!policyData) {
@@ -115,9 +116,11 @@ export function matchDocuments({
     }
   }
 
-  if (imageLocation === "UNKNOWN") {
+  if (!geoTagged) {
     riskScore += 8;
     reasons.push("Image geo not available");
+  } else {
+    signals.push("Image geo metadata found");
   }
 
   if (firData.incident && !incidentMentioned(firData.incident)) {

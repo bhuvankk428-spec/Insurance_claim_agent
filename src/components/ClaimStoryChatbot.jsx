@@ -130,14 +130,20 @@ export default function ClaimStoryChatbot() {
       });
 
       const data = await res.json();
+      const isPartial =
+        data.level === "partial" ||
+        data.eligibilityStatus === "partial" ||
+        data.eligibilityStatus === "pending";
+      const shouldShowResult = Boolean(data.eligible) || isPartial;
 
-      if (data.eligible) {
-        navigate(`/claim-result/${data.claimCode}`, {
+      if (shouldShowResult) {
+        navigate(`/claim-result/${data.claimCode || claimId}`, {
           state: {
             level: data.level,
             riskLevel: data.riskLevel,
             explanation: data.explanation,
             reasons: data.reasons,
+            message: data.message,
           },
         });
       } else {

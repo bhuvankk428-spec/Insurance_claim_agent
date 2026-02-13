@@ -74,6 +74,7 @@ export async function checkEvidence(req, res) {
     policyData: claim.policyData,
     firData,
     imageLocation,
+    geoTagged,
   });
 
   const evidenceIssues = [];

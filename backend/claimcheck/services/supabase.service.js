@@ -44,6 +44,24 @@ export async function listClaims(limit = 50) {
   return data;
 }
 
+export async function listClaimsByEmail(email, limit = 100) {
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  if (!normalizedEmail) return [];
+
+  const client = ensureSupabase();
+  const { data, error } = await client
+    .from("claims")
+    .select(
+      "claim_id,email,eligibility_status,risk_level,claim_code,match_level,image_location,geo_tagged,policy_owner_name,policy_bike_number,policy_land_location,fir_incident,fir_bike_number,fir_location,admin_decision,admin_notes,created_at,updated_at"
+    )
+    .ilike("email", normalizedEmail)
+    .order("created_at", { ascending: false })
+    .limit(Number.isFinite(limit) ? limit : 100);
+
+  if (error) throw error;
+  return data;
+}
+
 export async function updateAdminDecision(claimId, update) {
   const client = ensureSupabase();
   const { data, error } = await client

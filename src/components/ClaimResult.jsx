@@ -80,7 +80,11 @@ export default function ClaimResult() {
         {(reasons.length > 0 || explanation || message) && (
           <div className="mt-6 p-5 bg-black/40 border border-neutral-800/70 rounded-2xl text-sm text-neutral-200">
             <p className="font-semibold mb-2 text-white">
-              {isRejected ? "Why this claim was rejected" : "Why this claim was approved"}
+              {isRejected
+                ? "Why this claim was rejected"
+                : isPartial
+                  ? "Why this claim was partially approved"
+                  : "Why this claim was approved"}
             </p>
 
             {reasons.length > 0 && (
