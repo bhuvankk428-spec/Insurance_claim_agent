@@ -77,6 +77,7 @@ Claim Checker Flow
 `src/components/ClaimStoryChatbot.jsx`
 - Step 3: `POST /api/claim-story` with `{ claimId, story }`
 - Navigates to result page with decision data.
+- If backend OpenAI analysis is unavailable, backend may return partial/manual-review outcome instead of full approval.
 
 Admin Dashboard
 ---------------
@@ -101,3 +102,4 @@ Known Constraints
 - Claim flow depends on server in-memory claim session state.
 - Refreshing during claim flow may require restarting from Step 1.
 - Production setup must align frontend and backend admin tokens.
+- Geo-tag status depends on backend EXIF parsing; image watermark text does not count as geo metadata.

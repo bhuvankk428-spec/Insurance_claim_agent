@@ -340,8 +340,9 @@ Respond STRICTLY in JSON:
       } else {
         aiResult = {
           consistent: true,
-          decision: "approved",
-          reason: "Story is consistent with verified documents.",
+          decision: "partially_approved",
+          reason:
+            "OpenAI response unavailable. Claim marked partial for manual review.",
           riskLevel: evidenceRisk?.riskLevel || "medium",
         };
       }

@@ -35,6 +35,10 @@ Create two services from the same repository.
   - `RATE_LIMIT_MAX=60`
   - `RATE_LIMIT_WINDOW_MS=60000`
 
+Behavior note:
+- Story decision path uses OpenAI when available.
+- If OpenAI fails or returns invalid output during story analysis, backend falls back to `partially_approved` (manual review), not auto-approval.
+
 ## 2) Configure CORS on Both Railway Services
 Set `CORS_ORIGIN` to Vercel production + preview:
 
@@ -92,6 +96,10 @@ Expected:
 ### CORS errors
 - Missing `https://*.vercel.app` in `CORS_ORIGIN`
 - Trailing spaces or malformed comma-separated origins
+
+### Geo-tag confusion on claim evidence
+- Geo verification requires EXIF GPS metadata in uploaded photo files.
+- Location watermark text on the image is not treated as geo metadata.
 
 ## 7) Deploy Order (Recommended)
 1. Railway chat service

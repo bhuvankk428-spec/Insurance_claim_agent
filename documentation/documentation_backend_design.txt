@@ -43,6 +43,10 @@ Flow:
 4. Admin routes read/update persisted decisions in Supabase
 5. Finance route fetches latest market headlines for frontend cards
 
+Decision safety notes:
+- If OpenAI is unavailable or returns invalid story JSON, the story step falls back to partial approval/manual review (no auto-approve fallback).
+- Geo signal is derived from EXIF GPS metadata in uploaded images. Location text/watermarks drawn on images are not treated as geo tags.
+
 Startup constraints:
 - In production, `ADMIN_TOKEN` must be set and non-default.
 - Supabase readiness can be enforced with `REQUIRE_SUPABASE_READY=true`.
@@ -58,4 +62,5 @@ Operational Notes
 - Frontend production requires explicit backend URLs.
 - Admin API requires token alignment between frontend and claim backend.
 - For local `npm run backend`, set distinct ports (for example `CHAT_PORT=5175` and `CLAIM_PORT=5174`).
+- If startup fails with `EADDRINUSE`, stop the stale process using that port or change `CHAT_PORT` / `CLAIM_PORT`.
 - Recommended deploy order: chat backend, claim backend, then frontend.
