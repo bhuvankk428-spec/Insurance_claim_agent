@@ -9,6 +9,7 @@ QK.AI is an insurance platform with:
 - Streaming chatbot answers from `/api/rag-chat`
 - Multilingual chat responses (`en`, `hi`, `te`, `kn`) with optional text-to-speech output
 - Claim workflow: policy PDF -> evidence -> story analysis
+- Safe claim fallback: if OpenAI is unavailable or returns invalid story output, claim is marked `partial` for manual review
 - Admin dashboard backed by Supabase (search, load-more pagination, decision updates, export to printable PDF)
 - Finance news feed from `/api/finance-news` (last 24h + refresh)
 - Firebase login (email/password + Google)
@@ -75,6 +76,11 @@ Important:
 - `CORS_ORIGIN`
 - Optional: `STRICT_GEO`, `ALLOW_FAKE_GEO`, `CLAIM_PORT`, `NEWS_*`
 
+Claim backend behavior:
+- `OPENAI_API_KEY` enables image vision checks, policy coverage reasoning, and story consistency checks.
+- If OpenAI is configured but fails/returns invalid JSON during story analysis, claim falls back to `partially_approved` (manual review), not auto-approval.
+- Geo verification uses EXIF GPS metadata from uploaded images. A visible location watermark/text in the photo is not treated as a geo-tag.
+
 ### Token matching rule
 `VITE_ADMIN_TOKEN` (frontend) must exactly match `ADMIN_TOKEN` (claim backend).
 
@@ -118,6 +124,12 @@ create table if not exists public.claims (
 - Rotate any leaked API key immediately.
 - Do not use default `ADMIN_TOKEN` in production.
 - Do not commit `.env` or `.env.*`.
+
+## Local Troubleshooting
+- `EADDRINUSE` on `5174` or `5175` means another process is already using the port.
+- Find process: `Get-NetTCPConnection -LocalPort 5174 -State Listen | Select-Object OwningProcess`
+- Stop process: `Stop-Process -Id <PID> -Force`
+- Or change local ports in `.env` (`CLAIM_PORT`, `CHAT_PORT`) and restart.
 
 ## Author
 Bhuvan KK  

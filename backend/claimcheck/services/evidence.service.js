@@ -54,8 +54,8 @@ export async function checkEvidence(req, res) {
   let geoTagged = false;
 
   try {
-    const geo = await extractExif(photos[0].buffer);
-    if (geo?.latitude && geo?.longitude) {
+    const geo = await extractExif(photos[0].buffer, photos[0].mimetype);
+    if (Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude)) {
       geoTagged = true;
       imageLocation = geo.resolvedLocation || "UNKNOWN";
     }

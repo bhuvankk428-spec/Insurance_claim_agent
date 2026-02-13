@@ -39,6 +39,14 @@ Claimcheck Service (`backend/claimcheck`)
 
 `backend/claimcheck/services/*.js`
 - OCR, EXIF, matching, story analysis, coverage checks, image checks, Supabase persistence.
+- OpenAI usage:
+  - `image.service.js`: incident-image consistency + quality checks.
+  - `coverage.service.js`: policy coverage reasoning with heuristic fallback.
+  - `story.service.js`: final narrative consistency decision.
+- Story fallback safety:
+  - If OpenAI output is missing/invalid, claim decision falls back to partial/manual-review path.
+- Geo behavior:
+  - Geo tagging is based on image EXIF GPS metadata; watermark text in the image is not considered geo metadata.
 
 State and Persistence
 ---------------------
@@ -62,6 +70,9 @@ API Contract Summary
 `POST /api/claim-story`
 - Body: `{ claimId, story }`
 - Response: `{ eligible, claimCode?, level?, riskLevel?, explanation?, reasons? }`
+- OpenAI behavior:
+  - With `OPENAI_API_KEY`: OpenAI is used for coverage + story checks.
+  - Without key (or AI failure): heuristic/manual-review fallback is used.
 
 `GET /api/admin/claims`
 - Header: `x-admin-token`

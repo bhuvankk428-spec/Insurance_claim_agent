@@ -7,9 +7,6 @@ import crypto from "crypto";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
-import claimRoutes from "./routes/claim.routes.js";
-import { ensureSupabase } from "./services/supabase.service.js";
-import { fetchFinanceNews } from "./services/news.service.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
@@ -19,6 +16,13 @@ dotenv.config({
   quiet: true,
 });
 dotenv.config({ quiet: true });
+
+const [{ default: claimRoutes }, { ensureSupabase }, { fetchFinanceNews }] =
+  await Promise.all([
+    import("./routes/claim.routes.js"),
+    import("./services/supabase.service.js"),
+    import("./services/news.service.js"),
+  ]);
 
 const app = express();
 app.set("trust proxy", 1);
