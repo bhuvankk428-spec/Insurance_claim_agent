@@ -1,13 +1,13 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaClipboardCheck, FaRegLightbulb } from "react-icons/fa";
-import Navbar from "./ui/Navbar.jsx"
+import Navbar from "./ui/Navbar.jsx";
 export default function ChooserPage() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0b0f14] text-white flex flex-col  relative overflow-hidden">
+    <div className="min-h-screen bg-[#0b0f14] text-white flex flex-col relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-48 -left-32 h-96 w-96 rounded-full bg-cyan-500/12 blur-[140px]" />
         <div className="absolute top-40 -right-24 h-80 w-80 rounded-full bg-amber-400/12 blur-[130px]" />
@@ -19,7 +19,7 @@ export default function ChooserPage() {
       <Navbar/>
 
       {/* Main content */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 lg:pb-20">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-28 lg:pb-32">
         <div className="max-w-5xl w-full text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm text-cyan-200 mb-5">
             Fast, simple, and secure
@@ -71,8 +71,8 @@ export default function ChooserPage() {
             <HoverCard
               icon={<FaRegLightbulb className="text-4xl sm:text-5xl lg:text-6xl text-emerald-200 mb-4 sm:mb-6" />}
               title="Plan Builder"
-              desc="If you want a secure retirement click here"
-              tag="Lets Plan"
+              desc="Build a secure retirement plan with monthly allocation and projections."
+              tag="Let's Plan"
               tagColor="bg-emerald-500/80 text-emerald-50 hover:bg-emerald-400/80"
               onClick={() => navigate("/plan")}
             />
@@ -94,25 +94,11 @@ export default function ChooserPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-800/50 bg-[#0b0f14]/90 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 text-xs sm:text-sm text-neutral-400">
-          <p className="text-center lg:text-left order-2 lg:order-1">
-            (c) {new Date().getFullYear()} QK.AI All rights reserved.
+      <footer className="fixed bottom-0 left-0 right-0 z-20 border-t border-neutral-800/50 bg-[#0b0f14]/90 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex items-center justify-center text-xs sm:text-sm text-neutral-400">
+          <p className="text-center">
+            © {new Date().getFullYear()} QK.AI. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 lg:gap-4 order-1 lg:order-2">
-            <button className="hover:text-cyan-300 transition-colors px-3 py-1 rounded-lg hover:bg-white/10">
-              Privacy
-            </button>
-            <button className="hover:text-cyan-300 transition-colors px-3 py-1 rounded-lg hover:bg-white/10">
-              Terms
-            </button>
-            <button className="hover:text-cyan-300 transition-colors px-3 py-1 rounded-lg hover:bg-white/10">
-              Support
-            </button>
-            <button className="hover:text-cyan-300 transition-colors px-3 py-1 rounded-lg hover:bg-white/10">
-              Status
-            </button>
-          </div>
         </div>
       </footer>
     </div>

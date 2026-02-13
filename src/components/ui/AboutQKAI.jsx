@@ -1,14 +1,16 @@
 import Navbar from "./Navbar.jsx";
+import { useNavigate } from "react-router-dom";
 
 // AboutQKAI.jsx
 export default function AboutQKAI() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#0b0f14] text-white  px-4 py-12 sm:py-16">
+      <div className="min-h-screen bg-[#0b0f14] text-white px-4 pb-12 pt-24 sm:pb-16 sm:pt-28">
         <div className="max-w-5xl mx-auto w-full grid gap-8 sm:gap-10 md:grid-cols-[1.2fr_1fr] items-start md:items-center">
-          
           {/* Left: Text */}
           <div className="order-2 md:order-1 space-y-6 sm:space-y-8">
             <p className="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-3">
@@ -16,34 +18,42 @@ export default function AboutQKAI() {
             </p>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 sm:mb-6 leading-tight">
-              Smarter insurance decisions,
+              Insurance clarity for people,
               <span className="block bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                powered by QK.AI
+                teams, and every claim moment
               </span>
             </h1>
 
             <div className="space-y-4 text-neutral-300 text-sm sm:text-base leading-relaxed">
               <p>
-                QK.AI is your intelligent copilot for understanding complex insurance
-                policies and claims. It turns long PDFs and confusing clauses into
-                clear, actionable insights in seconds.
+                QK.AI is an AI platform built to simplify insurance decisions from
+                day one. We turn dense policy wording, scattered claim evidence, and
+                complex eligibility rules into clear, usable guidance.
               </p>
               <p>
-                Instead of navigating jargon alone, QK.AI helps you compare coverage,
-                check claim eligibility, and feel confident about every decision you
-                make with your insurer.
+                Whether you are reviewing coverage before purchase or validating a
+                claim under pressure, QK.AI helps you move faster with fewer blind
+                spots and less legal jargon.
               </p>
             </div>
 
             {/* Key points */}
             <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 mb-6">
               <FeatureItem
-                title="Policy Summaries"
-                desc="Upload or paste policy text and get a human-friendly breakdown of what actually matters to you."
+                title="Plain-Language Policy Reading"
+                desc="Convert long policy PDFs into practical summaries with limits, exclusions, and key conditions highlighted."
               />
               <FeatureItem
-                title="Claim Scenarios"
-                desc="Describe what happened and instantly see if it's likely claimable and what to prepare next."
+                title="Claim Readiness Guidance"
+                desc="Assess likely claim eligibility and get a checklist of documents and facts needed before filing."
+              />
+              <FeatureItem
+                title="Evidence Intelligence"
+                desc="Cross-check documents, photos, and incident stories to spot inconsistencies early."
+              />
+              <FeatureItem
+                title="Human-in-the-Loop Friendly"
+                desc="Designed for policyholders, advisors, and operations teams that need speed without losing control."
               />
             </div>
 
@@ -51,16 +61,39 @@ export default function AboutQKAI() {
             <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-neutral-400">
               <div>
                 <span className="block font-semibold text-white">
-                  AI-first workflow
+                  Built for high-stakes decisions
                 </span>
-                <span>Designed for speed, clarity, and zero jargon.</span>
+                <span>Fast outputs with transparent reasoning steps.</span>
               </div>
               <div>
                 <span className="block font-semibold text-white">
-                  Built for users
+                  Security-minded workflows
                 </span>
-                <span>Policyholders, agents, and teams can all plug in.</span>
+                <span>Structured for sensitive insurance documents.</span>
               </div>
+              <div>
+                <span className="block font-semibold text-white">
+                  Continually improving
+                </span>
+                <span>Updated from real usage feedback and edge cases.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => navigate("/choose")}
+                className="rounded-xl bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400 transition-colors"
+              >
+                Explore QK.AI
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/contact")}
+                className="rounded-xl border border-neutral-700 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-900 transition-colors"
+              >
+                Talk to Team
+              </button>
             </div>
           </div>
 
@@ -81,18 +114,18 @@ export default function AboutQKAI() {
               </div>
 
               <p className="text-neutral-300 text-sm mb-4 leading-relaxed">
-                QK.AI sits between you and your insurance paperwork, acting like a
-                personal assistant that actually understands coverage rules.
+                We are building a dependable insurance intelligence layer that helps
+                users understand coverage, assess claims, and make better decisions
+                with confidence.
               </p>
 
               <ul className="text-xs sm:text-sm text-neutral-400 space-y-2 list-disc list-inside">
-                <li>Reduce time spent reading long policies.</li>
-                <li>Spot exclusions and key limits before it's too late.</li>
-                <li>Standardize how your team analyzes insurance documents.</li>
+                <li>Reduce review time for policies and claims.</li>
+                <li>Catch limits, waiting periods, and exclusions earlier.</li>
+                <li>Keep decision logic consistent across your workflow.</li>
               </ul>
             </div>
           </div>
-
         </div>
       </div>
     </>

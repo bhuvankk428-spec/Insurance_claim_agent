@@ -2,7 +2,7 @@
 
 QK.AI is an insurance platform with:
 1. Policy Advisor chatbot (RAG).
-2. Claimcheck workflow for document verification and admin review.
+2. Claim Checker workflow for document verification and admin review.
 3. Planning and finance modules in the frontend (`/plan`, `/plan-dashboard`, `/finance-news`).
 
 ## Features

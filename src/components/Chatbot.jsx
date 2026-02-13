@@ -206,7 +206,7 @@ export default function PolicySummarizer() {
       {
         from: "ai",
         text:
-          "⚠️ We’re having trouble fetching policy details right now. Please try again shortly.",
+          "Warning: We're having trouble fetching policy details right now. Please try again shortly.",
       },
     ]);
   }
@@ -238,10 +238,10 @@ export default function PolicySummarizer() {
         {/* STATUS BAR */}
         <div className="flex items-center justify-between mb-6 text-xs">
           <span className="text-sm">
-            {muted ? "🔇 Voice Muted" : "🔊 Voice Enabled"}
+            {muted ? "Voice muted" : "Voice enabled"}
           </span>
           {loading && (
-            <span className="text-sky-300 text-sm">⏳ Thinking...</span>
+            <span className="text-sky-300 text-sm">Thinking...</span>
           )}
         </div>
 

@@ -5,7 +5,6 @@ export default function ContactQKAI() {
     <>
       <Navbar />
 
-      {/*  FIX */}
       <div className="min-h-screen bg-[#0b0f14] text-white px-4 pt-24 sm:pt-28 py-12 sm:py-16">
         <div className="max-w-5xl mx-auto grid gap-8 lg:grid-cols-[1.1fr_1fr] items-start">
 
@@ -31,13 +30,13 @@ export default function ContactQKAI() {
               <div>
                 <h2 className="font-bold text-lg">Bhuvan KK</h2>
                 <p className="text-sm text-neutral-400">
-                  Full-Stack Developer • QK.AI
+                  Full-Stack Developer - QK.AI
                 </p>
                 <p className="text-sm mt-2">
-                  📞 <span className="text-cyan-300">+91 9036694320</span>
+                  Phone: <span className="text-cyan-300">+91 9036694320</span>
                 </p>
                 <p className="text-sm">
-                  ✉️{" "}
+                  Email:{" "}
                   <a
                     href="mailto:bhuvankk2005@gmail.com"
                     className="text-cyan-300 underline"
@@ -53,7 +52,7 @@ export default function ContactQKAI() {
           <div className="rounded-2xl border border-neutral-800 bg-[#111827]/90 p-6">
             <h3 className="font-bold text-lg mb-2">Quick Message</h3>
             <p className="text-sm text-neutral-300">
-              Reach out anytime — replies within 24 hours.
+              Reach out anytime - replies within 24 hours.
             </p>
           </div>
 

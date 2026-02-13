@@ -26,16 +26,16 @@ export default function HelpQKAI() {
           <HelpStep
             number="2"
             title="Go to the chooser page"
-            text="After login, choose the module you want: Policy Advisor, Policy Claim Checker, Claim Plan Builder, or Finance News."
+            text="After login, choose the module you want: Policy Advisor, Claim Checker, Plan Builder, or Finance News."
           />
           <HelpStep
             number="3"
-            title="Use Policy Advisor (/chatbot)"
+            title="Use Policy Advisor (chatbot)"
             text="Ask insurance questions, choose language, and optionally choose domain. Add details for better responses."
           />
           <HelpStep
             number="4"
-            title="Use Claim Checker (/claim-checker)"
+            title="Use Claim Checker (claim-checker)"
             text="Select claim type, upload policy PDF for verification, then upload FIR PDF and incident photos."
           />
           <HelpStep
@@ -46,7 +46,7 @@ export default function HelpQKAI() {
           <HelpStep
             number="6"
             title="Use Plan and Finance modules"
-            text="Use /plan and /plan-dashboard for claim planning and allocation, and /finance-news for latest finance headlines."
+            text="Use plan Maker and plan-dashboard for claim planning and allocation, and finance-news for latest finance headlines."
           />
         </section>
 
