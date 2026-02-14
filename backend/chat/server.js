@@ -30,13 +30,25 @@ const logger = pinoHttp({
 });
 
 const PORT = process.env.CHAT_PORT || process.env.PORT || 5174;
-const corsOrigin =
-  process.env.CORS_ORIGIN ||
-  "http://localhost:5173,http://127.0.0.1:5173";
-const allowedOrigins = corsOrigin
+const vercelUrl = (process.env.VERCEL_URL || "").trim();
+const inferredFrontendOrigin = vercelUrl
+  ? vercelUrl.startsWith("http")
+    ? vercelUrl
+    : `https://${vercelUrl}`
+  : "";
+const corsOrigin = [
+  process.env.CORS_ORIGIN || "",
+  process.env.FRONTEND_URL || "",
+  inferredFrontendOrigin,
+  "https://*.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+]
+  .join(",")
   .split(",")
   .map((origin) => origin.trim().replace(/\/$/, "").toLowerCase())
   .filter(Boolean);
+const allowedOrigins = [...new Set(corsOrigin)];
 
 function isOriginAllowed(origin) {
   if (!origin) return true;
