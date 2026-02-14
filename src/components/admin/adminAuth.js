@@ -11,7 +11,15 @@ export function isAdminAuthed() {
 }
 
 export function adminLogin(email, password) {
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+  const normalizedEmail = (email || "").trim().toLowerCase();
+  const normalizedAdminEmail = (ADMIN_EMAIL || "").trim().toLowerCase();
+  const normalizedPassword = (password || "").trim();
+  const normalizedAdminPassword = (ADMIN_PASSWORD || "").trim();
+
+  if (
+    normalizedEmail === normalizedAdminEmail &&
+    normalizedPassword === normalizedAdminPassword
+  ) {
     localStorage.setItem("qk_admin_authed", "true");
     return true;
   }

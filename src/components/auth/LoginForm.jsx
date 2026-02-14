@@ -21,15 +21,34 @@ export default function LoginForm() {
     setError("");
 
     try {
-      if (adminLogin(form.email, form.password)) {
+      const email = form.email.trim();
+      const isAdminEmail =
+        email.toLowerCase() === ADMIN_EMAIL.trim().toLowerCase();
+
+      if (adminLogin(email, form.password)) {
         navigate("/admin-dashboard");
         return;
       }
 
-      await signInWithEmailAndPassword(auth, form.email, form.password);
+      if (isAdminEmail) {
+        setError("Invalid admin email or password");
+        return;
+      }
+
+      await signInWithEmailAndPassword(auth, email, form.password);
       navigate("/choose");
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      const code = err?.code || "";
+      if (
+        code === "auth/invalid-credential" ||
+        code === "auth/user-not-found" ||
+        code === "auth/wrong-password" ||
+        code === "auth/invalid-email"
+      ) {
+        setError("Invalid email or password");
+      } else {
+        setError(err.message || "Login failed");
+      }
     } finally {
       setLoading(false);
     }
