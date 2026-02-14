@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../ui/Navbar";
 import {
   ADMIN_EMAIL,
   ADMIN_TOKEN,
@@ -251,7 +250,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-[#0b0f14] text-white">
-      <Navbar />
 
       <div className="relative overflow-hidden pt-24 pb-16 px-4">
         <div className="pointer-events-none absolute inset-0">
