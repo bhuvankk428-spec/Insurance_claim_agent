@@ -7,6 +7,7 @@ import { claimStore } from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
 const STRICT_GEO_VALIDATION = process.env.STRICT_GEO === "true";
+const LOG_GEO_DETAILS = process.env.LOG_GEO_DETAILS === "true";
 
 export async function checkEvidence(req, res) {
   const fir = req.files?.fir?.[0];
@@ -54,13 +55,32 @@ export async function checkEvidence(req, res) {
   let geoTagged = false;
 
   try {
+    let firstGeo = null;
+
     for (const photo of photos) {
       const geo = await extractExif(photo.buffer, photo.mimetype);
-      if (Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude)) {
-        geoTagged = true;
-        imageLocation = geo.resolvedLocation || "UNKNOWN";
-        break;
+      const hasGps =
+        Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude);
+
+      if (LOG_GEO_DETAILS) {
+        console.info("[geo-check]", {
+          file: photo.originalname,
+          mimeType: photo.mimetype,
+          sizeBytes: photo.size,
+          geoDetected: hasGps,
+          latitude: hasGps ? geo.latitude : null,
+          longitude: hasGps ? geo.longitude : null,
+        });
       }
+
+      if (!firstGeo && hasGps) {
+        firstGeo = geo;
+      }
+    }
+
+    if (firstGeo) {
+      geoTagged = true;
+      imageLocation = firstGeo.resolvedLocation || "UNKNOWN";
     }
   } catch {
     // ignore EXIF errors in dev
