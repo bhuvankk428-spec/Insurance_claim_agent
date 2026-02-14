@@ -1,6 +1,7 @@
 import { extractText } from "./ocr.service.js";
 import { extractFIRFields } from "./extractFields.service.js";
 import { extractExif } from "./exif.service.js";
+import { extractGeoFromImageText } from "./geoText.service.js";
 import { matchDocuments, detectDomain } from "./match.service.js";
 import { verifyIncidentWithVision, VISION_ENABLED } from "./image.service.js";
 import { claimStore } from "../store/claimStore.js";
@@ -59,8 +60,20 @@ export async function checkEvidence(req, res) {
 
     for (const photo of photos) {
       const geo = await extractExif(photo.buffer, photo.mimetype);
-      const hasGps =
+      let hasGps =
         Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude);
+      let geoSource = hasGps ? "exif" : "none";
+
+      let fallbackGeo = null;
+      if (!hasGps) {
+        fallbackGeo = await extractGeoFromImageText(photo.buffer, photo.mimetype);
+        hasGps =
+          Number.isFinite(fallbackGeo?.latitude) &&
+          Number.isFinite(fallbackGeo?.longitude);
+        if (hasGps) {
+          geoSource = fallbackGeo?.source || "overlay";
+        }
+      }
 
       if (LOG_GEO_DETAILS) {
         console.info("[geo-check]", {
@@ -68,13 +81,14 @@ export async function checkEvidence(req, res) {
           mimeType: photo.mimetype,
           sizeBytes: photo.size,
           geoDetected: hasGps,
-          latitude: hasGps ? geo.latitude : null,
-          longitude: hasGps ? geo.longitude : null,
+          geoSource,
+          latitude: hasGps ? (fallbackGeo?.latitude ?? geo.latitude) : null,
+          longitude: hasGps ? (fallbackGeo?.longitude ?? geo.longitude) : null,
         });
       }
 
       if (!firstGeo && hasGps) {
-        firstGeo = geo;
+        firstGeo = fallbackGeo || geo;
       }
     }
 

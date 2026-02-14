@@ -42,6 +42,76 @@ function toBase64DataUrl(buffer, mimeType = "image/jpeg") {
   return `data:${mimeType};base64,${base64}`;
 }
 
+function isValidLatitude(value) {
+  return Number.isFinite(value) && Math.abs(value) <= 90;
+}
+
+function isValidLongitude(value) {
+  return Number.isFinite(value) && Math.abs(value) <= 180;
+}
+
+export async function extractGeoFromImageWithVision({ buffer, mimeType }) {
+  if (!openai || !buffer) return null;
+
+  const prompt = `
+Find GPS coordinates visible in this image (such as camera watermark/overlay text).
+
+Rules:
+- Extract only coordinates explicitly visible in image text.
+- If no coordinates are visible, return found=false.
+- Do not infer city/state/country into coordinates.
+
+Return STRICT JSON only:
+{
+  "found": true | false,
+  "latitude": number | null,
+  "longitude": number | null,
+  "reason": "short reason"
+}
+`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: VISION_MODEL,
+      temperature: 0,
+      max_tokens: 120,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You extract visible GPS coordinates from an image and return strict JSON.",
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            {
+              type: "image_url",
+              image_url: { url: toBase64DataUrl(buffer, mimeType) },
+            },
+          ],
+        },
+      ],
+    });
+
+    const text = response.choices?.[0]?.message?.content || "";
+    const parsed = extractJSON(text);
+    if (!parsed || parsed.found !== true) return null;
+
+    const latitude = Number(parsed.latitude);
+    const longitude = Number(parsed.longitude);
+    if (!isValidLatitude(latitude) || !isValidLongitude(longitude)) return null;
+
+    return {
+      latitude,
+      longitude,
+      source: "vision-overlay",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function verifyIncidentWithVision({
   image,
   incident,
