@@ -14,6 +14,18 @@ const openai = VISION_ENABLED
 const VISION_MODEL = process.env.OPENAI_VISION_MODEL || "gpt-4o-mini";
 const MIN_CONFIDENCE = Number(process.env.OPENAI_VISION_MIN_CONFIDENCE || 0.6);
 
+function isDateOnlyReason(reason = "") {
+  const text = String(reason || "").toLowerCase();
+  if (!text) return false;
+
+  const hasDateOrTime =
+    /\b(date|dated|timestamp|time|timing|captured|exif|metadata)\b/.test(text) ||
+    /\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b/.test(text);
+  const hasImageContext = /\b(photo|image|picture|evidence)\b/.test(text);
+
+  return hasDateOrTime && hasImageContext;
+}
+
 function extractJSON(text) {
   try {
     const start = text.indexOf("{");
@@ -49,6 +61,10 @@ Domain: ${domain}
 Incident described in documents: ${incidentText}
 Policy details: ${JSON.stringify(policyData || {}, null, 2)}
 Evidence details: ${JSON.stringify(firData || {}, null, 2)}
+
+Important:
+- Ignore image/photo date or timestamp (including EXIF date/time).
+- Do not mark mismatch only because dates differ.
 
 Return STRICT JSON only:
 {
@@ -120,6 +136,14 @@ Return STRICT JSON only:
     }
 
     if (parsed.consistent === false) {
+      if (isDateOnlyReason(parsed.reason)) {
+        return {
+          status: "ok",
+          reason: "Image date metadata is ignored for verification.",
+          confidence,
+          quality,
+        };
+      }
       return {
         status: "reject",
         reason: parsed.reason || "Image does not match incident",

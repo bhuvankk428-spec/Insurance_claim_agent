@@ -54,10 +54,13 @@ export async function checkEvidence(req, res) {
   let geoTagged = false;
 
   try {
-    const geo = await extractExif(photos[0].buffer, photos[0].mimetype);
-    if (Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude)) {
-      geoTagged = true;
-      imageLocation = geo.resolvedLocation || "UNKNOWN";
+    for (const photo of photos) {
+      const geo = await extractExif(photo.buffer, photo.mimetype);
+      if (Number.isFinite(geo?.latitude) && Number.isFinite(geo?.longitude)) {
+        geoTagged = true;
+        imageLocation = geo.resolvedLocation || "UNKNOWN";
+        break;
+      }
     }
   } catch {
     // ignore EXIF errors in dev
