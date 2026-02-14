@@ -51,7 +51,7 @@ export async function extractGeoFromImageText(buffer, mimeType) {
       return parsedFromOcr;
     }
   } catch {
-    // OCR errors should not block claim flow.
+    console.log("error from ocr moving to openai vision")
   }
 
   const parsedFromVision = await extractGeoFromImageWithVision({
