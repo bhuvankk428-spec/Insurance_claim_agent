@@ -52,15 +52,65 @@ function normalizeCoordinate(value, ref) {
   return parsed;
 }
 
-function getGps(data = {}) {
-  const latitudeRaw = data.GPSLatitude ?? data["Composite:GPSLatitude"];
-  const longitudeRaw = data.GPSLongitude ?? data["Composite:GPSLongitude"];
-
-  const latitude = normalizeCoordinate(latitudeRaw, data.GPSLatitudeRef);
-  const longitude = normalizeCoordinate(longitudeRaw, data.GPSLongitudeRef);
-
+function normalizePair(rawLatitude, rawLongitude, latitudeRef, longitudeRef) {
+  const latitude = normalizeCoordinate(rawLatitude, latitudeRef);
+  const longitude = normalizeCoordinate(rawLongitude, longitudeRef);
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     return { latitude, longitude };
+  }
+  return null;
+}
+
+function parseGpsPosition(position) {
+  if (position === null || position === undefined) return null;
+
+  if (Array.isArray(position) && position.length >= 2) {
+    return normalizePair(position[0], position[1], null, null);
+  }
+
+  if (typeof position === "string") {
+    const cleaned = position.trim();
+
+    // Example: "12.958746 77.557346"
+    const parts = cleaned.split(/[,\s]+/).filter(Boolean);
+    if (parts.length >= 2) {
+      const direct = normalizePair(parts[0], parts[1], null, null);
+      if (direct) return direct;
+    }
+
+    // Example: "12 deg 34' 56.7\" N, 77 deg 33' 12.5\" E"
+    const dmsMatch = cleaned.match(
+      /(\d+(?:\.\d+)?(?:\D+\d+(?:\.\d+)?)?(?:\D+\d+(?:\.\d+)?)?\D*[NS])\D+(\d+(?:\.\d+)?(?:\D+\d+(?:\.\d+)?)?(?:\D+\d+(?:\.\d+)?)?\D*[EW])/i
+    );
+    if (dmsMatch) {
+      const dms = normalizePair(dmsMatch[1], dmsMatch[2], null, null);
+      if (dms) return dms;
+    }
+  }
+
+  return null;
+}
+
+function getGps(data = {}) {
+  const direct = normalizePair(
+    data.GPSLatitude ?? data["Composite:GPSLatitude"] ?? data.CompositeGPSLatitude,
+    data.GPSLongitude ??
+      data["Composite:GPSLongitude"] ??
+      data.CompositeGPSLongitude,
+    data.GPSLatitudeRef,
+    data.GPSLongitudeRef
+  );
+  if (direct) {
+    return direct;
+  }
+
+  const position =
+    parseGpsPosition(data.GPSPosition) ??
+    parseGpsPosition(data["Composite:GPSPosition"]) ??
+    parseGpsPosition(data.CompositeGPSPosition);
+
+  if (position) {
+    return position;
   }
 
   return null;

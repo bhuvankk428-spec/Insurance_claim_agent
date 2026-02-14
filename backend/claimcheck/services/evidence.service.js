@@ -7,7 +7,7 @@ import { claimStore } from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
 const STRICT_GEO_VALIDATION = process.env.STRICT_GEO === "true";
-const LOG_GEO_DETAILS = process.env.LOG_GEO_DETAILS === "true";
+const LOG_GEO_DETAILS = process.env.LOG_GEO_DETAILS !== "false";
 
 export async function checkEvidence(req, res) {
   const fir = req.files?.fir?.[0];
@@ -82,8 +82,12 @@ export async function checkEvidence(req, res) {
       geoTagged = true;
       imageLocation = firstGeo.resolvedLocation || "UNKNOWN";
     }
-  } catch {
-    // ignore EXIF errors in dev
+  } catch (error) {
+    if (LOG_GEO_DETAILS) {
+      console.warn("[geo-check] exif extraction failed", {
+        error: error?.message || "unknown error",
+      });
+    }
   }
 
   // If geo is missing, continue. Geo is a bonus signal only.
