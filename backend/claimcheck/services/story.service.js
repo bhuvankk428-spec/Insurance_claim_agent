@@ -58,6 +58,18 @@ function extractJSON(text) {
   }
 }
 
+function isImageDateReason(reason = "") {
+  const text = String(reason || "").toLowerCase();
+  if (!text) return false;
+
+  const hasDateOrTime =
+    /\b(date|dated|timestamp|time|timing|captured|exif|metadata)\b/.test(text) ||
+    /\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b/.test(text);
+  const hasImageContext = /\b(photo|image|picture|evidence)\b/.test(text);
+
+  return hasDateOrTime && hasImageContext;
+}
+
 /* ---------------- STORY ANALYSIS ---------------- */
 export async function analyzeStory(req, res) {
   try {
@@ -89,8 +101,6 @@ export async function analyzeStory(req, res) {
       });
     }
 
-    const evidenceRejected = claim.matchLevel === "reject";
-
     const {
       policyData,
       firData,
@@ -100,7 +110,11 @@ export async function analyzeStory(req, res) {
       policyText,
       domain,
     } = claim;
-    const evidenceReasons = evidenceRisk?.reasons || [];
+    const evidenceReasons = (evidenceRisk?.reasons || []).filter(
+      (reason) => !isImageDateReason(reason)
+    );
+    const evidenceRejected =
+      claim.matchLevel === "reject" && evidenceReasons.length > 0;
     const geoMismatch = evidenceReasons.some((reason) =>
       reason
         ?.toString()
@@ -295,6 +309,8 @@ User story:
 RULES:
 - Missing fields are inconclusive, not incorrect
 - Ignore UNKNOWN image location
+- Ignore image/photo date or timestamp (including EXIF date/time)
+- Do not reject based on photo date mismatch
 - Reject only on clear contradictions
 - Prefer approval if core details match
 
@@ -348,9 +364,18 @@ Respond STRICTLY in JSON:
       }
     }
 
+    if (isImageDateReason(aiResult?.reason)) {
+      aiResult = {
+        ...aiResult,
+        consistent: true,
+        decision: "partially_approved",
+        reason: "Image date metadata is ignored; geo location is used for location checks.",
+      };
+    }
+
     if (evidenceRejected && !geoMismatch) {
       const reason =
-        evidenceRisk?.reasons?.[0] ||
+        evidenceReasons?.[0] ||
         "Evidence does not sufficiently match policy details.";
       try {
         await upsertClaimDecision({
