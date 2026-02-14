@@ -102,4 +102,4 @@ Known Constraints
 - Claim flow depends on server in-memory claim session state.
 - Refreshing during claim flow may require restarting from Step 1.
 - Production setup must align frontend and backend admin tokens.
-- Geo-tag status depends on backend EXIF parsing; image watermark text does not count as geo metadata.
+- Geo-tag status depends on backend geo fallback chain: EXIF GPS -> OCR coordinate text parsing -> OpenAI vision coordinate parsing (if key configured).

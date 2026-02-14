@@ -79,7 +79,10 @@ Important:
 Claim backend behavior:
 - `OPENAI_API_KEY` enables image vision checks, policy coverage reasoning, and story consistency checks.
 - If OpenAI is configured but fails/returns invalid JSON during story analysis, claim falls back to `partially_approved` (manual review), not auto-approval.
-- Geo verification uses EXIF GPS metadata from uploaded images. A visible location watermark/text in the photo is not treated as a geo-tag.
+- Geo verification uses this fallback chain:
+  1. EXIF GPS metadata from uploaded image
+  2. OCR extraction of visible coordinate text/watermark in the image
+  3. OpenAI vision extraction of visible coordinate text (only if `OPENAI_API_KEY` is configured)
 
 ### Token matching rule
 `VITE_ADMIN_TOKEN` (frontend) must exactly match `ADMIN_TOKEN` (claim backend).

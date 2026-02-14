@@ -98,8 +98,10 @@ Expected:
 - Trailing spaces or malformed comma-separated origins
 
 ### Geo-tag confusion on claim evidence
-- Geo verification requires EXIF GPS metadata in uploaded photo files.
-- Location watermark text on the image is not treated as geo metadata.
+- Geo verification fallback chain in production:
+  1. EXIF GPS metadata in uploaded photo
+  2. OCR parse of visible coordinate text/watermark
+  3. OpenAI vision parse of visible coordinate text/watermark (requires `OPENAI_API_KEY`)
 
 ## 7) Deploy Order (Recommended)
 1. Railway chat service

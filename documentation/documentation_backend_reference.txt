@@ -46,7 +46,10 @@ Claimcheck Service (`backend/claimcheck`)
 - Story fallback safety:
   - If OpenAI output is missing/invalid, claim decision falls back to partial/manual-review path.
 - Geo behavior:
-  - Geo tagging is based on image EXIF GPS metadata; watermark text in the image is not considered geo metadata.
+  - Geo tagging uses fallback chain:
+    1) EXIF GPS metadata
+    2) OCR parsing of visible coordinate text in image
+    3) OpenAI vision parsing of visible coordinate text (if `OPENAI_API_KEY` is set)
 
 State and Persistence
 ---------------------
