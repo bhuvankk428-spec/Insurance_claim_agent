@@ -83,7 +83,7 @@ app.options(/.*/, cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (_req, res) => {
-  res.send("RAG API running ✅");
+  res.send("RAG API running ");
 });
 
 app.get("/healthz", (_req, res) => {
@@ -155,7 +155,7 @@ app.post("/api/rag-chat", ragLimiter, async (req, res) => {
   } catch (err) {
     if (err?.name === "AbortError") {
       res.write(
-        "\n\n⚠️ The response is taking longer than expected. Please try again."
+        "\n\n The response is taking longer than expected. Please try again."
       );
       return res.end();
     }

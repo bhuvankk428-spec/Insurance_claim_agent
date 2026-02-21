@@ -122,4 +122,4 @@ const policies = loadAllPolicies();
 const chunks = buildChunks(policies);
 
 fs.writeFileSync(OUTPUT, JSON.stringify(chunks, null, 2));
-console.log(`✅ Built ${chunks.length} chunks`);
+console.log(` Built ${chunks.length} chunks`);

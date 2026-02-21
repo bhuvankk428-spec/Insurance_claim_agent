@@ -8,9 +8,9 @@ const hasOpenAIKey =
 
 const openai = hasOpenAIKey
   ? new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      timeout: Number(process.env.OPENAI_TIMEOUT_MS || 60000),
-    })
+    apiKey: process.env.OPENAI_API_KEY,
+    timeout: Number(process.env.OPENAI_TIMEOUT_MS || 60000),
+  })
   : null;
 
 const MAX_RETRIES = Number(process.env.OPENAI_MAX_RETRIES || 2);
