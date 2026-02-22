@@ -62,13 +62,13 @@ Important:
 - `VITE_ADMIN_PASSWORD`
 - `VITE_ADMIN_TOKEN`
 
-### Chat backend vars (Railway)
+### Chat backend vars (Vercel)
 - `DATABASE_URL`
 - `OPENAI_API_KEY`
 - `CORS_ORIGIN`
 - Optional: `OPENAI_CHAT_MODEL`, `OPENAI_EMBED_MODEL`, `RATE_LIMIT_*`, `CHAT_PORT`
 
-### Claim backend vars (Railway)
+### Claim backend vars (Vercel)
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `OPENAI_API_KEY`
@@ -88,7 +88,7 @@ Claim backend behavior:
 `VITE_ADMIN_TOKEN` (frontend) must exactly match `ADMIN_TOKEN` (claim backend).
 
 ## Production Deployment
-Frontend is intended for Vercel and backends for Railway.
+Frontend and backend are deployed together on Vercel.
 See `DEPLOY.md` for complete step-by-step instructions.
 
 ## CORS Notes

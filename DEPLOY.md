@@ -1,115 +1,78 @@
-# Deployment Guide (Vercel + Railway)
+# Deployment Guide (Vercel Full Stack)
 
-This project deploys as:
-- Frontend on Vercel (Vite)
-- Backends on Railway (Node/Express)
+This project deploys frontend and backend in one Vercel project:
+- Frontend: Vite static build
+- Backend: Vercel serverless functions under `api/`
 
-## 1) Create Two Railway Services
-Create two services from the same repository.
+## 1) Connect Repository to Vercel
+- Import this repository in Vercel.
+- Framework preset: Vite
+- Build command: `npm run build`
+- Output directory: `dist`
 
-### Service A: Chat (RAG)
-- Start command: `node backend/chat/server.js`
-- Required env:
-  - `NODE_ENV=production`
-  - `DATABASE_URL`
-  - `OPENAI_API_KEY`
-  - `CORS_ORIGIN`
-- Recommended:
-  - `OPENAI_CHAT_MODEL=gpt-4o-mini`
-  - `OPENAI_EMBED_MODEL=text-embedding-3-small`
-  - `RATE_LIMIT_MAX=60`
-  - `RATE_LIMIT_WINDOW_MS=60000`
+`vercel.json` is already configured to:
+- keep `/api/*` routed to functions
+- route non-API paths to `index.html` for SPA navigation
 
-### Service B: Claimcheck
-- Start command: `node backend/claimcheck/server.js`
-- Required env:
-  - `NODE_ENV=production`
-  - `SUPABASE_URL`
-  - `SUPABASE_SERVICE_ROLE_KEY`
-  - `OPENAI_API_KEY`
-  - `ADMIN_TOKEN` (must be non-default)
-  - `CORS_ORIGIN`
-- Recommended:
-  - `STRICT_GEO=true`
-  - `ALLOW_FAKE_GEO=false`
-  - `RATE_LIMIT_MAX=60`
-  - `RATE_LIMIT_WINDOW_MS=60000`
+## 2) Required Environment Variables
+Set these in Vercel Project Settings -> Environment Variables:
 
-Behavior note:
-- Story decision path uses OpenAI when available.
-- If OpenAI fails or returns invalid output during story analysis, backend falls back to `partially_approved` (manual review), not auto-approval.
+### Core backend
+- `OPENAI_API_KEY`
+- `DATABASE_URL` (PostgreSQL for chat/RAG)
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_TOKEN` (must not use default value)
 
-## 2) Configure CORS on Both Railway Services
-Set `CORS_ORIGIN` to Vercel production + preview:
+### Frontend auth/admin
+- `VITE_ADMIN_EMAIL`
+- `VITE_ADMIN_PASSWORD`
+- `VITE_ADMIN_TOKEN` (must exactly match `ADMIN_TOKEN`)
 
-```env
-CORS_ORIGIN=https://your-app.vercel.app,https://*.vercel.app
-```
+### Optional
+- `CORS_ORIGIN` (comma-separated origins, wildcard supported)
+- `OPENAI_CHAT_MODEL`
+- `OPENAI_EMBED_MODEL`
+- `RATE_LIMIT_MAX`
+- `RATE_LIMIT_WINDOW_MS`
+- `STRICT_GEO`
+- `ALLOW_FAKE_GEO`
+- `REQUIRE_DB_READY`
+- `REQUIRE_SUPABASE_READY`
 
-You can add a custom domain too:
+## 3) API Endpoints in Vercel
+These are available from the same domain:
+- `/api/rag-chat`
+- `/api/claim-check`
+- `/api/claim-evidence`
+- `/api/claim-story`
+- `/api/my-claims`
+- `/api/finance-news`
+- `/api/admin/claims`
+- `/api/admin/claims/:claimId`
 
-```env
-CORS_ORIGIN=https://your-app.vercel.app,https://app.yourdomain.com,https://*.vercel.app
-```
+Frontend now supports same-origin fallback for these routes, so separate `VITE_CHAT_API_URL` and `VITE_CLAIM_API_URL` are optional.
 
-## 3) Deploy Frontend on Vercel
-Set environment variables:
-- `VITE_CHAT_API_URL=https://<chat-service>.up.railway.app`
-- `VITE_CLAIM_API_URL=https://<claim-service>.up.railway.app`
-- `VITE_API_URL=https://<claim-service>.up.railway.app`
-- `VITE_ADMIN_EMAIL=<admin email>`
-- `VITE_ADMIN_PASSWORD=<admin password>`
-- `VITE_ADMIN_TOKEN=<must match ADMIN_TOKEN on claim service>`
+## 4) Health Checks
+After deploy, verify:
+- `/healthz`
+- `/readyz`
 
-Then deploy/redeploy.
+Note: health/readiness routes are provided by the backend Express apps. If you need dedicated API health paths, add explicit `api/healthz.js` and `api/readyz.js` handlers.
 
-## 4) Token Matching Requirement
-Admin dashboard API auth requires:
+## 5) Common Issues
+### Admin dashboard unauthorized
+- `VITE_ADMIN_TOKEN` does not match `ADMIN_TOKEN`
+- `ADMIN_TOKEN` not set in production
 
-- `VITE_ADMIN_TOKEN` (Vercel frontend)
-- `ADMIN_TOKEN` (Railway claim backend)
+### Chat or claim APIs fail
+- Missing `OPENAI_API_KEY`, `DATABASE_URL`, or Supabase vars
+- CORS misconfiguration in `CORS_ORIGIN`
 
-These two values must be exactly the same.
+### Build succeeds but runtime fails
+- Missing production env vars in Vercel (Preview/Production scopes checked incorrectly)
 
-## 5) Health Checks
-Verify both backends:
-- `https://<chat-service>.up.railway.app/healthz`
-- `https://<chat-service>.up.railway.app/readyz`
-- `https://<claim-service>.up.railway.app/healthz`
-- `https://<claim-service>.up.railway.app/readyz`
-
-Expected:
-- Chat root: `RAG API running`
-- Claim root: `Claim backend running`
-
-## 6) Common Issues
-### Chatbot fails in production
-- `VITE_CHAT_API_URL` missing or wrong in Vercel
-- Chat Railway service missing `OPENAI_API_KEY`
-- Chat Railway service CORS not allowing Vercel origin
-
-### Admin dashboard fails
-- `VITE_ADMIN_TOKEN` missing in Vercel
-- `ADMIN_TOKEN` mismatch between frontend and claim backend
-- `VITE_API_URL` / `VITE_CLAIM_API_URL` missing or wrong
-
-### CORS errors
-- Missing `https://*.vercel.app` in `CORS_ORIGIN`
-- Trailing spaces or malformed comma-separated origins
-
-### Geo-tag confusion on claim evidence
-- Geo verification fallback chain in production:
-  1. EXIF GPS metadata in uploaded photo
-  2. OCR parse of visible coordinate text/watermark
-  3. OpenAI vision parse of visible coordinate text/watermark (requires `OPENAI_API_KEY`)
-
-## 7) Deploy Order (Recommended)
-1. Railway chat service
-2. Railway claim service
-3. Vercel frontend
-
-## 8) Env Templates in This Repo
-Use these helper files locally (do not commit secrets):
-- `.env.railway.chat.production`
-- `.env.railway.claim.production`
-- `.env.vercel.production`
+## 6) Rollout Order
+1. Set Vercel environment variables
+2. Deploy
+3. Verify user flows: chat, claim check, claim evidence, claim story, admin dashboard
