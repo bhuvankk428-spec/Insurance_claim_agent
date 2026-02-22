@@ -106,21 +106,12 @@ export default function ClaimStoryChatbot() {
       });
       return;
     }
-    if (!API_BASE) {
-      navigate(`/claim-result/${claimId}`, {
-        state: {
-          status: "rejected",
-          message:
-            "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
-        },
-      });
-      return;
-    }
+    const endpoint = API_BASE ? `${API_BASE}/api/claim-story` : "/api/claim-story";
 
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/claim-story`, {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

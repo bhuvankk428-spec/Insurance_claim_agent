@@ -127,11 +127,6 @@ export default function PolicySummarizer() {
   });
 
   try {
-    if (!CHAT_API_BASE) {
-      throw new Error(
-        "Missing chat API URL. Set VITE_CHAT_API_URL in Vercel."
-      );
-    }
     const endpoint = CHAT_API_BASE
       ? `${CHAT_API_BASE}/api/rag-chat`
       : "/api/rag-chat";

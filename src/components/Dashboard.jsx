@@ -20,11 +20,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function load() {
-      if (!API_BASE) {
-        setLoading(false);
-        setError("Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL.");
-        return;
-      }
+      const endpointBase = API_BASE ? `${API_BASE}/api` : "/api";
       const email = auth.currentUser?.email;
       if (!email) {
         setLoading(false);
@@ -36,7 +32,9 @@ export default function Dashboard() {
         setLoading(true);
         setError("");
         const encodedEmail = encodeURIComponent(email);
-        const res = await fetch(`${API_BASE}/api/my-claims?email=${encodedEmail}&limit=500`);
+        const res = await fetch(
+          `${endpointBase}/my-claims?email=${encodedEmail}&limit=500`
+        );
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.message || "Failed to load claims dashboard");

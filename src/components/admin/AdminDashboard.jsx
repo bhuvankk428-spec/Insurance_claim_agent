@@ -54,13 +54,6 @@ export default function AdminDashboard() {
       navigate("/");
       return;
     }
-    if (!API_BASE) {
-      setLoading(false);
-      setError(
-        "Missing claim API URL. Set VITE_API_URL or VITE_CLAIM_API_URL in Vercel."
-      );
-      return;
-    }
     if (!isLocalhost && !HAS_CONFIGURED_ADMIN_TOKEN) {
       setLoading(false);
       setError(
@@ -73,7 +66,10 @@ export default function AdminDashboard() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`${API_BASE}/api/admin/claims?limit=${limit}`, {
+        const endpoint = API_BASE
+          ? `${API_BASE}/api/admin/claims?limit=${limit}`
+          : `/api/admin/claims?limit=${limit}`;
+        const res = await fetch(endpoint, {
           headers: { "x-admin-token": ADMIN_TOKEN },
         });
         const data = await res.json();
@@ -143,7 +139,10 @@ export default function AdminDashboard() {
     setSavingId(claim.claim_id);
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/api/admin/claims/${claim.claim_id}`, {
+      const endpoint = API_BASE
+        ? `${API_BASE}/api/admin/claims/${claim.claim_id}`
+        : `/api/admin/claims/${claim.claim_id}`;
+      const res = await fetch(endpoint, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

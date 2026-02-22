@@ -53,14 +53,7 @@ export default function ClaimChecker() {
 
   /* ---------------- POLICY VERIFY ---------------- */
   async function verifyPolicy(file) {
-    if (!API_BASE) {
-      setPolicyResult({
-        status: "error",
-        message:
-          "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
-      });
-      return;
-    }
+    const endpoint = API_BASE ? `${API_BASE}/api/claim-check` : "/api/claim-check";
     const formData = new FormData();
     formData.append("pdf", file); 
     const email = auth.currentUser?.email;
@@ -69,7 +62,7 @@ export default function ClaimChecker() {
     try {
       setPolicyLoading(true);
 
-      const res = await fetch(`${API_BASE}/api/claim-check`, {
+      const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
@@ -98,14 +91,9 @@ export default function ClaimChecker() {
   /* ---------------- EVIDENCE SUBMIT ---------------- */
   async function handleEvidenceUpload(e) {
     e.preventDefault();
-    if (!API_BASE) {
-      setEvidenceResult({
-        status: "error",
-        message:
-          "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel.",
-      });
-      return;
-    }
+    const endpoint = API_BASE
+      ? `${API_BASE}/api/claim-evidence`
+      : "/api/claim-evidence";
 
     if (!policyVerified) {
       setEvidenceResult({
@@ -128,7 +116,7 @@ export default function ClaimChecker() {
       photoFiles.forEach((f) => formData.append("photos", f));
 
 
-      const res = await fetch(`${API_BASE}/api/claim-evidence`, {
+      const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });

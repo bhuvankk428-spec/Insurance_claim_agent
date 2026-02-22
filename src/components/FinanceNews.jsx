@@ -23,18 +23,12 @@ export default function FinanceNews() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState("");
 
-  async function loadNews(signal) {
-    if (!API_BASE) {
-      setLoading(false);
-      setError(
-        "Missing claim API URL. Set VITE_CLAIM_API_URL or VITE_API_URL in Vercel."
-      );
-      return;
-    }
+async function loadNews(signal) {
+    const endpoint = API_BASE ? `${API_BASE}/api/finance-news` : "/api/finance-news";
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/api/finance-news`, { signal });
+      const res = await fetch(endpoint, { signal });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(data?.message || "Failed to fetch finance news");
