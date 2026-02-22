@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 import {
-  ADMIN_EMAIL,
   ADMIN_TOKEN,
   HAS_CONFIGURED_ADMIN_TOKEN,
-  adminLogout,
-  isAdminAuthed,
 } from "./adminAuth";
 
 const isLocalhost =
@@ -50,10 +49,6 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    if (!isAdminAuthed()) {
-      navigate("/");
-      return;
-    }
     if (!isLocalhost && !HAS_CONFIGURED_ADMIN_TOKEN) {
       setLoading(false);
       setError(
@@ -85,7 +80,7 @@ export default function AdminDashboard() {
     }
 
     loadClaims();
-  }, [navigate, limit]);
+  }, [limit]);
 
   const filteredClaims = useMemo(() => {
     if (!search.trim()) return claims;
@@ -167,8 +162,9 @@ export default function AdminDashboard() {
   }
 
   function handleLogout() {
-    adminLogout();
-    navigate("/");
+    signOut(auth).finally(() => {
+      navigate("/");
+    });
   }
 
   function handleExportPdf() {

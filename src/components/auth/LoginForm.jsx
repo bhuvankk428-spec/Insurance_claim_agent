@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase";
-import { adminLogin, ADMIN_EMAIL } from "../admin/adminAuth";
+import { isAdminEmail } from "../admin/adminAuth";
 
 export default function LoginForm() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -22,21 +22,13 @@ export default function LoginForm() {
 
     try {
       const email = form.email.trim();
-      const isAdminEmail =
-        email.toLowerCase() === ADMIN_EMAIL.trim().toLowerCase();
-
-      if (adminLogin(email, form.password)) {
-        navigate("/admin-dashboard");
-        return;
-      }
-
-      if (isAdminEmail) {
-        setError("Invalid admin email or password");
-        return;
-      }
 
       await signInWithEmailAndPassword(auth, email, form.password);
-      navigate("/choose");
+      if (isAdminEmail(email)) {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/choose");
+      }
     } catch (err) {
       const code = err?.code || "";
       if (
@@ -58,8 +50,12 @@ export default function LoginForm() {
     setError("");
     setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
-      navigate("/choose");
+      const result = await signInWithPopup(auth, googleProvider);
+      if (isAdminEmail(result?.user?.email)) {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/choose");
+      }
     } catch (err) {
       setError(err.message || "Google login failed");
     } finally {

@@ -15,34 +15,159 @@ import PlanPage from "./components/PlanPage";
 import PlanDashboard from "./components/PlanDashboard";
 import FinanceNews from "./components/FinanceNews";
 import Dashboard from "./components/Dashboard";
+import {
+  RedirectIfAuthed,
+  RequireAdminAuth,
+  RequireUserAuth,
+} from "./auth/RouteGuards";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginEntry />} />
-        <Route path="/register" element={<RegisterForm />} />
+        <Route
+          path="/"
+          element={
+            <RedirectIfAuthed>
+              <LoginEntry />
+            </RedirectIfAuthed>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RedirectIfAuthed>
+              <RegisterForm />
+            </RedirectIfAuthed>
+          }
+        />
 
-        <Route path="/choose" element={<ChooserPage />} />
-        <Route path="/chatbot" element={<Chatbot />} />
-        <Route path="/claim-checker" element={<ClaimChecker />} />
-        <Route path="/plan" element={<PlanPage />} />
-        <Route path="/plan-dashboard" element={<PlanDashboard />} />
-        <Route path="/finance-news" element={<FinanceNews />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/claim-story/:claimId" element={<ClaimStoryChatbot />} />
-        <Route path="/claim-result/:claimId" element={<ClaimResult />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/choose"
+          element={
+            <RequireUserAuth>
+              <ChooserPage />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/chatbot"
+          element={
+            <RequireUserAuth>
+              <Chatbot />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/claim-checker"
+          element={
+            <RequireUserAuth>
+              <ClaimChecker />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/plan"
+          element={
+            <RequireUserAuth>
+              <PlanPage />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/plan-dashboard"
+          element={
+            <RequireUserAuth>
+              <PlanDashboard />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/finance-news"
+          element={
+            <RequireUserAuth>
+              <FinanceNews />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireUserAuth>
+              <Dashboard />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/claim-story/:claimId"
+          element={
+            <RequireUserAuth>
+              <ClaimStoryChatbot />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/claim-result/:claimId"
+          element={
+            <RequireUserAuth>
+              <ClaimResult />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <RequireAdminAuth>
+              <AdminDashboard />
+            </RequireAdminAuth>
+          }
+        />
 
-        <Route path="/about" element={<AboutQKAI />} />
-        <Route path="/help" element={<HelpQKAI />} />
-        <Route path="/faq" element={<FAQQKAI />} />
-        <Route path="/contact" element={<ContactQKAI />} />
+        <Route
+          path="/about"
+          element={
+            <RequireUserAuth>
+              <AboutQKAI />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <RequireUserAuth>
+              <HelpQKAI />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/faq"
+          element={
+            <RequireUserAuth>
+              <FAQQKAI />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <RequireUserAuth>
+              <ContactQKAI />
+            </RequireUserAuth>
+          }
+        />
 
-        <Route path="*" element={<ChooserPage />} />
+        <Route path="*" element={<NavigateByAuth />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
+function NavigateByAuth() {
+  return (
+    <RedirectIfAuthed>
+      <LoginEntry />
+    </RedirectIfAuthed>
+  );
+}
