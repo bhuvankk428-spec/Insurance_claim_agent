@@ -9,6 +9,7 @@ import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
 import { z } from "zod";
 import { askRAGStream } from "./rag.js";
+import { generateFinancePodcast } from "./podcast.js";
 import { db } from "./db.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -123,6 +124,12 @@ const ragSchema = z.object({
     .transform((val) => (typeof val === "string" ? { text: val } : val)),
 });
 
+const podcastSchema = z.object({
+  topic: z.string().min(3).max(200).optional(),
+  pair: z.enum(["gemini_grok", "openai_grok", "openai_gemini"]).optional(),
+  durationMinutes: z.number().int().min(3).max(12).optional(),
+});
+
 app.post("/api/rag-chat", ragLimiter, async (req, res) => {
   try {
     const parsed = ragSchema.safeParse(req.body);
@@ -166,6 +173,26 @@ app.post("/api/rag-chat", ragLimiter, async (req, res) => {
     } else {
       res.end();
     }
+  }
+});
+
+app.post("/api/finance-podcast", ragLimiter, async (req, res) => {
+  try {
+    const parsed = podcastSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: "Invalid request",
+        details: parsed.error.flatten().fieldErrors,
+      });
+    }
+
+    const podcast = await generateFinancePodcast(parsed.data);
+    return res.json(podcast);
+  } catch (err) {
+    req.log.error({ err }, "finance_podcast_error");
+    return res.status(err?.status || 500).json({
+      error: err?.message || "Failed to generate finance podcast",
+    });
   }
 });
 

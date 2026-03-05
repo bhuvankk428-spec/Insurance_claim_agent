@@ -81,3 +81,97 @@ html, body, #root {
 .page-chatbot footer {
   display: none;
 }
+
+.orbit-root {
+  position: relative;
+  margin: 0 auto;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.orbit-path {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--orbit-rx) * 2);
+  height: calc(var(--orbit-ry) * 2);
+  border-radius: 9999px;
+  border: 1px dashed rgba(103, 232, 249, 0.28);
+  transform: translate(-50%, -50%) rotateX(var(--orbit-tilt)) rotateZ(var(--orbit-rotation));
+}
+
+.orbit-track {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--orbit-tilt)) rotateZ(var(--orbit-rotation));
+  animation: orbit-spin var(--orbit-duration) linear infinite;
+}
+
+.orbit-reverse {
+  animation-direction: reverse;
+}
+
+.orbit-paused {
+  animation-play-state: paused;
+}
+
+.orbit-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--orbit-item-size);
+  height: var(--orbit-item-size);
+  margin-left: calc(var(--orbit-item-size) * -0.5);
+  margin-top: calc(var(--orbit-item-size) * -0.5);
+}
+
+.orbit-card-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
+}
+
+.orbit-upright {
+  width: 100%;
+  height: 100%;
+  animation: orbit-counter-spin var(--orbit-duration) linear infinite;
+}
+
+.orbit-counter-reverse {
+  animation-direction: reverse;
+}
+
+.orbit-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: rgba(8, 12, 20, 0.9);
+  display: block;
+}
+
+.orbit-image.orbit-fill {
+  object-fit: cover;
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotateX(var(--orbit-tilt)) rotateZ(var(--orbit-rotation)) rotate(0deg);
+  }
+  to {
+    transform: rotateX(var(--orbit-tilt)) rotateZ(var(--orbit-rotation)) rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}

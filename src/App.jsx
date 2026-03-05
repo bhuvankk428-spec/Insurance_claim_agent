@@ -14,6 +14,8 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import PlanPage from "./components/PlanPage";
 import PlanDashboard from "./components/PlanDashboard";
 import FinanceNews from "./components/FinanceNews";
+import FinancePodcast from "./components/FinancePodcast";
+import AIFinancePodcast from "./components/AIFinancePodcast";
 import Dashboard from "./components/Dashboard";
 import {
   RedirectIfAuthed,
@@ -87,6 +89,22 @@ function App() {
           element={
             <RequireUserAuth>
               <FinanceNews />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/finance-podcast"
+          element={
+            <RequireUserAuth>
+              <FinancePodcast />
+            </RequireUserAuth>
+          }
+        />
+        <Route
+          path="/ai-finance-podcast"
+          element={
+            <RequireUserAuth>
+              <AIFinancePodcast />
             </RequireUserAuth>
           }
         />
