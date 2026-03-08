@@ -58,8 +58,7 @@ Important:
 - `VITE_CHAT_API_URL`
 - `VITE_CLAIM_API_URL`
 - `VITE_API_URL` (claim/admin fallback)
-- `VITE_ADMIN_EMAIL`
-- `VITE_ADMIN_PASSWORD`
+- `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated)
 - `VITE_ADMIN_TOKEN`
 
 ### Chat backend vars (Vercel)
@@ -86,6 +85,15 @@ Claim backend behavior:
 
 ### Token matching rule
 `VITE_ADMIN_TOKEN` (frontend) must exactly match `ADMIN_TOKEN` (claim backend).
+
+### Admin access model (current)
+- User authentication is handled by Firebase Auth.
+- Admin routing is controlled by email match (`VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS`) in frontend route guards.
+- Admin API access is protected by `x-admin-token`.
+
+### Production hardening recommendation
+- Do not rely only on frontend email checks for admin authorization.
+- Prefer server-verified role checks (for example Firebase custom claims) and enforce admin authorization in backend handlers.
 
 ## Production Deployment
 Frontend and backend are deployed together on Vercel.

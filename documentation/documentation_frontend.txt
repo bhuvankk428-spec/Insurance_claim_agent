@@ -37,7 +37,7 @@ Vite environment variables:
 - `VITE_CHAT_API_URL`: chat backend URL (required in production)
 - `VITE_CLAIM_API_URL`: claim backend URL (recommended in production)
 - `VITE_API_URL`: fallback for claim/admin endpoints
-- `VITE_ADMIN_EMAIL`, `VITE_ADMIN_PASSWORD`, `VITE_ADMIN_TOKEN`
+- `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated), `VITE_ADMIN_TOKEN`
 
 Runtime behavior:
 - On localhost, frontend falls back to local backend URLs.
@@ -51,11 +51,12 @@ Authentication
 
 `src/components/auth/LoginForm.jsx`
 - Firebase login (email/password + Google).
-- Admin login uses `adminAuth.js` local credential check.
+- Admin redirect uses `adminAuth.js` email match helper after successful Firebase login.
 
 `src/components/admin/adminAuth.js`
-- Reads admin config from Vite env with local defaults.
-- Stores admin auth flag in localStorage.
+- Reads admin email allowlist from `VITE_ADMIN_EMAILS` or `VITE_ADMIN_EMAIL`.
+- Ignores known placeholder emails and falls back to `admin@qk.ai` if config is missing.
+- Exposes admin token used by admin API calls.
 
 Policy Advisor (Chatbot)
 ------------------------
@@ -82,7 +83,7 @@ Claim Checker Flow
 Admin Dashboard
 ---------------
 `src/components/admin/AdminDashboard.jsx`
-- Requires local admin auth flag.
+- Requires Firebase auth + admin email route guard.
 - Loads claims via `GET /api/admin/claims?limit=<n>` with `x-admin-token`.
 - Updates decisions via `PATCH /api/admin/claims/:claimId`.
 - Supports client-side search (claim ID, code, email, owner, status).
@@ -102,4 +103,5 @@ Known Constraints
 - Claim flow depends on server in-memory claim session state.
 - Refreshing during claim flow may require restarting from Step 1.
 - Production setup must align frontend and backend admin tokens.
+- Current admin authorization model is not role-claim based; frontend email checks should be treated as UX gating, not strong backend authorization.
 - Geo-tag status depends on backend geo fallback chain: EXIF GPS -> OCR coordinate text parsing -> OpenAI vision coordinate parsing (if key configured).

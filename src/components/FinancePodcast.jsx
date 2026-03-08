@@ -55,9 +55,6 @@ export default function FinancePodcast() {
               <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">
                 MoneyWave Studio
               </h1>
-              <p className="text-xs sm:text-sm font-semibold text-amber-200 mb-2">
-                qk.ai presents live podcast only for u
-              </p>
               <p className="text-sm sm:text-base text-neutral-300 max-w-2xl leading-relaxed">
                 Listen to high-signal shows on investing, markets, and the
                 economy. Curated for quick weekly learning.

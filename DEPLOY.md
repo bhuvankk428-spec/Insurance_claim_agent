@@ -25,8 +25,7 @@ Set these in Vercel Project Settings -> Environment Variables:
 - `ADMIN_TOKEN` (must not use default value)
 
 ### Frontend auth/admin
-- `VITE_ADMIN_EMAIL`
-- `VITE_ADMIN_PASSWORD`
+- `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated)
 - `VITE_ADMIN_TOKEN` (must exactly match `ADMIN_TOKEN`)
 
 ### Optional
@@ -64,6 +63,7 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 ### Admin dashboard unauthorized
 - `VITE_ADMIN_TOKEN` does not match `ADMIN_TOKEN`
 - `ADMIN_TOKEN` not set in production
+- Admin email does not match configured `VITE_ADMIN_EMAIL`/`VITE_ADMIN_EMAILS`
 
 ### Chat or claim APIs fail
 - Missing `OPENAI_API_KEY`, `DATABASE_URL`, or Supabase vars
@@ -76,3 +76,7 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 1. Set Vercel environment variables
 2. Deploy
 3. Verify user flows: chat, claim check, claim evidence, claim story, admin dashboard
+
+## 7) Production Security Note
+- Current admin route gating uses frontend email checks plus admin token for API calls.
+- For stronger security, move admin authorization to backend-verified identity claims (for example Firebase custom claims) and treat frontend checks as UX only.

@@ -171,7 +171,7 @@ export default function AIFinancePodcast() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm text-cyan-200 mb-4">
                 <FaMicrophoneAlt />
-                qk.ai presents live podcast only for u
+                qk.ai presents live podcast only for you.
               </div>
               <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">
                 AI Finance Duel

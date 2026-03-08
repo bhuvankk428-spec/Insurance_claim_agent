@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import {
+  ADMIN_EMAIL,
   ADMIN_TOKEN,
   HAS_CONFIGURED_ADMIN_TOKEN,
 } from "./adminAuth";
