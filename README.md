@@ -12,6 +12,7 @@ QK.AI is an insurance platform with:
 - Safe claim fallback: if OpenAI is unavailable or returns invalid story output, claim is marked `partial` for manual review
 - Admin dashboard backed by Supabase (search, load-more pagination, decision updates, export to printable PDF)
 - Finance news feed from `/api/finance-news` (last 24h + refresh)
+- AI Finance Podcast page (`/ai-finance-podcast`) currently shows a Coming Soon placeholder
 - Firebase login (email/password + Google)
 
 ## Tech Stack

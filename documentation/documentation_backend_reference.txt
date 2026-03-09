@@ -10,6 +10,7 @@ Chat Service (`backend/chat`)
 - Express server for RAG chat.
 - CORS uses `CORS_ORIGIN` with support for explicit and wildcard origins.
 - `POST /api/rag-chat` streams `text/plain` output.
+- `POST /api/finance-podcast` is available for AI podcast generation (frontend page currently marked Coming Soon).
 - Health endpoints: `/healthz`, `/readyz`.
 
 `backend/chat/rag.js`

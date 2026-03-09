@@ -30,6 +30,9 @@ Flow:
 3. Rank candidates
 4. Stream OpenAI output tokens to client
 
+Note:
+- `POST /api/finance-podcast` exists in chat service, while the frontend route `/ai-finance-podcast` is currently a Coming Soon placeholder.
+
 Startup constraints:
 - Requires DB readiness when `REQUIRE_DB_READY=true`.
 - Fails fast if `DATABASE_URL` is missing in enforced mode.

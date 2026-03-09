@@ -26,6 +26,7 @@ Entry Point and Routing
   - `/plan` -> PlanPage
   - `/plan-dashboard` -> PlanDashboard
   - `/finance-news` -> FinanceNews
+  - `/ai-finance-podcast` -> AIFinancePodcast (Coming Soon placeholder)
   - `/claim-story/:claimId` -> ClaimStoryChatbot
   - `/claim-result/:claimId` -> ClaimResult
   - `/admin-dashboard` -> AdminDashboard
@@ -97,6 +98,12 @@ Finance News
 - Calls `GET /api/finance-news` on claim backend.
 - Shows latest items and refreshes automatically every 24 hours.
 - Supports manual refresh and fallback image handling.
+
+AI Finance Podcast
+------------------
+`src/components/AIFinancePodcast.jsx`
+- Route `/ai-finance-podcast` is currently a Coming Soon page.
+- No backend call is made from this page until feature release.
 
 Known Constraints
 -----------------
