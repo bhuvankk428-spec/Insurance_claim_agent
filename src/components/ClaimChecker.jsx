@@ -11,15 +11,7 @@ import {
 import Navbar from "./ui/Navbar";
 import { loadClaimContext, saveClaimContext } from "../utils/claimContext";
 
-const isLocalhost =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-const API_BASE = isLocalhost
-  ? "http://localhost:5174"
-  : import.meta.env.VITE_CLAIM_API_URL ||
-    import.meta.env.VITE_API_URL ||
-    "";
+const API_BASE = "";
 
 export default function ClaimChecker() {
   const navigate = useNavigate();
@@ -28,6 +20,8 @@ export default function ClaimChecker() {
   const fileInput = useRef(null);
   const firInput = useRef(null);
   const photoInput = useRef(null);
+  const policyRequestSeq = useRef(0);
+  const policyAbortRef = useRef(null);
 
   /* ---------------- POLICY ---------------- */
   const [claimId, setClaimId] = useState(null);
@@ -53,6 +47,12 @@ export default function ClaimChecker() {
 
   /* ---------------- POLICY VERIFY ---------------- */
   async function verifyPolicy(file) {
+    policyRequestSeq.current += 1;
+    const requestSeq = policyRequestSeq.current;
+    policyAbortRef.current?.abort();
+    const controller = new AbortController();
+    policyAbortRef.current = controller;
+
     const endpoint = API_BASE ? `${API_BASE}/api/claim-check` : "/api/claim-check";
     const formData = new FormData();
     formData.append("pdf", file); 
@@ -63,9 +63,11 @@ export default function ClaimChecker() {
       const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
 
       const data = await res.json();
+      if (requestSeq !== policyRequestSeq.current) return;
 
       if (data.valid) {
         setClaimId(data.claimId);
@@ -78,7 +80,9 @@ export default function ClaimChecker() {
         status: data.valid ? "success" : "error",
         message: data.message,
       });
-    } catch {
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      if (requestSeq !== policyRequestSeq.current) return;
       setPolicyResult({
         status: "error",
         message: "Policy verification failed",

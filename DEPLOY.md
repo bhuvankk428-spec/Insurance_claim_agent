@@ -52,7 +52,7 @@ These are available from the same domain:
 - `/api/admin/claims`
 - `/api/admin/claims/:claimId`
 
-Frontend now supports same-origin fallback for these routes, so separate `VITE_CHAT_API_URL` and `VITE_CLAIM_API_URL` are optional.
+Frontend now uses same-origin `/api/*` routes. Do not set separate frontend API base URLs unless you intentionally want to bypass the co-deployed Vercel functions.
 
 ## 4) Health Checks
 After deploy, verify:

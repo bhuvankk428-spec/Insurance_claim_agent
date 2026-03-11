@@ -35,9 +35,8 @@ Entry Point and Routing
 Configuration
 -------------
 Vite environment variables:
-- `VITE_CHAT_API_URL`: chat backend URL (required in production)
-- `VITE_CLAIM_API_URL`: claim backend URL (recommended in production)
-- `VITE_API_URL`: fallback for claim/admin endpoints
+- Frontend uses same-origin `/api/*` routes in both local and production
+- Local development relies on the Vite dev proxy to forward `/api/*` to the local backends
 - `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated), `VITE_ADMIN_TOKEN`
 
 Runtime behavior:
@@ -67,7 +66,7 @@ Policy Advisor (Chatbot)
 - Sends `language` (`en`, `hi`, `te`, `kn`) and optional `domain` + `details`.
 - Auto-detects insurance domain from query when domain is set to "Any".
 - Supports speech synthesis voice playback and mute toggle.
-- Shows clear error if `VITE_CHAT_API_URL` is missing in production.
+- Production should call the same Vercel project under `/api/*`; avoid separate frontend API base URLs unless intentionally routing to another backend.
 
 Claim Checker Flow
 ------------------

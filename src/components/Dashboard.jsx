@@ -2,16 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Navbar from "./ui/Navbar";
 import { auth } from "../firebase";
 
-const isLocalhost =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-
-const API_BASE = (
-  import.meta.env.VITE_CLAIM_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  (isLocalhost ? "http://localhost:5174" : "")
-).replace(/\/$/, "");
+const API_BASE = "";
 
 export default function Dashboard() {
   const [claims, setClaims] = useState([]);

@@ -54,12 +54,10 @@ Use `example.env` as template.
 
 Important:
 - Keep secrets only in `.env` (never commit real keys).
-- Production requires explicit API URLs and admin token alignment.
+- Frontend uses same-origin `/api` routes in both local and production.
+- Production requires admin token alignment.
 
 ### Core frontend vars (Vercel)
-- `VITE_CHAT_API_URL`
-- `VITE_CLAIM_API_URL`
-- `VITE_API_URL` (claim/admin fallback)
 - `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated)
 - `VITE_ADMIN_TOKEN`
 
@@ -106,6 +104,7 @@ Claim workflow notes:
 
 ## Production Deployment
 Frontend and backend are deployed together on Vercel.
+- Frontend calls same-origin `/api/*` routes. Local development uses the Vite proxy to forward those routes to the local backends.
 See `DEPLOY.md` for complete step-by-step instructions.
 
 ## CORS Notes

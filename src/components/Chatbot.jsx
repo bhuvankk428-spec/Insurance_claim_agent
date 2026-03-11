@@ -2,14 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navbar from "./ui/Navbar.jsx";
-const isLocalhost =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-const CHAT_API_BASE = (
-  import.meta.env.VITE_CHAT_API_URL ||
-  (isLocalhost ? "http://localhost:5175" : "")
-).replace(/\/$/, "");
+const CHAT_API_BASE = "";
 
 /* ---------------- AUTO DOMAIN DETECTION ---------------- */
 function detectDomain(text) {

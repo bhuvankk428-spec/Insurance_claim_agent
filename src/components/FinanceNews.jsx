@@ -3,15 +3,7 @@ import { FaNewspaper, FaSyncAlt, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./ui/Navbar";
 
-const isLocalhost =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-const API_BASE = isLocalhost
-  ? "http://localhost:5174"
-  : import.meta.env.VITE_CLAIM_API_URL ||
-    import.meta.env.VITE_API_URL ||
-    "";
+const API_BASE = "";
 
 const REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const FALLBACK_IMAGE = "/finance-news-fallback.svg";
