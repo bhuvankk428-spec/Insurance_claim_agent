@@ -69,6 +69,11 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 - Missing `OPENAI_API_KEY`, `DATABASE_URL`, or Supabase vars
 - CORS misconfiguration in `CORS_ORIGIN`
 
+### Claim story works locally but fails in production
+- Older deployments depended on in-memory claim session state between `/api/claim-check`, `/api/claim-evidence`, and `/api/claim-story`
+- Current flow returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the story request
+- If claim eligibility is failing after deploy, confirm the latest frontend and claim backend are deployed together; a mixed old/new deploy can break the handoff
+
 ### Build succeeds but runtime fails
 - Missing production env vars in Vercel (Preview/Production scopes checked incorrectly)
 
@@ -76,6 +81,7 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 1. Set Vercel environment variables
 2. Deploy
 3. Verify user flows: chat, claim check, claim evidence, claim story, admin dashboard
+4. Verify the full claim flow in production without relying on the same server instance between requests
 
 ## 7) Production Security Note
 - Current admin route gating uses frontend email checks plus admin token for API calls.

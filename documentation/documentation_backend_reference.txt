@@ -54,7 +54,7 @@ Claimcheck Service (`backend/claimcheck`)
 
 State and Persistence
 ---------------------
-- Transient claim step state: in-memory `claimStore`.
+- Transient claim step state: in-memory `claimStore`, with serialized `claimContext` returned to the frontend for browser-session handoff.
 - Durable admin/reporting state: Supabase `claims` table.
 
 API Contract Summary
@@ -65,15 +65,15 @@ API Contract Summary
 
 `POST /api/claim-check` (multipart)
 - Field: `pdf`
-- Response: `{ valid, message, claimId?, extracted? }`
+- Response: `{ valid, message, claimId?, extracted?, claimContext? }`
 
 `POST /api/claim-evidence` (multipart)
 - Fields: `claimId`, `claimType`, `fir`, `photos`
-- Response: `{ status, message, ... }`
+- Response: `{ status, message, claimContext?, ... }`
 
 `POST /api/claim-story`
-- Body: `{ claimId, story }`
-- Response: `{ eligible, claimCode?, level?, riskLevel?, explanation?, reasons? }`
+- Body: `{ claimId, story, claimContext? }`
+- Response: `{ eligible, claimCode?, level?, riskLevel?, explanation?, reasons?, claimContext? }`
 - OpenAI behavior:
   - With `OPENAI_API_KEY`: OpenAI is used for coverage + story checks.
   - Without key (or AI failure): heuristic/manual-review fallback is used.

@@ -42,9 +42,11 @@ Claimcheck Service Design (`backend/claimcheck`)
 Flow:
 1. `POST /api/claim-check` validates policy and creates claim session
 2. `POST /api/claim-evidence` processes FIR + photos and match rules
-3. `POST /api/claim-story` evaluates narrative + coverage and persists decision
-4. Admin routes read/update persisted decisions in Supabase
-5. Finance route fetches latest market headlines for frontend cards
+3. Frontend stores returned `claimContext` in browser session storage
+4. `POST /api/claim-story` evaluates narrative + coverage and persists decision
+5. Story step can restore missing in-memory session state from `claimContext` on serverless/production requests
+6. Admin routes read/update persisted decisions in Supabase
+7. Finance route fetches latest market headlines for frontend cards
 
 Decision safety notes:
 - If OpenAI is unavailable or returns invalid story JSON, the story step falls back to partial approval/manual review (no auto-approve fallback).
@@ -59,9 +61,10 @@ Startup constraints:
 
 State and Durability
 --------------------
-- In-progress claim session data is in-memory (`claimStore`).
+- In-progress claim session data is built in-memory (`claimStore`) and mirrored to the frontend as serialized `claimContext`.
 - Final claim records are stored in Supabase.
-- Restarting claim service clears in-memory sessions.
+- Restarting claim service clears in-memory sessions, but the story step can rebuild the required context from the browser-provided `claimContext`.
+- In-progress claim durability is browser-session scoped, not fully database-backed.
 
 Operational Notes
 -----------------

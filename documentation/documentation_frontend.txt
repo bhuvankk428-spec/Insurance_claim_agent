@@ -74,10 +74,11 @@ Claim Checker Flow
 `src/components/ClaimChecker.jsx`
 - Step 1: `POST /api/claim-check` (policy PDF)
 - Step 2: `POST /api/claim-evidence` (FIR + photos)
+- Stores returned `claimContext` in browser `sessionStorage` keyed by `claimId`
 - On success navigates to story page.
 
 `src/components/ClaimStoryChatbot.jsx`
-- Step 3: `POST /api/claim-story` with `{ claimId, story }`
+- Step 3: loads saved `claimContext` and `POST /api/claim-story` with `{ claimId, story, claimContext }`
 - Navigates to result page with decision data.
 - If backend OpenAI analysis is unavailable, backend may return partial/manual-review outcome instead of full approval.
 
@@ -107,8 +108,8 @@ AI Finance Podcast
 
 Known Constraints
 -----------------
-- Claim flow depends on server in-memory claim session state.
-- Refreshing during claim flow may require restarting from Step 1.
+- In-progress claim context is preserved for the active browser session using `sessionStorage`, which makes the claim flow production-safe on serverless backends.
+- If the browser session storage is cleared or the user switches devices mid-flow, Step 1 may need to be restarted.
 - Production setup must align frontend and backend admin tokens.
 - Current admin authorization model is not role-claim based; frontend email checks should be treated as UX gating, not strong backend authorization.
 - Geo-tag status depends on backend geo fallback chain: EXIF GPS -> OCR coordinate text parsing -> OpenAI vision coordinate parsing (if key configured).
