@@ -33,7 +33,7 @@ function pickTrendingTopic() {
 function safeJsonParse(text) {
   try {
     return JSON.parse(text);
-  } catch (_err) {
+  } catch {
     const firstBrace = text.indexOf("{");
     const lastBrace = text.lastIndexOf("}");
     if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {

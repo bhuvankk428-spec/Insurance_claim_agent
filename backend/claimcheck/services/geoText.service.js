@@ -18,7 +18,7 @@ function normalizePair(latitude, longitude, source) {
 
 function parseLabeledPair(text) {
   const pattern =
-    /(?:lat|latitude)\s*[:=]?\s*([+-]?\d{1,2}(?:\.\d+)?)[^\d+\-]+(?:lon|long|longitude)\s*[:=]?\s*([+-]?\d{1,3}(?:\.\d+)?)/i;
+    /(?:lat|latitude)\s*[:=]?\s*([+-]?\d{1,2}(?:\.\d+)?)[^\d+-]+(?:lon|long|longitude)\s*[:=]?\s*([+-]?\d{1,3}(?:\.\d+)?)/i;
   const match = text.match(pattern);
   if (!match) return null;
   return normalizePair(match[1], match[2], "ocr-labeled");
@@ -51,7 +51,7 @@ export async function extractGeoFromImageText(buffer, mimeType) {
       return parsedFromOcr;
     }
   } catch {
-    console.log("error from ocr moving to openai vision")
+    console.log("error from ocr moving to openai vision");
   }
 
   const parsedFromVision = await extractGeoFromImageWithVision({
@@ -68,4 +68,3 @@ export async function extractGeoFromImageText(buffer, mimeType) {
 
   return null;
 }
-

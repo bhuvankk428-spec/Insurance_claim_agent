@@ -33,7 +33,6 @@ export default function ClaimChecker() {
 
   const [fileName, setFileName] = useState("");
   const [policyResult, setPolicyResult] = useState(null);
-  const [policyLoading, setPolicyLoading] = useState(false);
   const policyVerified = policyResult?.status === "success";
 
   /* ---------------- DOMAIN ---------------- */
@@ -60,8 +59,6 @@ export default function ClaimChecker() {
     if (email) formData.append("email", email);
 
     try {
-      setPolicyLoading(true);
-
       const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -82,8 +79,6 @@ export default function ClaimChecker() {
         status: "error",
         message: "Policy verification failed",
       });
-    } finally {
-      setPolicyLoading(false);
     }
   }
 

@@ -86,7 +86,7 @@ app.use("/api", apiLimiter);
 
 app.use("/api", claimRoutes);
 
-app.use((err, _req, res, _next) => {
+app.use((err, _req, res) => {
   if (err?.name === "MulterError") {
     return res.status(400).json({
       status: "error",

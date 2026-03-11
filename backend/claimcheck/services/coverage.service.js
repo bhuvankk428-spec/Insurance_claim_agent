@@ -134,7 +134,9 @@ ${JSON.stringify(firData || {}, null, 2)}
       );
       if (parsed) return parsed;
     }
-  } catch {}
+  } catch {
+    // Fall back to the local rule-based coverage decision below.
+  }
 
   return fallback;
 }

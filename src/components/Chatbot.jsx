@@ -72,7 +72,7 @@ export default function PolicySummarizer() {
   const [details, setDetails] = useState("");
   const [domain, setDomain] = useState("any");
   const [messages, setMessages] = useState([]);
-  const [confidence, setConfidence] = useState(null);
+  const [confidence] = useState(null);
   const [loading, setLoading] = useState(false);
   const [muted, setMuted] = useState(false);
   const [responseLanguage, setResponseLanguage] = useState("en");

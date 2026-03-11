@@ -149,7 +149,7 @@ export default function ClaimStoryChatbot() {
         });
       }
 
-    } catch (err) {
+    } catch {
       navigate(`/claim-result/${claimId || "unknown"}`, {
         state: {
           status: "rejected",

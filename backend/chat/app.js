@@ -98,6 +98,9 @@ app.get("/readyz", async (_req, res) => {
         setTimeout(() => reject(new Error("DB timeout")), 2000)
       ),
     ]);
+    if (REQUIRE_POLICY_CHUNKS_READY) {
+      await ensurePolicyChunksReady();
+    }
     res.json({
       status: "ready",
       openai_configured: Boolean(process.env.OPENAI_API_KEY),
@@ -201,6 +204,28 @@ const REQUIRE_DB_READY =
 const STARTUP_DB_TIMEOUT_MS = Number(
   process.env.STARTUP_DB_TIMEOUT_MS || 5000
 );
+const REQUIRE_POLICY_CHUNKS_READY =
+  String(process.env.REQUIRE_POLICY_CHUNKS_READY || "true").toLowerCase() ===
+  "true";
+
+async function ensurePolicyChunksReady() {
+  const tableResult = await db.query(`
+    SELECT EXISTS (
+      SELECT 1
+      FROM information_schema.tables
+      WHERE table_schema = 'public' AND table_name = 'policy_chunks'
+    ) AS exists
+  `);
+
+  if (!tableResult.rows[0]?.exists) {
+    throw new Error("policy_chunks table is missing");
+  }
+
+  const rowCountResult = await db.query("SELECT COUNT(*)::int AS total FROM policy_chunks");
+  if (!rowCountResult.rows[0]?.total) {
+    throw new Error("policy_chunks table is empty");
+  }
+}
 
 export async function preflight() {
   if (!REQUIRE_DB_READY) return;
@@ -213,6 +238,9 @@ export async function preflight() {
       setTimeout(() => reject(new Error("DB timeout")), STARTUP_DB_TIMEOUT_MS)
     ),
   ]);
+  if (REQUIRE_POLICY_CHUNKS_READY) {
+    await ensurePolicyChunksReady();
+  }
 }
 
 export default app;
