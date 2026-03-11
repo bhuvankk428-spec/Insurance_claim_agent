@@ -120,6 +120,102 @@
     "text": "raw_text: Large standalone health insurer offering multiple products across health, personal accident and travel insurance. Known for a wide cashless hospital network, digital claim support, maternity and pre-existing disease coverage after waiting periods, and multiple add-ons such as critical illness and top-up covers."
   },
   {
+    "domain": "Health Insurance",
+    "policy_name": "HDFC ERGO Optima Secure",
+    "section": "coverage.home_healthcare",
+    "text": "coverage.home_healthcare: select_cities_variant_dependent"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "HDFC ERGO Optima Secure",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Strong fit for users who want broad hospitalization cover, restoration-style continuity, and a large cashless network."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "HDFC ERGO Optima Secure",
+    "section": "best_for",
+    "text": "best_for: Users wanting broad hospitalization cover with strong cashless usability; Families looking for a premium comprehensive plan without a room rent cap; Buyers who value restoration-led coverage structure"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "HDFC ERGO Optima Secure",
+    "section": "raw_text",
+    "text": "raw_text: Comprehensive health insurance plan from HDFC ERGO designed for individuals and families. It is known for broad hospitalization cover, no room rent cap in many variants, preventive health benefits, pre-existing disease cover after waiting periods, restore-style continuity of cover, and strong cashless support through a wide hospital network."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Care Supreme",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Useful for users comparing restoration-heavy products with broad hospitalization support and a modern digital purchase journey."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Care Supreme",
+    "section": "best_for",
+    "text": "best_for: Families comparing high-cover comprehensive plans; Users who value broad hospitalization terms and restoration-led benefits; Buyers seeking a modern premium health product"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Care Supreme",
+    "section": "raw_text",
+    "text": "raw_text: Comprehensive health insurance plan from Care Health Insurance positioned as a premium offering for individuals and families. It emphasizes broad hospitalization coverage, no room rent limit in many scenarios, restoration-oriented benefits, annual health checkups, and multiple optional enhancements depending on the selected variant."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ICICI Lombard Elevate",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Good for demos where customization and add-on style personalization matter alongside core hospitalization cover."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ICICI Lombard Elevate",
+    "section": "best_for",
+    "text": "best_for: Users who want a customizable health insurance plan; Families comparing modular premium products; Buyers who value digital servicing and optional add-ons"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ICICI Lombard Elevate",
+    "section": "raw_text",
+    "text": "raw_text: ICICI Lombard Elevate is a comprehensive health insurance plan for individuals and families with hospitalization cover, daycare support, restore-style continuity, customizable benefits, and optional feature extensions. It is positioned as a flexible modern product for buyers who want to tune coverage around their needs."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Aditya Birla Activ One Max",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Stronger fit for users who value preventive care, wellness-linked benefits, and chronic-condition management support."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Aditya Birla Activ One Max",
+    "section": "best_for",
+    "text": "best_for: Users who care about wellness and preventive-health engagement; Families comparing modern comprehensive plans; Buyers looking for chronic-care and digital-support oriented features"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "Aditya Birla Activ One Max",
+    "section": "raw_text",
+    "text": "raw_text: Aditya Birla Activ One Max is a health and wellness oriented comprehensive insurance plan for individuals and families. It combines hospitalization cover with restoration-style protection, preventive and wellness-linked features, chronic-care support signals, and a modern digital-first service experience."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ManipalCigna ProHealth Prime",
+    "section": "claim_process.notes",
+    "text": "claim_process.notes: Balanced option for users comparing comprehensive family coverage with wellness and add-on flexibility."
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ManipalCigna ProHealth Prime",
+    "section": "best_for",
+    "text": "best_for: Families wanting a balanced comprehensive plan; Users comparing wellness-friendly plans without forcing a premium flagship choice; Buyers who want broad core cover with flexible enhancements"
+  },
+  {
+    "domain": "Health Insurance",
+    "policy_name": "ManipalCigna ProHealth Prime",
+    "section": "raw_text",
+    "text": "raw_text: ManipalCigna ProHealth Prime is a comprehensive health insurance plan with hospitalization cover, daycare treatment support, restoration benefits, health checkups, and multiple add-on style customization options. It works as a balanced comparison option for both individual and family buyers."
+  },
+  {
     "domain": "Home Insurance",
     "policy_name": "ICICI Lombard Complete Home Protect",
     "section": "what_it_does",
