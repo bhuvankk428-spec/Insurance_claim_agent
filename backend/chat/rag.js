@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import { retrieveChunks } from "./retrieval.js";
 import { scorePolicy } from "./rules.js";
-import { getPolicyByName } from "./policyCatalog.js";
 
 const hasOpenAIKey =
   Boolean(process.env.OPENAI_API_KEY) &&
@@ -279,17 +278,10 @@ export async function askRAGStream({
 
   const userSignals = extractUserSignals(question, details);
   const rankedChunks = rawChunks
-    .map((c) => ({
-      ...c,
-      policy: getPolicyByName(c.policy_name),
-    }))
     .map((c) => {
-      const scoredPolicy = c.policy
-        ? { ...c.policy, similarity: c.similarity, content: c.content }
-        : { ...c, similarity: c.similarity };
       return {
         ...c,
-        score: scorePolicy(scoredPolicy, userSignals) * 0.7 + c.similarity * 0.3,
+        score: scorePolicy(c, userSignals) * 0.7 + c.similarity * 0.3,
       };
     })
     .sort((a, b) => b.score - a.score);
