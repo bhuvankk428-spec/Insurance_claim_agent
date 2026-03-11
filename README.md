@@ -107,6 +107,11 @@ Frontend and backend are deployed together on Vercel.
 - Frontend calls same-origin `/api/*` routes. Local development uses the Vite proxy to forward those routes to the local backends.
 See `DEPLOY.md` for complete step-by-step instructions.
 
+Production notes:
+- If a fix works locally but not in production, first confirm the backend commit was pushed and the latest Production deployment completed
+- For claim document issues, compare the live `/api/claim-check` response with local extraction output before changing validation logic
+- PDF extraction in serverless environments can differ from local runs; keep PDF.js asset resolution environment-safe
+
 ## CORS Notes
 You can provide multiple comma-separated origins in `CORS_ORIGIN`.
 Wildcards are supported (example):

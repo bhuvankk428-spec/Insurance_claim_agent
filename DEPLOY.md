@@ -76,6 +76,20 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 - Current flow persists in-progress claim state in Supabase and also returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the evidence and story requests as fallback
 - If claim eligibility is failing after deploy, confirm the latest frontend and claim backend are deployed together; a mixed old/new deploy can break the handoff
 
+### Local fix works but production still shows old claim behavior
+- Confirm the backend changes were committed and pushed before testing production
+- Confirm Vercel Production deployed the latest commit from `main`
+- If production still shows an old message such as `Policy verified (owner name missing, continuing anyway)`, the live site is still on an older backend build
+- Check the Production deployment logs and commit SHA in Vercel before debugging the app logic
+
+### Production says policy fields are missing but the same PDF passes locally
+- This usually means production PDF extraction differs from local extraction, not that the PDF itself is invalid
+- `policy_test.pdf` was verified locally with extracted values for owner name, vehicle number, policy number, and validity dates
+- A production-only issue was identified in PDF.js asset resolution inside `backend/claimcheck/services/ocr.service.js`; use package-based resolution rather than hardcoded relative `node_modules` paths
+- After deploy, test `/api/claim-check` directly and inspect the JSON response fields: `message`, `domain`, `missingFields`, and `extracted`
+- If `extracted` is empty or incomplete only in production, inspect Vercel runtime logs for PDF/OCR warnings before changing validation rules
+- Avoid assuming the parser is wrong until the production extraction output is confirmed
+
 ### Build succeeds but runtime fails
 - Missing production env vars in Vercel (Preview/Production scopes checked incorrectly)
 
@@ -84,6 +98,8 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 2. Deploy
 3. Verify user flows: chat, claim check, claim evidence, claim story, admin dashboard
 4. Verify the full claim flow in production without relying on the same server instance between requests
+5. Verify a known-good sample PDF such as `test_pdf_for_verification/policy_test.pdf` in Production
+6. If claim validation changed, verify both a known-good PDF and a known-bad PDF before closing the deploy
 
 ## 7) Production Security Note
 - Current admin route gating uses frontend email checks plus admin token for API calls.
