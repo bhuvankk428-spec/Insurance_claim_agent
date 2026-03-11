@@ -1,8 +1,9 @@
 import OpenAI from "openai";
 import {
   buildClaimContext,
-  claimStore,
+  getClaim,
   restoreClaimFromContext,
+  saveClaim,
 } from "../store/claimStore.js";
 import { upsertClaimDecision } from "./supabase.service.js";
 import { checkCoverage } from "./coverage.service.js";
@@ -95,12 +96,12 @@ export async function analyzeStory(req, res) {
       });
     }
 
-    let claim = claimStore.get(claimId);
+    let claim = await getClaim(claimId);
     if (
       (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) &&
       claimContext
     ) {
-      claim = restoreClaimFromContext(claimId, claimContext);
+      claim = await restoreClaimFromContext(claimId, claimContext);
     }
 
     if (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) {
@@ -221,7 +222,7 @@ export async function analyzeStory(req, res) {
       claim.claimCode = claimCode;
       claim.riskLevel = "high";
       claim.matchLevel = "partial";
-      claimStore.set(claimId, claim);
+      await saveClaim(claimId, claim);
 
       try {
         await upsertClaimDecision({
@@ -474,7 +475,7 @@ Respond STRICTLY in JSON:
       claim.claimCode = claimCode;
       claim.riskLevel = "high";
       claim.matchLevel = "partial";
-      claimStore.set(claimId, claim);
+      await saveClaim(claimId, claim);
 
       try {
         await upsertClaimDecision({
@@ -542,7 +543,7 @@ Respond STRICTLY in JSON:
     claim.riskLevel = finalRiskLevel;
     claim.matchLevel = isPartial ? "partial" : "full";
 
-    claimStore.set(claimId, claim);
+    await saveClaim(claimId, claim);
 
     try {
       await upsertClaimDecision({

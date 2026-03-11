@@ -1,6 +1,6 @@
 import { extractText } from "./ocr.service.js";
 import { extractPolicyFields } from "./extractFields.service.js";
-import { buildClaimContext, claimStore } from "../store/claimStore.js";
+import { buildClaimContext, saveClaim } from "../store/claimStore.js";
 import { detectDomain } from "./match.service.js";
 
 /* ---------------- CLAIM ID GENERATOR ---------------- */
@@ -43,7 +43,7 @@ export async function checkPolicy(req, res) {
     createdAt: Date.now(),
   };
 
-  claimStore.set(claimId, claim);
+  await saveClaim(claimId, claim);
 
   return res.json({
     valid: true,

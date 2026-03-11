@@ -6,8 +6,9 @@ import { matchDocuments, detectDomain } from "./match.service.js";
 import { verifyIncidentWithVision } from "./image.service.js";
 import {
   buildClaimContext,
-  claimStore,
+  getClaim,
   restoreClaimFromContext,
+  saveClaim,
 } from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
@@ -27,14 +28,14 @@ export async function checkEvidence(req, res) {
     });
   }
 
-  let claim = claimStore.get(claimId);
+  let claim = await getClaim(claimId);
   if ((!claim || !claim.policyData) && rawClaimContext) {
     try {
       const parsedContext =
         typeof rawClaimContext === "string"
           ? JSON.parse(rawClaimContext)
           : rawClaimContext;
-      claim = restoreClaimFromContext(claimId, parsedContext);
+      claim = await restoreClaimFromContext(claimId, parsedContext);
     } catch {
       claim = null;
     }
@@ -199,7 +200,7 @@ export async function checkEvidence(req, res) {
   claim.domain = resolvedDomain;
   claim.imageAnalysis = vision;
 
-  claimStore.set(claimId, claim);
+  await saveClaim(claimId, claim);
 
   /* ---------------- SUCCESS ---------------- */
   return res.json({

@@ -24,6 +24,8 @@ Set these in Vercel Project Settings -> Environment Variables:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_TOKEN` (must not use default value)
 
+Before rollout, create or update `public.claims` using `documentation/supabase_claims_schema.sql`.
+
 ### Frontend auth/admin
 - `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated)
 - `VITE_ADMIN_TOKEN` (must exactly match `ADMIN_TOKEN`)
@@ -71,7 +73,7 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 
 ### Claim story works locally but fails in production
 - Older deployments depended on in-memory claim session state between `/api/claim-check`, `/api/claim-evidence`, and `/api/claim-story`
-- Current flow returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the evidence and story requests
+- Current flow persists in-progress claim state in Supabase and also returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the evidence and story requests as fallback
 - If claim eligibility is failing after deploy, confirm the latest frontend and claim backend are deployed together; a mixed old/new deploy can break the handoff
 
 ### Build succeeds but runtime fails
