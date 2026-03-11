@@ -1,3 +1,4 @@
+import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 import Tesseract from "tesseract.js";
@@ -5,7 +6,8 @@ import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const pdfjsBase = path.resolve(__dirname, "..", "node_modules", "pdfjs-dist");
+const require = createRequire(import.meta.url);
+const pdfjsBase = path.dirname(require.resolve("pdfjs-dist/package.json"));
 const standardFontDataUrl =
   pathToFileURL(path.join(pdfjsBase, "standard_fonts")).toString() + "/";
 const cMapUrl = pathToFileURL(path.join(pdfjsBase, "cmaps")).toString() + "/";
