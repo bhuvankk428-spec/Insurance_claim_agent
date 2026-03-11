@@ -9,7 +9,7 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 import Navbar from "./ui/Navbar";
-import { saveClaimContext } from "../utils/claimContext";
+import { loadClaimContext, saveClaimContext } from "../utils/claimContext";
 
 const isLocalhost =
   typeof window !== "undefined" &&
@@ -108,9 +108,13 @@ export default function ClaimChecker() {
     setEvidenceResult(null);
 
     try {
+      const claimContext = claimId ? loadClaimContext(claimId) : null;
       const formData = new FormData();
       formData.append("claimId", claimId); 
       formData.append("claimType", claimType);
+      if (claimContext) {
+        formData.append("claimContext", JSON.stringify(claimContext));
+      }
       formData.append("fir", firFile);
       photoFiles.forEach((f) => formData.append("photos", f));
 

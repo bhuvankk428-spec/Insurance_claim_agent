@@ -9,7 +9,7 @@ QK.AI is an insurance platform with:
 - Streaming chatbot answers from `/api/rag-chat`
 - Multilingual chat responses (`en`, `hi`, `te`, `kn`) with optional text-to-speech output
 - Claim workflow: policy PDF -> evidence -> story analysis
-- Production-safe claim flow handoff: frontend stores serialized claim context per `claimId` and resubmits it on the story step so serverless runtimes do not lose eligibility state
+- Production-safe claim flow handoff: frontend stores serialized claim context per `claimId` and resubmits it on evidence/story steps so serverless runtimes do not lose claim state
 - Safe claim fallback: if OpenAI is unavailable or returns invalid story output, claim is marked `partial` for manual review
 - Admin dashboard backed by Supabase (search, load-more pagination, decision updates, export to printable PDF)
 - Finance news feed from `/api/finance-news` (last 24h + refresh)
@@ -80,7 +80,7 @@ Important:
 Claim backend behavior:
 - `OPENAI_API_KEY` enables image vision checks, policy coverage reasoning, and story consistency checks.
 - If OpenAI is configured but fails/returns invalid JSON during story analysis, claim falls back to `partially_approved` (manual review), not auto-approval.
-- Claim step state is created in backend memory first, then echoed back to the browser as `claimContext`; the frontend stores it in `sessionStorage` and sends it again to `/api/claim-story` so production/serverless requests can restore missing context.
+- Claim step state is created in backend memory first, then echoed back to the browser as `claimContext`; the frontend stores it in `sessionStorage` and sends it again to `/api/claim-evidence` and `/api/claim-story` so production/serverless requests can restore missing context.
 - Geo verification uses this fallback chain:
   1. EXIF GPS metadata from uploaded image
   2. OCR extraction of visible coordinate text/watermark in the image

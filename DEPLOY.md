@@ -71,7 +71,7 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 
 ### Claim story works locally but fails in production
 - Older deployments depended on in-memory claim session state between `/api/claim-check`, `/api/claim-evidence`, and `/api/claim-story`
-- Current flow returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the story request
+- Current flow returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the evidence and story requests
 - If claim eligibility is failing after deploy, confirm the latest frontend and claim backend are deployed together; a mixed old/new deploy can break the handoff
 
 ### Build succeeds but runtime fails

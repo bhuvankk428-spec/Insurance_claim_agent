@@ -3,8 +3,12 @@ import { extractFIRFields } from "./extractFields.service.js";
 import { extractExif } from "./exif.service.js";
 import { extractGeoFromImageText } from "./geoText.service.js";
 import { matchDocuments, detectDomain } from "./match.service.js";
-import { verifyIncidentWithVision, VISION_ENABLED } from "./image.service.js";
-import { buildClaimContext, claimStore } from "../store/claimStore.js";
+import { verifyIncidentWithVision } from "./image.service.js";
+import {
+  buildClaimContext,
+  claimStore,
+  restoreClaimFromContext,
+} from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
 const STRICT_GEO_VALIDATION = process.env.STRICT_GEO === "true";
@@ -13,7 +17,8 @@ const LOG_GEO_DETAILS = process.env.LOG_GEO_DETAILS !== "false";
 export async function checkEvidence(req, res) {
   const fir = req.files?.fir?.[0];
   const photos = req.files?.photos || [];
-  const { claimId } = req.body; // ✅ READ claimId
+  const { claimId } = req.body;
+  const rawClaimContext = req.body?.claimContext;
 
   if (!claimId) {
     return res.json({
@@ -22,7 +27,18 @@ export async function checkEvidence(req, res) {
     });
   }
 
-  const claim = claimStore.get(claimId); // ✅ FETCH CLAIM
+  let claim = claimStore.get(claimId);
+  if ((!claim || !claim.policyData) && rawClaimContext) {
+    try {
+      const parsedContext =
+        typeof rawClaimContext === "string"
+          ? JSON.parse(rawClaimContext)
+          : rawClaimContext;
+      claim = restoreClaimFromContext(claimId, parsedContext);
+    } catch {
+      claim = null;
+    }
+  }
 
   if (!claim || !claim.policyData) {
     return res.json({
@@ -106,7 +122,6 @@ export async function checkEvidence(req, res) {
 
   // If geo is missing, continue. Geo is a bonus signal only.
 
-
   /* ---------------- MATCH ---------------- */
   const resolvedDomain = detectDomain(firText, claim.policyData) || domain;
 
@@ -185,7 +200,6 @@ export async function checkEvidence(req, res) {
   claim.imageAnalysis = vision;
 
   claimStore.set(claimId, claim);
-
 
   /* ---------------- SUCCESS ---------------- */
   return res.json({
