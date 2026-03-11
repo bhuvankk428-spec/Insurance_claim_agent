@@ -1,6 +1,6 @@
 import { extractText } from "./ocr.service.js";
 import { extractPolicyFields } from "./extractFields.service.js";
-import { claimStore } from "../store/claimStore.js";
+import { buildClaimContext, claimStore } from "../store/claimStore.js";
 import { detectDomain } from "./match.service.js";
 
 /* ---------------- CLAIM ID GENERATOR ---------------- */
@@ -28,7 +28,7 @@ export async function checkPolicy(req, res) {
   const claimId = generateClaimId();
 
   // ✅ STORE IN claimStore
-  claimStore.set(claimId, {
+  const claim = {
     email,
     domain,
     policyData: fields,
@@ -41,7 +41,9 @@ export async function checkPolicy(req, res) {
     riskLevel: null,
     claimCode: null,
     createdAt: Date.now(),
-  });
+  };
+
+  claimStore.set(claimId, claim);
 
   return res.json({
     valid: true,
@@ -52,5 +54,6 @@ export async function checkPolicy(req, res) {
     claimId,
     extracted: fields,
     domain,
+    claimContext: buildClaimContext(claim),
   });
 }

@@ -1,5 +1,9 @@
 import OpenAI from "openai";
-import { claimStore } from "../store/claimStore.js";
+import {
+  buildClaimContext,
+  claimStore,
+  restoreClaimFromContext,
+} from "../store/claimStore.js";
 import { upsertClaimDecision } from "./supabase.service.js";
 import { checkCoverage } from "./coverage.service.js";
 
@@ -73,7 +77,7 @@ function isImageDateReason(reason = "") {
 /* ---------------- STORY ANALYSIS ---------------- */
 export async function analyzeStory(req, res) {
   try {
-    const { story, claimId } = req.body;
+    const { story, claimId, claimContext } = req.body;
 
     if (!story || !claimId) {
       return res.json({
@@ -91,7 +95,13 @@ export async function analyzeStory(req, res) {
       });
     }
 
-    const claim = claimStore.get(claimId);
+    let claim = claimStore.get(claimId);
+    if (
+      (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) &&
+      claimContext
+    ) {
+      claim = restoreClaimFromContext(claimId, claimContext);
+    }
 
     if (!claim || !claim.policyData || !claim.firData || !claim.matchLevel) {
       return res.json({
@@ -261,6 +271,7 @@ export async function analyzeStory(req, res) {
           geoMismatch ? "Image location does not match incident location" : null,
           "Manual review required",
         ].filter(Boolean),
+        claimContext: buildClaimContext(claim),
       });
     }
 
@@ -510,6 +521,7 @@ Respond STRICTLY in JSON:
         ],
         message:
           "Claim submitted for manual review due to related coverage terms.",
+        claimContext: buildClaimContext(claim),
       });
     }
 
@@ -585,6 +597,7 @@ Respond STRICTLY in JSON:
           ? "Some evidence requires manual verification"
           : "All required evidence verified successfully",
       ].filter(Boolean),
+      claimContext: buildClaimContext(claim),
     });
   } catch (err) {
     console.error("Story analysis error:", err);

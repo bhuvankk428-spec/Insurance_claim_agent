@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./ui/Navbar";
+import {
+  clearClaimContext,
+  loadClaimContext,
+  saveClaimContext,
+} from "../utils/claimContext";
 
 const isLocalhost =
   typeof window !== "undefined" &&
@@ -111,21 +116,30 @@ export default function ClaimStoryChatbot() {
     setLoading(true);
 
     try {
+      const persistedClaimContext = loadClaimContext(claimId);
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          claimId, 
+          claimId,
           story,
+          claimContext: persistedClaimContext,
         }),
       });
 
       const data = await res.json();
+      if (data.claimContext) {
+        saveClaimContext(claimId, data.claimContext);
+      }
       const isPartial =
         data.level === "partial" ||
         data.eligibilityStatus === "partial" ||
         data.eligibilityStatus === "pending";
       const shouldShowResult = Boolean(data.eligible) || isPartial;
+
+      if (data.eligible || data.reason || data.message) {
+        clearClaimContext(claimId);
+      }
 
       if (shouldShowResult) {
         navigate(`/claim-result/${data.claimCode || claimId}`, {

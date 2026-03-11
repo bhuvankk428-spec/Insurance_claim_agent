@@ -4,7 +4,7 @@ import { extractExif } from "./exif.service.js";
 import { extractGeoFromImageText } from "./geoText.service.js";
 import { matchDocuments, detectDomain } from "./match.service.js";
 import { verifyIncidentWithVision, VISION_ENABLED } from "./image.service.js";
-import { claimStore } from "../store/claimStore.js";
+import { buildClaimContext, claimStore } from "../store/claimStore.js";
 
 // Geo is a positive signal only (no hard rejection)
 const STRICT_GEO_VALIDATION = process.env.STRICT_GEO === "true";
@@ -201,5 +201,6 @@ export async function checkEvidence(req, res) {
       : geoTagged
         ? "Documents matched successfully (geo verified)"
         : "Documents matched successfully (geo not provided)",
+    claimContext: buildClaimContext(claim),
   });
 }

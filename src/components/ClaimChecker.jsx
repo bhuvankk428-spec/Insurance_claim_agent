@@ -9,6 +9,7 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 import Navbar from "./ui/Navbar";
+import { saveClaimContext } from "../utils/claimContext";
 
 const isLocalhost =
   typeof window !== "undefined" &&
@@ -67,7 +68,10 @@ export default function ClaimChecker() {
       const data = await res.json();
 
       if (data.valid) {
-        setClaimId(data.claimId); 
+        setClaimId(data.claimId);
+        if (data.claimContext) {
+          saveClaimContext(data.claimId, data.claimContext);
+        }
       }
 
       setPolicyResult({
@@ -120,6 +124,9 @@ export default function ClaimChecker() {
       setEvidenceResult(data);
 
       if (data.status === "success") {
+        if (data.claimContext) {
+          saveClaimContext(claimId, data.claimContext);
+        }
         navigate(`/claim-story/${claimId}`);
       }
     } catch {
