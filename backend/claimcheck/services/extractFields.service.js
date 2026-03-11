@@ -152,7 +152,8 @@ function matchAny(text, regexes) {
   for (const regex of regexes) {
     const m = text.match(regex);
     if (m) {
-      return m[3] || m[2] || m[1] || null;
+      const value = m[3] || m[2] || m[1] || null;
+      return typeof value === "string" ? value.trim() : value;
     }
   }
   return null;

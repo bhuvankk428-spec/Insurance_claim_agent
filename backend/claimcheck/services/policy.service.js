@@ -2,6 +2,7 @@ import { extractText } from "./ocr.service.js";
 import { extractPolicyFields } from "./extractFields.service.js";
 import { buildClaimContext, saveClaim } from "../store/claimStore.js";
 import { detectDomain } from "./match.service.js";
+import { validatePolicyDocument } from "./documentValidation.service.js";
 
 /* ---------------- CLAIM ID GENERATOR ---------------- */
 function generateClaimId() {
@@ -18,11 +19,17 @@ export async function checkPolicy(req, res) {
   const text = await extractText(file.buffer, file.mimetype);
   const fields = extractPolicyFields(text);
   const domain = detectDomain(text, fields);
+  const validation = validatePolicyDocument(domain, fields);
 
-  const hasPrimaryName =
-    Boolean(fields.ownerName) ||
-    Boolean(fields.companyName) ||
-    Boolean(fields.patientName);
+  if (!validation.ok) {
+    return res.json({
+      valid: false,
+      message: validation.message,
+      extracted: fields,
+      domain,
+      missingFields: validation.missingFields,
+    });
+  }
 
   // ✅ CREATE CLAIM
   const claimId = generateClaimId();
@@ -47,10 +54,8 @@ export async function checkPolicy(req, res) {
 
   return res.json({
     valid: true,
-    message: hasPrimaryName
-      ? "Policy verified"
-      : "Policy verified (owner name missing, continuing anyway)",
-    warning: hasPrimaryName ? null : "Owner/insured name not found in policy",
+    message: validation.message,
+    warning: null,
     claimId,
     extracted: fields,
     domain,

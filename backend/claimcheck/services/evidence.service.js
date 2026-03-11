@@ -4,6 +4,7 @@ import { extractExif } from "./exif.service.js";
 import { extractGeoFromImageText } from "./geoText.service.js";
 import { matchDocuments, detectDomain } from "./match.service.js";
 import { verifyIncidentWithVision } from "./image.service.js";
+import { validateFirDocument } from "./documentValidation.service.js";
 import {
   buildClaimContext,
   getClaim,
@@ -67,6 +68,16 @@ export async function checkEvidence(req, res) {
   /* ---------------- FIR OCR ---------------- */
   const firText = await extractText(fir.buffer, fir.mimetype);
   const firData = extractFIRFields(firText);
+  const resolvedDomain = detectDomain(firText, claim.policyData) || domain;
+  const firValidation = validateFirDocument(resolvedDomain, firData);
+
+  if (!firValidation.ok) {
+    return res.json({
+      status: "error",
+      message: firValidation.message,
+      missingFields: firValidation.missingFields,
+    });
+  }
 
   /* ---------------- IMAGE CHECK ---------------- */
   let imageLocation = "UNKNOWN";
@@ -124,8 +135,6 @@ export async function checkEvidence(req, res) {
   // If geo is missing, continue. Geo is a bonus signal only.
 
   /* ---------------- MATCH ---------------- */
-  const resolvedDomain = detectDomain(firText, claim.policyData) || domain;
-
   const result = matchDocuments({
     domain: resolvedDomain,
     policyData: claim.policyData,
