@@ -17,6 +17,10 @@ const decisionOptions = [
   { value: "rejected", label: "Rejected" },
 ];
 
+const isLocalhost =
+  typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [claims, setClaims] = useState([]);
