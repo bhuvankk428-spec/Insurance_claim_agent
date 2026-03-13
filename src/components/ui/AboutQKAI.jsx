@@ -14,7 +14,7 @@ export default function AboutQKAI() {
           {/* Left: Text */}
           <div className="order-2 md:order-1 space-y-6 sm:space-y-8">
             <p className="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-3">
-              About QK.AI
+              About INSURE.AI
             </p>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 sm:mb-6 leading-tight">
@@ -26,13 +26,13 @@ export default function AboutQKAI() {
 
             <div className="space-y-4 text-neutral-300 text-sm sm:text-base leading-relaxed">
               <p>
-                QK.AI is an AI platform built to simplify insurance decisions from
+                INSURE.AI is an AI platform built to simplify insurance decisions from
                 day one. We turn dense policy wording, scattered claim evidence, and
                 complex eligibility rules into clear, usable guidance.
               </p>
               <p>
                 Whether you are reviewing coverage before purchase or validating a
-                claim under pressure, QK.AI helps you move faster with fewer blind
+                claim under pressure, INSURE.AI helps you move faster with fewer blind
                 spots and less legal jargon.
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function AboutQKAI() {
                 onClick={() => navigate("/choose")}
                 className="rounded-xl bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400 transition-colors"
               >
-                Explore QK.AI
+                Explore INSURE.AI
               </button>
               <button
                 type="button"
@@ -104,12 +104,12 @@ export default function AboutQKAI() {
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center flex-shrink-0">
                   <img
                     src="/logo.png"
-                    alt="QK.AI Logo"
+                    alt="INSURE.AI Logo"
                     className="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-xl"
                   />
                 </div>
                 <span className="font-semibold text-base sm:text-lg tracking-tight">
-                  QK.AI
+                  INSURE.AI
                 </span>
               </div>
 

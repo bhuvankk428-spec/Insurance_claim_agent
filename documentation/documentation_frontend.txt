@@ -55,7 +55,7 @@ Authentication
 
 `src/components/admin/adminAuth.js`
 - Reads admin email allowlist from `VITE_ADMIN_EMAILS` or `VITE_ADMIN_EMAIL`.
-- Ignores known placeholder emails and falls back to `admin@qk.ai` if config is missing.
+- Ignores known placeholder emails and falls back to `admin@insure.ai` if config is missing.
 - Exposes admin token used by admin API calls.
 
 Policy Advisor (Chatbot)

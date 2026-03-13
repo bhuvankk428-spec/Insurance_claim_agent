@@ -10,10 +10,10 @@ export default function HelpQKAI() {
             Help & Guide
           </p>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 leading-tight text-white drop-shadow-2xl">
-            How to use QK.AI
+            How to use INSURE.AI
           </h1>
           <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mx-auto">
-            Follow this flow to use the current QK.AI modules in this project.
+            Follow this flow to use the current INSURE.AI modules in this project.
           </p>
         </div>
 
@@ -21,7 +21,7 @@ export default function HelpQKAI() {
           <HelpStep
             number="1"
             title="Sign in or create an account"
-            text="Open QK.AI and sign in from the login screen. New users can create an account from the registration page."
+            text="Open INSURE.AI and sign in from the login screen. New users can create an account from the registration page."
           />
           <HelpStep
             number="2"

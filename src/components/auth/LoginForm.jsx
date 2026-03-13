@@ -73,7 +73,7 @@ export default function LoginForm() {
             <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-2xl border-4 border-cyan-500/60 bg-gradient-to-br from-cyan-900/50 to-emerald-900/40 flex items-center justify-center shadow-2xl">
               <img
                 src="/logo.png"
-                alt="QK.AI Logo"
+                alt="INSURE.AI Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain drop-shadow-lg"
               />
             </div>
@@ -85,7 +85,7 @@ export default function LoginForm() {
               Welcome Back
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md mx-auto">
-              Sign in to your QK.AI account to access policy analysis and claim tools
+              Sign in to your INSURE.AI account to access policy analysis and claim tools
             </p>
           </div>
 
@@ -160,7 +160,7 @@ export default function LoginForm() {
                 Signing in...
               </span>
             ) : (
-              "Sign In to QK.AI"
+              "Sign In to INSURE.AI"
             )}
           </button>
           </form>
@@ -257,7 +257,7 @@ export default function LoginForm() {
           
           <img
             src="/login.jpg"
-            alt="QK.AI Dashboard Preview"
+            alt="INSURE.AI Dashboard Preview"
             className="w-full h-full object-cover absolute inset-0 rounded-tl-[46px] rounded-bl-[46px] brightness-75 z-0"
           />
           

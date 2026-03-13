@@ -3,8 +3,8 @@ import Navbar from "./Navbar.jsx";
 
 const faqs = [
   {
-    q: "What is QK.AI in this project?",
-    a: "QK.AI includes multiple modules: Policy Advisor chatbot, Claim Checker workflow, Claim Story evaluation, Plan Builder and Dashboard, and Finance News."
+    q: "What is INSURE.AI in this project?",
+    a: "INSURE.AI includes multiple modules: Policy Advisor chatbot, Claim Checker workflow, Claim Story evaluation, Plan Builder and Dashboard, and Finance News."
   },
   {
     q: "Which page should I open first after login?",
@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: "Is this legal or financial advice?",
-    a: "No. QK.AI outputs guidance and automation support. Final claim and investment decisions should be confirmed with your insurer or a certified advisor."
+    a: "No. INSURE.AI outputs guidance and automation support. Final claim and investment decisions should be confirmed with your insurer or a certified advisor."
   },
   {
     q: "Can I upload sensitive personal information?",
@@ -59,7 +59,7 @@ export default function FAQQKAI() {
             Frequently asked questions
           </h1>
           <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mx-auto">
-            Answers based on the current QK.AI modules and workflows in this repository.
+            Answers based on the current INSURE.AI modules and workflows in this repository.
           </p>
         </div>
 

@@ -1,6 +1,6 @@
-# QK.AI - Intelligent Insurance Policy Advisor
+# INSURE.AI - Intelligent Insurance Policy Advisor
 
-QK.AI is an insurance platform with:
+INSURE.AI is an insurance platform with:
 1. Policy Advisor chatbot (RAG).
 2. Claim Checker workflow for document verification and admin review.
 3. Planning and finance modules in the frontend (`/plan`, `/plan-dashboard`, `/finance-news`).
@@ -120,7 +120,7 @@ CORS_ORIGIN=https://your-app.vercel.app,https://*.vercel.app
 ```
 
 ## Supabase Table
-Create table `public.claims` with the SQL in [documentation/supabase_claims_schema.sql](/d:/qk.ai/documentation/supabase_claims_schema.sql) or run:
+Create table `public.claims` with the SQL in `documentation/supabase_claims_schema.sql` or run:
 ```sql
 create table if not exists public.claims (
   claim_id text primary key,
@@ -161,6 +161,12 @@ create table if not exists public.claims (
 - Stop process: `Stop-Process -Id <PID> -Force`
 - Or change local ports in `.env` (`CLAIM_PORT`, `CHAT_PORT`) and restart.
 
-## Author
-Bhuvan KK  
-Email: bhuvankk2005@gmail.com
+## Team Contacts
+Chaithanya  
+Email: ChaithanyaN31@gmail.com
+
+Ashritha  
+Email: ashritha@gmail.com
+
+Deepashree  
+Email: deepashree@gmail.com

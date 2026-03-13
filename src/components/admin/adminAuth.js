@@ -1,4 +1,4 @@
-const FALLBACK_ADMIN_EMAIL = "admin@qk.ai";
+const FALLBACK_ADMIN_EMAIL = "admin@insure.ai";
 const PLACEHOLDER_ADMIN_EMAILS = new Set([
   "your-admin-firebase-email@example.com",
   "your-admin-email@example.com",

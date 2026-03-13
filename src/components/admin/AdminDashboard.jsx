@@ -186,7 +186,7 @@ export default function AdminDashboard() {
       <html>
         <head>
           <meta charset="utf-8" />
-          <title>QK.AI Claims Summary</title>
+          <title>INSURE.AI Claims Summary</title>
           <style>
             body { font-family: Arial, sans-serif; color: #0b0f14; padding: 24px; }
             h1 { margin: 0 0 6px; font-size: 22px; }
@@ -226,7 +226,7 @@ export default function AdminDashboard() {
               ${rows || `<tr><td colspan="7">No claims found.</td></tr>`}
             </tbody>
           </table>
-          <div class="footer">QK.AI Admin Dashboard</div>
+          <div class="footer">INSURE.AI Admin Dashboard</div>
         </body>
       </html>
     `;
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center">
-                  <span className="text-cyan-300 font-bold">QK</span>
+                  <span className="text-cyan-300 font-bold">IA</span>
                 </div>
                 <div>
                   <p className="text-sm text-neutral-400">Total claims</p>

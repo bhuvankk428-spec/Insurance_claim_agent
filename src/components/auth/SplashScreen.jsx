@@ -12,7 +12,7 @@ export default function SplashScreen() {
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl border-4 border-cyan-500/60 bg-gradient-to-br from-cyan-900/50 to-emerald-900/50 flex items-center justify-center shadow-2xl animate-[zoomInOut_2s_ease-in-out_infinite] motion-reduce:animate-none">
           <img
             src="/logo.png"
-            alt="QK.AI Logo"
+            alt="INSURE.AI Logo"
             className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-lg"
           />
         </div>

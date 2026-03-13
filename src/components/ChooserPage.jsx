@@ -170,7 +170,7 @@ export default function ChooserPage() {
 
       <footer className="fixed bottom-0 left-0 right-0 z-20 border-t border-neutral-800/50 bg-[#0b0f14]/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex items-center justify-center text-xs sm:text-sm text-neutral-400">
-          <p className="text-center">© {new Date().getFullYear()} QK.AI. All rights reserved.</p>
+          <p className="text-center">© {new Date().getFullYear()} INSURE.AI. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -87,7 +87,7 @@ export default function RegisterForm() {
             <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-2xl border-4 border-emerald-500/60 bg-gradient-to-br from-emerald-900/50 to-sky-900/50 flex items-center justify-center shadow-2xl">
               <img
                 src="/logo.png"
-                alt="QK.AI Logo"
+                alt="INSURE.AI Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain drop-shadow-lg"
               />
             </div>
@@ -99,7 +99,7 @@ export default function RegisterForm() {
               Create Account
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md mx-auto">
-              Join QK.AI and simplify your insurance management
+              Join INSURE.AI and simplify your insurance management
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export default function RegisterForm() {
                 Creating Account...
               </span>
             ) : (
-              "Create QK.AI Account"
+              "Create INSURE.AI Account"
             )}
           </button>
 
@@ -271,7 +271,7 @@ export default function RegisterForm() {
           
           <img
             src="/login.jpg"
-            alt="QK.AI Registration Preview"
+            alt="INSURE.AI Registration Preview"
             className="w-full h-full object-cover absolute inset-0 rounded-tl-[46px] rounded-bl-[46px] brightness-75 z-0"
           />
           

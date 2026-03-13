@@ -48,7 +48,7 @@ export async function fetchFinanceNews(req, res) {
 
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "qk.ai finance news",
+        "User-Agent": "insure.ai finance news",
       },
     });
 

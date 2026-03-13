@@ -64,11 +64,11 @@ export default function Navbar({ className = "" }) {
         >
           <img
             src="/logo.png"
-            alt="QK.AI Logo"
+            alt="INSURE.AI Logo"
             className="w-7 h-7 sm:w-8 sm:h-8 rounded-2xl object-contain flex-shrink-0"
           />
           <span className="font-semibold text-base sm:text-lg tracking-tight">
-            QK.AI
+            INSURE.AI
           </span>
         </div>
 

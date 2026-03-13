@@ -1,6 +1,24 @@
 import Navbar from "./Navbar.jsx";
 
 export default function ContactQKAI() {
+  const teamMembers = [
+    {
+      name: "Chaithanya",
+      role: "Team Member - INSURE.AI",
+      email: "ChaithanyaN31@gmail.com",
+    },
+    {
+      name: "Ashritha",
+      role: "Team Member - INSURE.AI",
+      email: "ashritha@gmail.com",
+    },
+    {
+      name: "Deepashree",
+      role: "Team Member - INSURE.AI",
+      email: "deepashree@gmail.com",
+    },
+  ];
+
   return (
     <>
       <Navbar />
@@ -17,34 +35,36 @@ export default function ContactQKAI() {
             <h1 className="text-2xl sm:text-3xl font-black leading-tight">
               Get in touch with the
               <span className="block bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                QK.AI team
+                INSURE.AI team
               </span>
             </h1>
 
-            <div className="rounded-2xl border border-neutral-800 bg-[#0b1120]/90 p-6 flex gap-4">
-              <img
-                src="/bhuvan.jpg"
-                alt="Bhuvan KK"
-                className="w-20 h-20 rounded-full object-cover"
-              />
-              <div>
-                <h2 className="font-bold text-lg">Bhuvan KK</h2>
-                <p className="text-sm text-neutral-400">
-                  Full-Stack Developer - QK.AI
-                </p>
-                <p className="text-sm mt-2">
-                  Phone: <span className="text-cyan-300">+91 9036694320</span>
-                </p>
-                <p className="text-sm">
-                  Email:{" "}
-                  <a
-                    href="mailto:bhuvankk2005@gmail.com"
-                    className="text-cyan-300 underline"
-                  >
-                    bhuvankk2005@gmail.com
-                  </a>
-                </p>
-              </div>
+            <div className="grid gap-4">
+              {teamMembers.map((member) => (
+                <div
+                  key={member.email}
+                  className="rounded-2xl border border-neutral-800 bg-[#0b1120]/90 p-6 flex gap-4"
+                >
+                  <img
+                    src="/logo.png"
+                    alt={`${member.name} profile`}
+                    className="w-20 h-20 rounded-full object-contain bg-white p-3"
+                  />
+                  <div>
+                    <h2 className="font-bold text-lg">{member.name}</h2>
+                    <p className="text-sm text-neutral-400">{member.role}</p>
+                    <p className="text-sm mt-2">
+                      Email:{" "}
+                      <a
+                        href={`mailto:${member.email}`}
+                        className="text-cyan-300 underline"
+                      >
+                        {member.email}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -52,7 +72,8 @@ export default function ContactQKAI() {
           <div className="rounded-2xl border border-neutral-800 bg-[#111827]/90 p-6">
             <h3 className="font-bold text-lg mb-2">Quick Message</h3>
             <p className="text-sm text-neutral-300">
-              Reach out anytime - replies within 24 hours.
+              Reach out to the INSURE.AI team anytime for product questions,
+              partnerships, or support.
             </p>
           </div>
 

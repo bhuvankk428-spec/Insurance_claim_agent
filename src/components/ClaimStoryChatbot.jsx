@@ -183,7 +183,7 @@ export default function ClaimStoryChatbot() {
               Tell your claim story
             </h1>
             <p className="text-neutral-300">
-              Describe what happened. QK.AI will verify it against your policy
+              Describe what happened. INSURE.AI will verify it against your policy
               and evidence.
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function ClaimStoryChatbot() {
 
           {/* Disclaimer */}
           <p className="mt-6 text-xs text-neutral-500 text-center">
-            QK.AI provides guidance only. Always verify with your insurer.
+            INSURE.AI provides guidance only. Always verify with your insurer.
           </p>
         </div>
       </main>
