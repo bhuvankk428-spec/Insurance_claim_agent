@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase";
 import { isAdminEmail } from "../admin/adminAuth";
@@ -9,6 +9,22 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  function getPostLoginPath(email) {
+    const requestedPath = location.state?.from;
+    const adminUser = isAdminEmail(email);
+
+    if (requestedPath === "/admin-dashboard") {
+      return adminUser ? requestedPath : "/choose";
+    }
+
+    if (requestedPath) {
+      return requestedPath;
+    }
+
+    return adminUser ? "/admin-dashboard" : "/choose";
+  }
 
   function handleChange(e) {
     setForm(prevForm => ({ ...prevForm, [e.target.name]: e.target.value }));
@@ -24,11 +40,7 @@ export default function LoginForm() {
       const email = form.email.trim();
 
       await signInWithEmailAndPassword(auth, email, form.password);
-      if (isAdminEmail(email)) {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/choose");
-      }
+      navigate(getPostLoginPath(email), { replace: true });
     } catch (err) {
       const code = err?.code || "";
       if (
@@ -51,11 +63,7 @@ export default function LoginForm() {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      if (isAdminEmail(result?.user?.email)) {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/choose");
-      }
+      navigate(getPostLoginPath(result?.user?.email), { replace: true });
     } catch (err) {
       setError(err.message || "Google login failed");
     } finally {
