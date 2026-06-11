@@ -38,14 +38,50 @@ async function extractPdfText(fileBuffer) {
   return text.trim();
 }
 
+async function extractPdfOcrText(fileBuffer) {
+  const maxPages = Number(process.env.OCR_PDF_MAX_PAGES || 3);
+  const doc = await pdfjsLib.getDocument({
+    data: new Uint8Array(fileBuffer),
+    disableWorker: true,
+    standardFontDataUrl,
+    cMapUrl,
+    cMapPacked: true,
+    disableFontFace: true,
+  }).promise;
+
+  const totalPages = Math.min(doc.numPages || 0, maxPages);
+  let text = "";
+
+  for (let pageNo = 1; pageNo <= totalPages; pageNo += 1) {
+    const page = await doc.getPage(pageNo);
+    const viewport = page.getViewport({ scale: 2.5 });
+    const canvas = createCanvas(viewport.width, viewport.height);
+    const context = canvas.getContext("2d");
+    await page.render({ canvasContext: context, viewport }).promise;
+    const imageBuffer = canvas.toBuffer("image/png");
+    const { data } = await Tesseract.recognize(imageBuffer, "eng");
+    if (data?.text) text += data.text + "\n";
+  }
+
+  return text.trim();
+}
+
 /**
  * Extract text from PDF or image
  */
-export async function extractText(fileBuffer, mimeType) {
+export async function extractText(fileBuffer, mimeType, options = {}) {
   // IMAGE (JPG / PNG)
   if (mimeType.startsWith("image/")) {
     const { data } = await Tesseract.recognize(fileBuffer, "eng");
     return data.text;
+  }
+
+  if (options.forceOcr) {
+    try {
+      return await extractPdfOcrText(fileBuffer);
+    } catch {
+      return "";
+    }
   }
 
   // PDF (text extraction only; no OCR on PDF buffer)
@@ -58,31 +94,7 @@ export async function extractText(fileBuffer, mimeType) {
 
   // Scanned PDFs: render pages to images and OCR.
   try {
-    const maxPages = Number(process.env.OCR_PDF_MAX_PAGES || 3);
-    const doc = await pdfjsLib.getDocument({
-      data: new Uint8Array(fileBuffer),
-      disableWorker: true,
-      standardFontDataUrl,
-      cMapUrl,
-      cMapPacked: true,
-      disableFontFace: true,
-    }).promise;
-
-    const totalPages = Math.min(doc.numPages || 0, maxPages);
-    let text = "";
-
-    for (let pageNo = 1; pageNo <= totalPages; pageNo += 1) {
-      const page = await doc.getPage(pageNo);
-      const viewport = page.getViewport({ scale: 2 });
-      const canvas = createCanvas(viewport.width, viewport.height);
-      const context = canvas.getContext("2d");
-      await page.render({ canvasContext: context, viewport }).promise;
-      const imageBuffer = canvas.toBuffer("image/png");
-      const { data } = await Tesseract.recognize(imageBuffer, "eng");
-      if (data?.text) text += data.text + "\n";
-    }
-
-    return text.trim();
+    return await extractPdfOcrText(fileBuffer);
   } catch {
     return "";
   }

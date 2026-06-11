@@ -11,10 +11,11 @@
     "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\""
   },
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
     "@supabase/supabase-js": "^2.49.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "exiftool-vendored": "^23.7.0",
+    "exiftool-vendored": "^36.0.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "firebase": "^12.6.0",
@@ -42,7 +43,7 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
-    "concurrently": "^9.2.0",
+    "concurrently": "^10.0.3",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

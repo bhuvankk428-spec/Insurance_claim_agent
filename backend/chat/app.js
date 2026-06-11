@@ -9,7 +9,6 @@ import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
 import { z } from "zod";
 import { askRAGStream } from "./rag.js";
-import { generateFinancePodcast } from "./podcast.js";
 import { db } from "./db.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -42,7 +41,6 @@ const corsOrigin = [
   inferredFrontendOrigin,
   "https://*.vercel.app",
   "http://localhost:5173",
-  "http://127.0.0.1:5173",
 ]
   .join(",")
   .split(",")
@@ -189,10 +187,16 @@ app.post("/api/finance-podcast", ragLimiter, async (req, res) => {
       });
     }
 
+    const { generateFinancePodcast } = await import("./podcast.js");
     const podcast = await generateFinancePodcast(parsed.data);
     return res.json(podcast);
   } catch (err) {
     req.log.error({ err }, "finance_podcast_error");
+    if (err?.code === "ERR_MODULE_NOT_FOUND") {
+      return res.status(503).json({
+        error: "AI finance podcast is not enabled yet",
+      });
+    }
     return res.status(err?.status || 500).json({
       error: err?.message || "Failed to generate finance podcast",
     });

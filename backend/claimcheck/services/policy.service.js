@@ -16,10 +16,35 @@ export async function checkPolicy(req, res) {
     return res.json({ valid: false, message: "Policy missing" });
   }
 
-  const text = await extractText(file.buffer, file.mimetype);
-  const fields = extractPolicyFields(text);
-  const domain = detectDomain(text, fields);
-  const validation = validatePolicyDocument(domain, fields);
+  let text = await extractText(file.buffer, file.mimetype);
+  let fields = extractPolicyFields(text);
+  let domain = detectDomain(text, fields);
+  let validation = validatePolicyDocument(domain, fields);
+
+  if (!validation.ok && file.mimetype === "application/pdf") {
+    const ocrText = await extractText(file.buffer, file.mimetype, {
+      forceOcr: true,
+    });
+    if (ocrText && ocrText !== text) {
+      const combinedText = `${text}\n${ocrText}`.trim();
+      const combinedFields = extractPolicyFields(combinedText);
+      const combinedDomain = detectDomain(combinedText, combinedFields);
+      const combinedValidation = validatePolicyDocument(
+        combinedDomain,
+        combinedFields
+      );
+
+      if (
+        combinedValidation.ok ||
+        combinedValidation.missingFields.length < validation.missingFields.length
+      ) {
+        text = combinedText;
+        fields = combinedFields;
+        domain = combinedDomain;
+        validation = combinedValidation;
+      }
+    }
+  }
 
   if (!validation.ok) {
     return res.json({
@@ -28,6 +53,7 @@ export async function checkPolicy(req, res) {
       extracted: fields,
       domain,
       missingFields: validation.missingFields,
+      textExtracted: text.trim().length > 0,
     });
   }
 

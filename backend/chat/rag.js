@@ -361,7 +361,7 @@ ${selectedLanguage.structure}
       const stream = await withRetry(() =>
         openai.chat.completions.create({
           model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
-          temperature: 0.2,
+          temperature: 0.4,
           top_p: 0.9,
           max_tokens: maxTokens,
           stream: true,
