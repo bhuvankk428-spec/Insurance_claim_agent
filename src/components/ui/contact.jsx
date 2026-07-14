@@ -3,20 +3,10 @@ import Navbar from "./Navbar.jsx";
 export default function ContactQKAI() {
   const teamMembers = [
     {
-      name: "Chaithanya",
-      role: "Team Member - INSURE.AI",
-      email: "ChaithanyaN31@gmail.com",
-    },
-    {
-      name: "Ashritha",
-      role: "Team Member - INSURE.AI",
-      email: "ashritha@gmail.com",
-    },
-    {
-      name: "Deepashree",
-      role: "Team Member - INSURE.AI",
-      email: "deepashree@gmail.com",
-    },
+      name: "Bhuvan K K",
+      role: "INSURE.AI",
+      email: "bhuvankk2005@gmail.com",
+    }
   ];
 
   return (
