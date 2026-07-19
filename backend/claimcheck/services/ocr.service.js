@@ -6,7 +6,10 @@ import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+// Resolve from the repository root so a stale nested dependency cannot shadow
+// the Vercel production dependency declared in the root package.json.
+const require = createRequire(path.resolve(__dirname, "../../../package.json"));
+const { PDFParse } = require("pdf-parse");
 const pdfjsBase = path.dirname(require.resolve("pdfjs-dist/package.json"));
 const standardFontDataUrl =
   pathToFileURL(path.join(pdfjsBase, "standard_fonts")).toString() + "/";
@@ -14,6 +17,22 @@ const cMapUrl = pathToFileURL(path.join(pdfjsBase, "cmaps")).toString() + "/";
 
 async function extractPdfText(fileBuffer) {
   const maxPages = Number(process.env.PDF_TEXT_MAX_PAGES || 5);
+
+  // pdf-parse packages its worker with the parser and is reliable in Vercel's
+  // serverless bundle. PDF.js remains below as a fallback for malformed files.
+  let parser;
+  try {
+    parser = new PDFParse({ data: fileBuffer });
+    const result = await parser.getText({
+      partial: Array.from({ length: maxPages }, (_, index) => index + 1),
+    });
+    if (result?.text?.trim()) return result.text.trim();
+  } catch {
+    // Fall through to the lower-level parser.
+  } finally {
+    await parser?.destroy?.().catch(() => undefined);
+  }
+
   const doc = await pdfjsLib.getDocument({
     data: new Uint8Array(fileBuffer),
     disableWorker: true,
