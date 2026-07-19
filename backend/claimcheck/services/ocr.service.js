@@ -2,6 +2,7 @@ import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 import Tesseract from "tesseract.js";
+import PDFParser from "pdf2json";
 import { PDFParse } from "pdf-parse";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
@@ -13,8 +14,30 @@ const standardFontDataUrl =
   pathToFileURL(path.join(pdfjsBase, "standard_fonts")).toString() + "/";
 const cMapUrl = pathToFileURL(path.join(pdfjsBase, "cmaps")).toString() + "/";
 
+function extractPdf2JsonText(fileBuffer) {
+  return new Promise((resolve, reject) => {
+    const parser = new PDFParser(null, 1);
+    parser.once("pdfParser_dataError", (error) => {
+      reject(error?.parserError || error);
+    });
+    parser.once("pdfParser_dataReady", () => {
+      resolve(parser.getRawTextContent()?.trim() || "");
+    });
+    parser.parseBuffer(fileBuffer);
+  });
+}
+
 async function extractPdfText(fileBuffer) {
   const maxPages = Number(process.env.PDF_TEXT_MAX_PAGES || 5);
+
+  // This parser is self-contained and avoids the external font/worker files
+  // that serverless bundlers can omit from PDF.js deployments.
+  try {
+    const text = await extractPdf2JsonText(fileBuffer);
+    if (text) return text;
+  } catch {
+    // Continue with the other parsers for PDFs pdf2json cannot read.
+  }
 
   // pdf-parse packages its worker with the parser and is reliable in Vercel's
   // serverless bundle. PDF.js remains below as a fallback for malformed files.
