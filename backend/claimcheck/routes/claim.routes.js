@@ -25,6 +25,16 @@ const uploadEvidence = multer({
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "qk-admin-2026";
 
+function isPdfUpload(file) {
+  if (!file?.buffer) return false;
+  // Browsers normally send application/pdf, but drag-and-drop and some mobile
+  // browsers send application/octet-stream. The file signature is authoritative.
+  return (
+    file.mimetype === "application/pdf" ||
+    file.buffer.subarray(0, 5).toString("ascii") === "%PDF-"
+  );
+}
+
 function requireAdmin(req, res, next) {
   const token = req.headers["x-admin-token"];
   if (!token || token !== ADMIN_TOKEN) {
@@ -39,6 +49,19 @@ function requireAdmin(req, res, next) {
 router.post(
   "/claim-check",
   uploadPolicy.single("pdf"),
+  (req, res, next) => {
+    if (!req.file || isPdfUpload(req.file)) return next();
+    return res.status(400).json({
+      valid: false,
+      message: "Policy document must be a PDF",
+    });
+  },
+  (req, _res, next) => {
+    // Give the extraction service a stable MIME type for valid PDFs uploaded
+    // with the generic application/octet-stream MIME type.
+    if (req.file) req.file.mimetype = "application/pdf";
+    next();
+  },
   checkPolicy
 );
 
@@ -49,6 +72,19 @@ router.post(
     { name: "fir", maxCount: 1 },
     { name: "photos", maxCount: 5 },
   ]),
+  (req, res, next) => {
+    const fir = req.files?.fir?.[0];
+    if (!fir || isPdfUpload(fir)) return next();
+    return res.status(400).json({
+      status: "error",
+      message: "Evidence document must be a PDF",
+    });
+  },
+  (req, _res, next) => {
+    const fir = req.files?.fir?.[0];
+    if (fir) fir.mimetype = "application/pdf";
+    next();
+  },
   checkEvidence
 );
 

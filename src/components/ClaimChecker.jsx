@@ -66,7 +66,7 @@ export default function ClaimChecker() {
         signal: controller.signal,
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (requestSeq !== policyRequestSeq.current) return;
 
       if (data.valid) {
@@ -78,7 +78,9 @@ export default function ClaimChecker() {
 
       setPolicyResult({
         status: data.valid ? "success" : "error",
-        message: data.message,
+        message:
+          data.message ||
+          (res.ok ? "Policy verification could not be completed" : "Policy verification service is unavailable"),
       });
     } catch (error) {
       if (error.name === "AbortError") return;
@@ -240,6 +242,8 @@ export default function ClaimChecker() {
                     if (!file) return;
                     setFileName(file.name);
                     setPolicyResult(null);
+                    setClaimId(null);
+                    setEvidenceResult(null);
                     verifyPolicy(file); 
                   }}
                 />

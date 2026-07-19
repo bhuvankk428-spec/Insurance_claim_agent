@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
+import { isAdminEmail } from "../admin/adminAuth";
 
 export default function Navbar({ className = "" }) {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ export default function Navbar({ className = "" }) {
 
   const profileInitial = (userEmail?.trim()?.[0] || "U").toUpperCase();
   const userLabel = userEmail || userId || "Unknown user";
+  const isAdmin = isAdminEmail(userEmail);
 
   return (
    <nav
@@ -110,6 +112,14 @@ export default function Navbar({ className = "" }) {
           >
             Dashboard
           </button>
+          {isAdmin && (
+            <button
+              className="hover:text-cyan-300 transition-colors py-1 px-2 rounded hover:bg-white/10"
+              onClick={() => navigate("/admin-dashboard")}
+            >
+              Admin
+            </button>
+          )}
           <button
             className="relative py-1 px-3 rounded-full border border-red-400/70 bg-red-500/15 text-red-200 hover:text-white hover:bg-red-500/30 transition-colors shadow-sm overflow-hidden animate-[pulse_2.4s_ease-in-out_infinite]"
             onClick={() => navigate("/finance-news")}
@@ -185,6 +195,9 @@ export default function Navbar({ className = "" }) {
               { label: "Help", path: "/help" },
               { label: "FAQ", path: "/faq" },
               { label: "Dashboard", path: "/dashboard" },
+              ...(isAdmin
+                ? [{ label: "Admin", path: "/admin-dashboard" }]
+                : []),
               { label: "Finance News", path: "/finance-news", highlight: true },
             ].map(item => (
               <button
