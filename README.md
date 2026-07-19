@@ -160,3 +160,6 @@ create table if not exists public.claims (
 - Find process: `Get-NetTCPConnection -LocalPort 5174 -State Listen | Select-Object OwningProcess`
 - Stop process: `Stop-Process -Id <PID> -Force`
 - Or change local ports in `.env` (`CLAIM_PORT`, `CHAT_PORT`) and restart.
+
+
+Final update on 19 july
