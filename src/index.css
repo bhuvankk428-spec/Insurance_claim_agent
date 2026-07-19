@@ -8,6 +8,41 @@ html, body, #root {
   margin: 0;
   padding: 0;
 }
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  color: #ecfeff;
+  background: rgba(8, 145, 178, 0.65);
+}
+
+/* A restrained, consistent finish for the dark application surfaces. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0f14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #273449;
+  border: 2px solid #0b0f14;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b5870;
+}
+
+:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
 @layer base {
   body {
     @apply bg-black min-h-screen;
@@ -19,6 +54,17 @@ html, body, #root {
   img {
     max-width: 100%;
     height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 .right-image-wrapper {
