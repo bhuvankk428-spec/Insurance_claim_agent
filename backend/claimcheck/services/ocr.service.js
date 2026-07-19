@@ -2,14 +2,12 @@ import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 import Tesseract from "tesseract.js";
+import { PDFParse } from "pdf-parse";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Resolve from the repository root so a stale nested dependency cannot shadow
-// the Vercel production dependency declared in the root package.json.
-const require = createRequire(path.resolve(__dirname, "../../../package.json"));
-const { PDFParse } = require("pdf-parse");
+const require = createRequire(import.meta.url);
 const pdfjsBase = path.dirname(require.resolve("pdfjs-dist/package.json"));
 const standardFontDataUrl =
   pathToFileURL(path.join(pdfjsBase, "standard_fonts")).toString() + "/";
