@@ -11,7 +11,8 @@ This separation allows independent scaling and fault isolation.
 
 Architecture
 ------------
-- Frontend calls chat and claim APIs directly by configured base URLs.
+- Frontend calls same-origin `/api/*` routes. Locally the Vite proxy splits traffic: `/api/rag-chat` -> chat service, other `/api/*` -> claimcheck service.
+- In production, `api/*.js` Vercel entrypoints re-export the chat and claimcheck apps.
 - Both services load environment variables and enforce startup checks.
 - Both services apply CORS from `CORS_ORIGIN`.
 - Finance news is fetched server-side by claimcheck (`/api/finance-news`) and returned to frontend.
@@ -32,6 +33,7 @@ Flow:
 
 Note:
 - `POST /api/finance-podcast` exists in chat service, while the frontend route `/ai-finance-podcast` is currently a Coming Soon placeholder.
+- The `/finance-podcast` frontend route is a static curated list and makes no backend call.
 
 Startup constraints:
 - Requires DB readiness when `REQUIRE_DB_READY=true`.
@@ -45,8 +47,9 @@ Flow:
 3. Frontend stores returned `claimContext` in browser session storage
 4. `POST /api/claim-story` evaluates narrative + coverage and persists decision
 5. Story step can restore missing in-memory session state from `claimContext` on serverless/production requests
-6. Admin routes read/update persisted decisions in Supabase
-7. Finance route fetches latest market headlines for frontend cards
+6. `GET /api/my-claims` returns claim history for the signed-in user dashboard
+7. Admin routes read/update persisted decisions in Supabase
+8. Finance route fetches latest market headlines for frontend cards
 
 Decision safety notes:
 - If OpenAI is unavailable or returns invalid story JSON, the story step falls back to partial approval/manual review (no auto-approve fallback).
@@ -78,7 +81,7 @@ Model Quality Evaluation
 
 Operational Notes
 -----------------
-- Frontend production requires explicit backend URLs.
+- Frontend and backend are deployed together on Vercel and communicate over same-origin `/api/*`.
 - Admin API requires token alignment between frontend and claim backend.
 - For local `npm run backend`, set distinct ports (for example `CHAT_PORT=5175` and `CLAIM_PORT=5174`).
 - If startup fails with `EADDRINUSE`, stop the stale process using that port or change `CHAT_PORT` / `CLAIM_PORT`.

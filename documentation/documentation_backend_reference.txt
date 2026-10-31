@@ -35,6 +35,7 @@ Claimcheck Service (`backend/claimcheck`)
 - `POST /api/claim-check`
 - `POST /api/claim-evidence`
 - `POST /api/claim-story`
+- `GET /api/my-claims?email=<email>&limit=<n>` (user claims dashboard)
 - `GET /api/admin/claims?limit=<n>` (requires `x-admin-token`)
 - `PATCH /api/admin/claims/:claimId` (requires `x-admin-token`)
 
@@ -113,6 +114,10 @@ API Contract Summary
 - OpenAI behavior:
   - With `OPENAI_API_KEY`: OpenAI is used for coverage + story checks.
   - Without key (or AI failure): heuristic/manual-review fallback is used.
+
+`GET /api/my-claims`
+- Query: `email` (required; `x-user-email` header is also accepted), `limit` (optional, defaults to 100)
+- Response: `{ status, claims[] }`
 
 `GET /api/admin/claims`
 - Header: `x-admin-token`

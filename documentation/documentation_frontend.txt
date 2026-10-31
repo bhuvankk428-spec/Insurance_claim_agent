@@ -7,9 +7,10 @@ Frontend is a Vite + React app with Tailwind styling.
 Main flows:
 1. Policy advisor chat (RAG)
 2. Claim checker (policy + evidence + story)
-3. Admin dashboard for claim review
-4. Plan builder + plan dashboard
-5. Finance news view
+3. User claims dashboard
+4. Admin dashboard for claim review
+5. Plan builder + plan dashboard
+6. Finance news and curated finance podcast views
 
 Entry Point and Routing
 -----------------------
@@ -18,19 +19,22 @@ Entry Point and Routing
 
 `src/App.jsx`
 - Route map:
-  - `/` -> LoginEntry
-  - `/register` -> RegisterForm
-  - `/choose` -> ChooserPage
-  - `/chatbot` -> Chatbot
-  - `/claim-checker` -> ClaimChecker
-  - `/plan` -> PlanPage
-  - `/plan-dashboard` -> PlanDashboard
-  - `/finance-news` -> FinanceNews
+  - `/` -> LoginEntry (RedirectIfAuthed)
+  - `/register` -> RegisterForm (RedirectIfAuthed)
+  - `/choose` -> ChooserPage (RequireUserAuth)
+  - `/chatbot` -> Chatbot (RequireUserAuth)
+  - `/claim-checker` -> ClaimChecker (RequireUserAuth)
+  - `/dashboard` -> Dashboard (RequireUserAuth)
+  - `/plan` -> PlanPage (RequireUserAuth)
+  - `/plan-dashboard` -> PlanDashboard (RequireUserAuth)
+  - `/finance-news` -> FinanceNews (RequireUserAuth)
+  - `/finance-podcast` -> FinancePodcast (RequireUserAuth)
   - `/ai-finance-podcast` -> AIFinancePodcast (Coming Soon placeholder)
-  - `/claim-story/:claimId` -> ClaimStoryChatbot
-  - `/claim-result/:claimId` -> ClaimResult
-  - `/admin-dashboard` -> AdminDashboard
-  - `/about`, `/help`, `/faq`, `/contact`
+  - `/claim-story/:claimId` -> ClaimStoryChatbot (RequireUserAuth)
+  - `/claim-result/:claimId` -> ClaimResult (RequireUserAuth)
+  - `/admin-dashboard` -> AdminDashboard (RequireAdminAuth)
+  - `/about`, `/help`, `/faq`, `/contact` (RequireUserAuth)
+  - `*` -> redirect by auth state
 
 Configuration
 -------------
@@ -40,14 +44,20 @@ Vite environment variables:
 - `VITE_ADMIN_EMAIL` or `VITE_ADMIN_EMAILS` (comma-separated), `VITE_ADMIN_TOKEN`
 
 Runtime behavior:
-- On localhost, frontend falls back to local backend URLs.
-- In production, missing API URLs show explicit UI errors.
-- Admin dashboard requires `VITE_ADMIN_TOKEN` only outside localhost.
+- Frontend always calls same-origin `/api/*` routes.
+- Local development uses the Vite proxy: `/api/rag-chat` -> `http://localhost:5175`, other `/api/*` -> `http://localhost:5174`.
+- Production rewrites non-API paths to `index.html` and serves `/api/*` from Vercel serverless entrypoints in `api/`.
+- Admin dashboard requires `VITE_ADMIN_TOKEN` outside localhost.
 
 Authentication
 --------------
 `src/firebase.js`
 - Firebase init + auth exports.
+
+`src/auth/RouteGuards.jsx`
+- `RequireUserAuth`: redirects unauthenticated users to `/`.
+- `RequireAdminAuth`: requires Firebase auth plus an admin email match.
+- `RedirectIfAuthed`: sends signed-in users away from login/register.
 
 `src/components/auth/LoginForm.jsx`
 - Firebase login (email/password + Google).
@@ -81,6 +91,14 @@ Claim Checker Flow
 - Navigates to result page with decision data.
 - If backend OpenAI analysis is unavailable, backend may return partial/manual-review outcome instead of full approval.
 
+User Claims Dashboard
+---------------------
+`src/components/Dashboard.jsx`
+- Route `/dashboard` (requires user auth).
+- Calls `GET /api/my-claims?email=<encoded email>&limit=500`.
+- Shows totals for applied, approved, partial, rejected, pending, and geo-tagged claims.
+- Shows a recent claims table (claim ID, status, risk, geo, created date) for the signed-in user.
+
 Admin Dashboard
 ---------------
 `src/components/admin/AdminDashboard.jsx`
@@ -98,6 +116,12 @@ Finance News
 - Calls `GET /api/finance-news` on claim backend.
 - Shows latest items and refreshes automatically every 24 hours.
 - Supports manual refresh and fallback image handling.
+
+Finance Podcast
+---------------
+`src/components/FinancePodcast.jsx`
+- Route `/finance-podcast` shows curated external finance podcast picks.
+- Static links only; no backend call is made from this page.
 
 AI Finance Podcast
 ------------------

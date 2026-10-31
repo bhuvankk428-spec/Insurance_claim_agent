@@ -3,7 +3,8 @@
 INSURE.AI is an insurance platform with:
 1. Policy Advisor chatbot (RAG).
 2. Claim Checker workflow for document verification and admin review.
-3. Planning and finance modules in the frontend (`/plan`, `/plan-dashboard`, `/finance-news`).
+3. User claims dashboard (`/dashboard`).
+4. Planning and finance modules in the frontend (`/plan`, `/plan-dashboard`, `/finance-news`, `/finance-podcast`).
 
 ## Features
 - Streaming chatbot answers from `/api/rag-chat`
@@ -11,10 +12,30 @@ INSURE.AI is an insurance platform with:
 - Claim workflow: policy PDF -> evidence -> story analysis
 - Production-safe claim flow handoff: in-progress claim state is persisted in Supabase, with browser `claimContext` fallback for mixed or stale deployments
 - Safe claim fallback: if OpenAI is unavailable or returns invalid story output, claim is marked `partial` for manual review
+- User dashboard backed by `/api/my-claims` (status counts, geo-tagged totals, recent claims table)
 - Admin dashboard backed by Supabase (search, load-more pagination, decision updates, export to printable PDF)
 - Finance news feed from `/api/finance-news` (last 24h + refresh)
+- Curated finance podcast picks (`/finance-podcast`)
 - AI Finance Podcast page (`/ai-finance-podcast`) currently shows a Coming Soon placeholder
-- Firebase login (email/password + Google)
+- Firebase login (email/password + Google) with route guards for user and admin pages
+
+## Routes
+| Route | Access | Purpose |
+| --- | --- | --- |
+| `/` | Public | Login |
+| `/register` | Public | Registration |
+| `/choose` | User | Module chooser |
+| `/chatbot` | User | Policy Advisor (RAG chat) |
+| `/claim-checker` | User | Claim workflow |
+| `/dashboard` | User | My claims dashboard |
+| `/plan`, `/plan-dashboard` | User | Planning modules |
+| `/finance-news` | User | Finance news |
+| `/finance-podcast` | User | Curated podcast picks |
+| `/ai-finance-podcast` | User | Coming Soon placeholder |
+| `/claim-story/:claimId` | User | Claim story step |
+| `/claim-result/:claimId` | User | Claim result |
+| `/admin-dashboard` | Admin | Claim review |
+| `/about`, `/help`, `/faq`, `/contact` | User | Static pages |
 
 ## Tech Stack
 - Frontend: React, Vite, Tailwind, React Router, Firebase
@@ -59,10 +80,12 @@ Evaluation notes:
 
 ## Project Structure
 - `src/`: frontend app
+- `api/`: Vercel serverless entrypoints that re-export the backend apps
 - `backend/chat/`: RAG backend service
-- `backend/claimcheck/`: claim workflow + admin backend service
+- `backend/claimcheck/`: claim workflow, admin, dashboard, and finance backend service
 - `eval/`: model-quality evaluation dataset, runner, reports, and comparison tool
 - `documentation/`: architecture and reference docs
+- `test_pdf_for_verification/`, `public/`: claim/image fixtures used by evaluation
 
 ## Local Setup
 1. Install dependencies:
@@ -111,7 +134,8 @@ Important:
 - `OPENAI_API_KEY`
 - `ADMIN_TOKEN`
 - `CORS_ORIGIN`
-- Optional: `STRICT_GEO`, `ALLOW_FAKE_GEO`, `CLAIM_PORT`, `NEWS_*`
+- Optional: `STRICT_GEO`, `ALLOW_FAKE_GEO`, `CLAIM_PORT`, `REQUIRE_SUPABASE_READY`
+- Optional finance news: `NEWS_API_KEY`, `NEWS_API_URL`, `NEWS_QUERY`, `NEWS_LANGUAGE`, `NEWS_PAGE_SIZE`, `NEWS_FALLBACK_SYMBOLS`
 
 Claim backend behavior:
 - `OPENAI_API_KEY` enables image vision checks, policy coverage reasoning, and story consistency checks.
@@ -126,6 +150,7 @@ Claim workflow notes:
 - `POST /api/claim-check` returns `claimId` and `claimContext`
 - `POST /api/claim-evidence` returns updated `claimContext`
 - `POST /api/claim-story` accepts `{ claimId, story, claimContext? }`
+- `GET /api/my-claims?email=<email>&limit=<n>` returns claim history for the signed-in user dashboard
 - Current durability is browser-session scoped for in-progress claims; final decisions are still persisted in Supabase
 
 ### Token matching rule
@@ -200,4 +225,12 @@ create table if not exists public.claims (
 - Or change local ports in `.env` (`CLAIM_PORT`, `CHAT_PORT`) and restart.
 
 
-Final update on 19 july
+## Documentation Index
+- `documentation/documentation_frontend.txt` - frontend routes, auth, and component behavior
+- `documentation/documentation_backend_design.txt` - service architecture and decision safety
+- `documentation/documentation_backend_reference.txt` - file responsibilities and API contracts
+- `documentation/model_quality_evaluation.txt` - evaluation metrics, modes, and limitations
+- `documentation/supabase_claims_schema.sql` - `public.claims` table schema
+- `DEPLOY.md` - production deployment steps
+
+Last updated: October 2026
