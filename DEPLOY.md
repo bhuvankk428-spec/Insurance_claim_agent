@@ -71,6 +71,16 @@ Note: health/readiness routes are provided by the backend Express apps. If you n
 - Missing `OPENAI_API_KEY`, `DATABASE_URL`, or Supabase vars
 - CORS misconfiguration in `CORS_ORIGIN`
 
+### RAG answers are irrelevant or eval top-3 is low
+- Confirm `policy_chunks` was seeded with the same `EMBEDDING_PROVIDER`, `OPENAI_EMBED_MODEL`, and `EMBEDDING_DIM` used at query time. A foreign-model seed makes pgvector ranking near-random even when the expected chunk exists.
+- After editing `backend/chat/data/*.json`, rebuild and re-seed:
+```bash
+node backend/chat/scripts/buildChunks.js
+# clear policy_chunks first; embedChunks.js appends rows
+node backend/chat/scripts/embedChunks.js
+```
+- With OpenAI `text-embedding-3-small`, stored vectors should have norm ~1.0. A much larger norm (for example ~20) means the table was embedded with a different model/space.
+
 ### Claim story works locally but fails in production
 - Older deployments depended on in-memory claim session state between `/api/claim-check`, `/api/claim-evidence`, and `/api/claim-story`
 - Current flow persists in-progress claim state in Supabase and also returns `claimContext` from step 1 and step 2, stores it in browser `sessionStorage`, and sends it back on the evidence and story requests as fallback

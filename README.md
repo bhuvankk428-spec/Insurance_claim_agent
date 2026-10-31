@@ -76,7 +76,27 @@ Evaluation notes:
 - Cost uses `eval/lib/pricing.js` token prices. Live pgvector retrieval does not expose embedding usage, so `db` mode reports cost as `n/a`.
 - Image fixtures come from `test_pdf_for_verification/` and `public/`. The text-only placeholder image is expected to be `partial`, not `ok`.
 - The RAG run surfaced a domain-filter gap: BrightFuture child-plan chunks are tagged `Education / Child Plan`, but the frontend only offers `Life Insurance`, so that chunk is unreachable under the Life filter.
+- RAG `db` ranking is only meaningful when the stored `policy_chunks` embeddings come from the same model/space as the query embeddings (`EMBEDDING_PROVIDER`, `OPENAI_EMBED_MODEL`, `EMBEDDING_DIM`). A `policy_chunks` table seeded with a different model returns near-random order even when the expected text exists.
 - See `documentation/model_quality_evaluation.txt` for the full metric definitions and limitations.
+
+## RAG Data Pipeline
+The RAG index is derived from `backend/chat/data/*.json`:
+
+1. Build chunks (writes `backend/chat/policy_chunks.json`):
+```bash
+node backend/chat/scripts/buildChunks.js
+```
+2. Re-seed the vector table (clear `policy_chunks` first, since the script appends):
+```bash
+node backend/chat/scripts/embedChunks.js
+```
+
+Chunking rules:
+- One chunk per leaf value, with the section path as context (`coverage.room_rent_cap: ...`).
+- Prose values are stored as-is; short enum/boolean/number values are rendered into sentences (e.g. `coverage.room_rent_cap: there is no room rent cap`) instead of being dropped.
+- `false`/`0` values are preserved; only empty/null values are skipped.
+
+Important: the embed step and the query path must use the same embedding provider/model and dimension. Re-embed after any model or chunking change, and delete `eval/.cache/` so local evaluation embeddings are rebuilt.
 
 ## Project Structure
 - `src/`: frontend app

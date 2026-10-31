@@ -31,6 +31,16 @@ Flow:
 3. Rank candidates
 4. Stream OpenAI output tokens to client
 
+Chunk index pipeline:
+- `scripts/buildChunks.js` derives one chunk per leaf value from `data/*.json`.
+- Short enum/boolean/number leaves are rendered as sentences, so answer-bearing
+  fields (room-rent cap, maternity, premium structure, claim trigger) are not
+  dropped. `false`/`0` are preserved.
+- `scripts/embedChunks.js` embeds the chunk file into `policy_chunks`. The seed
+  step and `retrieval.js` queries must use the same provider/model/dimension;
+  otherwise pgvector ranking is meaningless even when the expected chunk exists.
+- Clear `policy_chunks` before a full re-seed because the embed script appends.
+
 Note:
 - `POST /api/finance-podcast` exists in chat service, while the frontend route `/ai-finance-podcast` is currently a Coming Soon placeholder.
 - The `/finance-podcast` frontend route is a static curated list and makes no backend call.

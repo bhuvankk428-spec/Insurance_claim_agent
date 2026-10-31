@@ -189,6 +189,25 @@ Image miss: the text-only placeholder image is expected to be `partial`, but
 the vision model sometimes rejects it. This case is intentionally left in the
 dataset as a borderline example.
 
+Live pgvector baseline (2026-10-31, `db` mode)
+-----------------------------------------------
+A `db`-mode run against the live table scored RAG top-3 18.8% / top-1 6.3% /
+MRR 0.115, while local `embed` mode over the same chunk file scored much higher.
+Inspection showed this was an index problem, not a retrieval-algorithm problem:
+
+- The expected chunk (`Pradhan Mantri Fasal Bima Yojana (PMFBY)` /
+  `coverage.perils`) exists in `policy_chunks` under the exact name used by the
+  eval case, so there was no chunk-ID mismatch.
+- Stored embeddings had norm ~20.7; live query embeddings had norm ~1.0.
+  Cosine between a stored vector and a fresh embedding of the *same* text was
+  -0.04 instead of ~1.0.
+- Consequently `1 - (embedding <-> query)` was around -19 for every row and the
+  ordering was effectively random.
+
+Before tuning retrieval, confirm the table was seeded with the same embedding
+model used by `retrieveChunks`. Re-seed with `embedChunks.js` (after clearing
+the table) when it was not.
+
 Current environment limitations
 -------------------------------
 - Postgres/pgvector was unreachable from the evaluation environment
@@ -218,16 +237,42 @@ Current environment limitations
   domain option for `Personal Accident` or device protection, so those cases use
   `any` and compete against all domains.
 
-Changing chunk size
--------------------
-`backend/chat/scripts/buildChunks.js` currently creates one chunk per leaf
-value. If chunking logic changes:
+Chunking and re-seeding
+-----------------------
+`backend/chat/scripts/buildChunks.js` creates one chunk per leaf value.
 
-1. Run the chunk builder and re-embed the chunk table for production.
-2. Update `backend/chat/policy_chunks.json` if the local file is regenerated.
-3. Delete `eval/.cache/` so local embeddings are rebuilt.
-4. Run `npm run eval -- --tag after-chunking --rag-mode embed`.
-5. Compare with `npm run eval:compare -- baseline after-chunking`.
+Current rules:
+- Long prose values are stored as-is with the section path as a prefix.
+- Short enum/boolean/number values are rendered into sentences instead of being
+  dropped. For example `coverage.room_rent_cap: false` becomes
+  `coverage.room_rent_cap: there is no room rent cap`, and
+  `family.max_members_supported: 19` becomes `...: 19 members`.
+- `false` and `0` are treated as real values. Only empty/null leaves are skipped.
+  (An earlier `String(text || "")` check silently discarded `false` and `0`.)
+- This keeps answer-bearing fields such as room-rent cap, maternity, premium
+  structure, and claim trigger type in the index.
+
+If chunking logic changes:
+
+1. Run `node backend/chat/scripts/buildChunks.js` to regenerate
+   `backend/chat/policy_chunks.json`.
+2. Clear the `policy_chunks` table, then run
+   `node backend/chat/scripts/embedChunks.js` to re-embed. The embed script
+   appends rows, so clearing first avoids duplicates.
+3. Use the same `EMBEDDING_PROVIDER`, `OPENAI_EMBED_MODEL`, and `EMBEDDING_DIM`
+   for seeding and for queries. Mixing embedding models/spaces makes pgvector
+   ranking near-random even when the expected chunk exists.
+4. Delete `eval/.cache/` so local embeddings are rebuilt.
+5. Run `npm run eval -- --tag after-chunking --rag-mode embed`.
+6. Compare with `npm run eval:compare -- baseline after-chunking`.
+
+Verifying a suspect DB index:
+- OpenAI `text-embedding-3-small` vectors are unit length (norm ~1.0).
+  Unnormalized or foreign-model vectors show a much larger norm (for example
+  ~20.7), and `1 - (embedding <-> query)` then reports values around -19.
+- If embedding the same chunk text returns a vector with near-zero cosine to
+  its stored vector, the table was seeded with a different model. Re-seed
+  before tuning retrieval or editing eval expectations.
 
 Adding cases
 ------------

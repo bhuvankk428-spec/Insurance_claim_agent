@@ -19,6 +19,22 @@ Chat Service (`backend/chat`)
 `backend/chat/retrieval.js`
 - Embedding + vector retrieval from Postgres.
 - Keyword fallback when OpenAI embeddings are unavailable.
+- Vector SQL orders by pgvector `<->` (L2 distance) and exposes
+  `1 - distance AS similarity`. OpenAI embeddings are unit length, so distance
+  is in `[0, 2]` and similarity is in `[-1, 1]` only when the table was seeded
+  with the same model and dimension used for queries.
+
+`backend/chat/scripts/buildChunks.js`
+- Builds `backend/chat/policy_chunks.json` from `backend/chat/data/*.json`.
+- One chunk per leaf value, prefixed with its section path.
+- Long values are kept as-is; short enum/boolean/number values are rendered into
+  sentences (for example `coverage.room_rent_cap: there is no room rent cap`).
+- Preserves `false`/`0`; skips only empty/null values.
+
+`backend/chat/scripts/embedChunks.js`
+- Embeds every chunk into `policy_chunks` using `EMBEDDING_PROVIDER`,
+  `OPENAI_EMBED_MODEL`/`OLLAMA_EMBED_MODEL`, and `EMBEDDING_DIM`.
+- Appends rows; clear the table before a full re-seed.
 
 `backend/chat/db.js`
 - `pg.Pool` from `DATABASE_URL`.
