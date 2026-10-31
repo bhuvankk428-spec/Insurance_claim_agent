@@ -66,6 +66,16 @@ State and Durability
 - Restarting claim service clears in-memory sessions, but the story step can rebuild the required context from the browser-provided `claimContext`.
 - In-progress claim durability is browser-session scoped, not fully database-backed.
 
+Model Quality Evaluation
+------------------------
+- `eval/` is a non-production harness. It does not change runtime behavior.
+- Claim/image evaluation calls the real service functions with fixed contexts.
+- RAG evaluation can use live pgvector (`db`), local embeddings over the chunk
+  file (`embed`), or the production keyword fallback (`keyword`).
+- Results include accuracy, invalid/repair JSON rates, latency, and token cost.
+- Reports are written to `eval/results/`; `eval/compare.js` compares two runs.
+- AI telemetry is recorded by `backend/claimcheck/utils/aiTelemetry.js`.
+
 Operational Notes
 -----------------
 - Frontend production requires explicit backend URLs.

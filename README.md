@@ -20,10 +20,48 @@ INSURE.AI is an insurance platform with:
 - Frontend: React, Vite, Tailwind, React Router, Firebase
 - Backend: Node.js, Express, OpenAI, PostgreSQL (chat), Supabase (claim data)
 
+## Model Quality Evaluation
+The repo includes a reproducible evaluation harness for measuring model quality, not just manual testing.
+
+- Dataset: `eval/cases/insure-ai-eval-cases.json` (45 cases: 24 claim stories, 5 image checks, 16 RAG policy questions)
+- Claim/image results: accuracy, invalid-JSON rate, JSON-repair rate, average latency, average cost per query, and confusion matrix
+- RAG results: top-1/top-3 chunk hit rate, MRR, average latency, and average embedding cost per query
+- Every run is saved as JSON + Markdown under `eval/results/` (latest, tagged, and history); generated results are gitignored
+- Two runs can be compared case-by-case and metric-by-metric
+
+Commands:
+```bash
+# Validate the dataset (counts, ids, expected RAG chunks)
+npm run eval:validate
+
+# Full run. Uses OpenAI for claims and embeddings when configured.
+npm run eval -- --tag baseline
+
+# Deterministic keyword-only baseline (no model cost)
+npm run eval -- --tag keyword-baseline --claim-mode heuristic --rag-mode keyword
+
+# Re-run after a prompt/chunking change, then compare
+npm run eval -- --tag after-change
+npm run eval:compare -- baseline after-change
+```
+
+Useful options: `--suite claim,image,rag`, `--claim-mode ai|heuristic`, `--rag-mode auto|db|embed|keyword`, `--limit <n>`, `--verbose`, `--no-images`.
+
+Evaluation notes:
+- Claim and image cases call the real service functions with fixed policy/FIR/evidence contexts. They do not upload PDFs or rerun OCR/EXIF.
+- Supabase persistence is intentionally disabled during evaluation so runs do not write claim records.
+- RAG `db` mode uses the real pgvector query. If Postgres is unreachable, `auto` falls back to local embedding retrieval over `backend/chat/policy_chunks.json`; if embeddings are unavailable it falls back to the production keyword scorer.
+- Invalid JSON means a model response could not be parsed into the required shape. Repaired JSON means JSON was recovered from prose/Markdown fences (the existing extractor behavior). Unrecoverable JSON follows the existing safe fallback/manual-review path.
+- Cost uses `eval/lib/pricing.js` token prices. Live pgvector retrieval does not expose embedding usage, so `db` mode reports cost as `n/a`.
+- Image fixtures come from `test_pdf_for_verification/` and `public/`. The text-only placeholder image is expected to be `partial`, not `ok`.
+- The RAG run surfaced a domain-filter gap: BrightFuture child-plan chunks are tagged `Education / Child Plan`, but the frontend only offers `Life Insurance`, so that chunk is unreachable under the Life filter.
+- See `documentation/model_quality_evaluation.txt` for the full metric definitions and limitations.
+
 ## Project Structure
 - `src/`: frontend app
 - `backend/chat/`: RAG backend service
 - `backend/claimcheck/`: claim workflow + admin backend service
+- `eval/`: model-quality evaluation dataset, runner, reports, and comparison tool
 - `documentation/`: architecture and reference docs
 
 ## Local Setup
