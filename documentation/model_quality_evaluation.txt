@@ -243,14 +243,27 @@ Chunking and re-seeding
 
 Current rules:
 - Long prose values are stored as-is with the section path as a prefix.
-- Short enum/boolean/number values are rendered into sentences instead of being
-  dropped. For example `coverage.room_rent_cap: false` becomes
-  `coverage.room_rent_cap: there is no room rent cap`, and
-  `family.max_members_supported: 19` becomes `...: 19 members`.
+- Boolean, enum (including snake_case), numeric, member-count, and short-list
+  values are rendered as full sentences instead of being dropped or indexed as
+  bare tokens. For example:
+  - `coverage.room_rent_cap: false` becomes
+    `coverage.room_rent_cap: there is no room rent cap`
+  - `coverage.hospitalization: true` becomes
+    `coverage.hospitalization: hospitalization is covered`
+  - `family.max_members_supported: 19` becomes
+    `...: up to 19 members can be covered`
+  - `plan_variants: Standard; Silver; Gold; Platinum` becomes
+    `plan_variants: plan variants include Standard, Silver, Gold and Platinum`
+- Rendering is selected by value type (boolean, known/humanizable enum, numeric,
+  short list) rather than a 30-character cutoff, so long snake_case enums such
+  as `indicative_not_product_specific` are rendered instead of leaking
+  underscores.
 - `false` and `0` are treated as real values. Only empty/null leaves are skipped.
-  (An earlier `String(text || "")` check silently discarded `false` and `0`.)
 - This keeps answer-bearing fields such as room-rent cap, maternity, premium
   structure, and claim trigger type in the index.
+- Keyword-mode ranking is sensitive to chunk text. Re-run
+  `npm run eval -- --suite rag --rag-mode keyword` and compare after any
+  rendering change; the free keyword run is the quickest regression check.
 
 If chunking logic changes:
 

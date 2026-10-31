@@ -93,7 +93,13 @@ node backend/chat/scripts/embedChunks.js
 
 Chunking rules:
 - One chunk per leaf value, with the section path as context (`coverage.room_rent_cap: ...`).
-- Prose values are stored as-is; short enum/boolean/number values are rendered into sentences (e.g. `coverage.room_rent_cap: there is no room rent cap`) instead of being dropped.
+- Prose values are stored as-is.
+- Short fields are rendered as full sentences, for example:
+  - `coverage.room_rent_cap: there is no room rent cap`
+  - `coverage.hospitalization: hospitalization is covered`
+  - `family.max_members_supported: up to 19 members can be covered`
+  - `plan_variants: plan variants include Standard, Silver, Gold and Platinum`
+- Rendering is chosen by value type (boolean, enum, number, short list), not by length alone, so long snake_case enums such as `indicative_not_product_specific` are rendered instead of leaking underscores.
 - `false`/`0` values are preserved; only empty/null values are skipped.
 
 Important: the embed step and the query path must use the same embedding provider/model and dimension. Re-embed after any model or chunking change, and delete `eval/.cache/` so local evaluation embeddings are rebuilt.

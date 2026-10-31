@@ -33,9 +33,12 @@ Flow:
 
 Chunk index pipeline:
 - `scripts/buildChunks.js` derives one chunk per leaf value from `data/*.json`.
-- Short enum/boolean/number leaves are rendered as sentences, so answer-bearing
-  fields (room-rent cap, maternity, premium structure, claim trigger) are not
-  dropped. `false`/`0` are preserved.
+- Short enum/boolean/number/list leaves are rendered as full sentences (for
+  example `coverage.hospitalization: hospitalization is covered`), so
+  answer-bearing fields (room-rent cap, maternity, premium structure, claim
+  trigger) are not dropped or indexed as bare tokens. Rendering is keyed by
+  value type, not only by length, so long snake_case enums are still rendered.
+  `false`/`0` are preserved.
 - `scripts/embedChunks.js` embeds the chunk file into `policy_chunks`. The seed
   step and `retrieval.js` queries must use the same provider/model/dimension;
   otherwise pgvector ranking is meaningless even when the expected chunk exists.

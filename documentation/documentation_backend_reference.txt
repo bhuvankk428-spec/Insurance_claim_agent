@@ -27,8 +27,13 @@ Chat Service (`backend/chat`)
 `backend/chat/scripts/buildChunks.js`
 - Builds `backend/chat/policy_chunks.json` from `backend/chat/data/*.json`.
 - One chunk per leaf value, prefixed with its section path.
-- Long values are kept as-is; short enum/boolean/number values are rendered into
-  sentences (for example `coverage.room_rent_cap: there is no room rent cap`).
+- Long prose values are kept as-is.
+- Boolean, enum (including snake_case), numeric, member-count, and short-list
+  values are rendered as full sentences (for example
+  `coverage.room_rent_cap: there is no room rent cap` and
+  `coverage.hospitalization: hospitalization is covered`). Rendering is chosen
+  by value type rather than length alone, so long snake_case enums do not leak
+  underscores.
 - Preserves `false`/`0`; skips only empty/null values.
 
 `backend/chat/scripts/embedChunks.js`

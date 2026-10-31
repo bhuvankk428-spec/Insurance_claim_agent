@@ -3,31 +3,31 @@
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "coverage.perils",
-    "text": "coverage.perils: drought; flood; cyclone; hailstorm; pests; crop diseases; excess rainfall; prevented sowing; post-harvest loss; localised calamities"
+    "text": "coverage.perils: perils include drought, flood, cyclone, hailstorm, pests, crop diseases, excess rainfall, prevented sowing, post-harvest loss and localised calamities"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "coverage.natural_calamities",
-    "text": "coverage.natural_calamities: yes"
+    "text": "coverage.natural_calamities: natural calamities are covered"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "coverage.post_harvest_coverage",
-    "text": "coverage.post_harvest_coverage: yes"
+    "text": "coverage.post_harvest_coverage: post-harvest losses are covered"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "coverage.prevented_sowing",
-    "text": "coverage.prevented_sowing: yes"
+    "text": "coverage.prevented_sowing: prevented sowing is covered"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "eligibility.occupation",
-    "text": "eligibility.occupation: Farmer"
+    "text": "eligibility.occupation: eligible occupation is Farmer"
   },
   {
     "domain": "Crop Insurance",
@@ -45,19 +45,19 @@
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "financials.premium_structure.kharif",
-    "text": "financials.premium_structure.kharif: 2% of sum insured"
+    "text": "financials.premium_structure.kharif: Kharif premium is 2% of sum insured"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "financials.premium_structure.rabi",
-    "text": "financials.premium_structure.rabi: 1.5% of sum insured"
+    "text": "financials.premium_structure.rabi: Rabi premium is 1.5% of sum insured"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "financials.premium_structure.commercial_horticulture",
-    "text": "financials.premium_structure.commercial_horticulture: 5% of sum insured"
+    "text": "financials.premium_structure.commercial_horticulture: commercial horticulture premium is 5% of sum insured"
   },
   {
     "domain": "Crop Insurance",
@@ -69,25 +69,25 @@
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "financials.subsidy_range_percent",
-    "text": "financials.subsidy_range_percent: 90–98%"
+    "text": "financials.subsidy_range_percent: the subsidy covers 90–98% of the premium"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "financials.premium_affordability",
-    "text": "financials.premium_affordability: very low"
+    "text": "financials.premium_affordability: premium affordability is very low"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "claims.trigger_type",
-    "text": "claims.trigger_type: yield based"
+    "text": "claims.trigger_type: claims are triggered by yield"
   },
   {
     "domain": "Crop Insurance",
     "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "section": "claims.assessment_method",
-    "text": "claims.assessment_method: area approach"
+    "text": "claims.assessment_method: claims are assessed using an area approach"
   },
   {
     "domain": "Crop Insurance",
@@ -135,25 +135,25 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.heart_conditions",
-    "text": "coverage.heart_conditions: conditional"
+    "text": "coverage.heart_conditions: heart conditions are conditional"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.maternity",
-    "text": "coverage.maternity: covered after a waiting period"
+    "text": "coverage.maternity: maternity is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
@@ -165,37 +165,37 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "coverage.modern_treatments",
-    "text": "coverage.modern_treatments: covered"
+    "text": "coverage.modern_treatments: modern treatments are covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "family.type",
-    "text": "family.type: individual or family"
+    "text": "family.type: family type is individual or family"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "family.family_floater",
-    "text": "family.family_floater: depends on the plan variant"
+    "text": "family.family_floater: family floater depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: medium"
+    "text": "financials.premium_level: premium level is medium"
   },
   {
     "domain": "Health Insurance",
@@ -207,31 +207,31 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: strong"
+    "text": "insurer_metrics.network_strength: hospital network is strong"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "insurer_metrics.network_hospitals_estimate",
-    "text": "insurer_metrics.network_hospitals_estimate: 14000+"
+    "text": "insurer_metrics.network_hospitals_estimate: the network has an estimated 14,000+ hospitals"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "insurer_metrics.claim_settlement_ratio_band",
-    "text": "insurer_metrics.claim_settlement_ratio_band: 80–90%"
+    "text": "insurer_metrics.claim_settlement_ratio_band: the claim settlement ratio is typically 80–90%"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "insurer_metrics.csr_confidence",
-    "text": "insurer_metrics.csr_confidence: indicative and not specific to a city"
+    "text": "insurer_metrics.csr_confidence: the claim settlement ratio is indicative and not specific to a city"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "eligibility.age_band",
-    "text": "eligibility.age_band: adult to senior"
+    "text": "eligibility.age_band: eligible age band is adult to senior"
   },
   {
     "domain": "Health Insurance",
@@ -243,7 +243,7 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Comprehensive Plan",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -267,55 +267,55 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "coverage.maternity",
-    "text": "coverage.maternity: covered after a waiting period"
+    "text": "coverage.maternity: maternity is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "coverage.worldwide_emergency",
-    "text": "coverage.worldwide_emergency: depends on the plan variant"
+    "text": "coverage.worldwide_emergency: worldwide emergency coverage depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "family.type",
-    "text": "family.type: family floater"
+    "text": "family.type: family type is family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "family.recommended_family_size",
-    "text": "family.recommended_family_size: 3 to 5 members"
+    "text": "family.recommended_family_size: recommended family size is 3 to 5 members"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: medium"
+    "text": "financials.premium_level: premium level is medium"
   },
   {
     "domain": "Health Insurance",
@@ -327,19 +327,19 @@
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "eligibility.relationship_rules_apply",
-    "text": "eligibility.relationship_rules_apply: applies"
+    "text": "eligibility.relationship_rules_apply: relationship rules apply"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "eligibility.age_limits_apply",
-    "text": "eligibility.age_limits_apply: applies"
+    "text": "eligibility.age_limits_apply: age limits apply"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Star Health Family Health Optima",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -363,55 +363,55 @@
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "coverage.ayush",
-    "text": "coverage.ayush: covered"
+    "text": "coverage.ayush: AYUSH treatments are covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: unlimited in some variants"
+    "text": "coverage.restoration: restoration is unlimited in some variants"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "coverage.annual_health_checkups",
-    "text": "coverage.annual_health_checkups: available"
+    "text": "coverage.annual_health_checkups: annual health checkups are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "family.type",
-    "text": "family.type: large family floater"
+    "text": "family.type: family type is large family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "family.max_members_supported",
-    "text": "family.max_members_supported: 19 members"
+    "text": "family.max_members_supported: up to 19 members can be covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: medium"
+    "text": "financials.premium_level: premium level is medium"
   },
   {
     "domain": "Health Insurance",
@@ -423,19 +423,19 @@
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: strong in urban areas"
+    "text": "insurer_metrics.network_strength: hospital network is strong in urban areas"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "insurer_metrics.csr_confidence",
-    "text": "insurer_metrics.csr_confidence: indicative_not_product_specific"
+    "text": "insurer_metrics.csr_confidence: the claim settlement ratio is indicative and not specific to a product"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "eligibility.urban_focus",
-    "text": "eligibility.urban_focus: available"
+    "text": "eligibility.urban_focus: urban focus is available"
   },
   {
     "domain": "Health Insurance",
@@ -447,7 +447,7 @@
     "domain": "Health Insurance",
     "policy_name": "Niva Bupa Health Companion Plan",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -471,37 +471,37 @@
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "coverage.health",
-    "text": "coverage.health: yes"
+    "text": "coverage.health: health coverage applies"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "coverage.personal_accident",
-    "text": "coverage.personal_accident: covered"
+    "text": "coverage.personal_accident: personal accident cover is included"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "coverage.travel",
-    "text": "coverage.travel: depends on the product"
+    "text": "coverage.travel: travel coverage depends on the product"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: very strong"
+    "text": "insurer_metrics.network_strength: hospital network is very strong"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "insurer_metrics.network_hospitals_estimate",
-    "text": "insurer_metrics.network_hospitals_estimate: 14000+"
+    "text": "insurer_metrics.network_hospitals_estimate: the network has an estimated 14,000+ hospitals"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "insurer_metrics.claim_settlement_ratio_band",
-    "text": "insurer_metrics.claim_settlement_ratio_band: 80–88%"
+    "text": "insurer_metrics.claim_settlement_ratio_band: the claim settlement ratio is typically 80–88%"
   },
   {
     "domain": "Health / Accident / Travel",
@@ -513,13 +513,13 @@
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "claim_process.digital_support",
-    "text": "claim_process.digital_support: available"
+    "text": "claim_process.digital_support: digital support is available"
   },
   {
     "domain": "Health / Accident / Travel",
     "policy_name": "Star Health Insurance (General Overview)",
     "section": "claim_process.customer_support",
-    "text": "claim_process.customer_support: 24x7"
+    "text": "claim_process.customer_support: customer support is available 24x7"
   },
   {
     "domain": "Health / Accident / Travel",
@@ -531,13 +531,13 @@
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
@@ -549,49 +549,49 @@
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.health_checkups",
-    "text": "coverage.health_checkups: available"
+    "text": "coverage.health_checkups: health checkups are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.advanced_coverage_design",
-    "text": "coverage.advanced_coverage_design: secure benefit plus restoration"
+    "text": "coverage.advanced_coverage_design: advanced coverage includes secure benefit plus restoration"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "coverage.home_healthcare",
-    "text": "coverage.home_healthcare: select_cities_variant_dependent"
+    "text": "coverage.home_healthcare: home healthcare is available in select cities depending on the variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "family.type",
-    "text": "family.type: individual or family floater"
+    "text": "family.type: family type is individual or family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "family.family_floater",
-    "text": "family.family_floater: yes"
+    "text": "family.family_floater: family floater is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: upper middle"
+    "text": "financials.premium_level: premium level is upper middle"
   },
   {
     "domain": "Health Insurance",
@@ -603,19 +603,19 @@
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: strong"
+    "text": "insurer_metrics.network_strength: hospital network is strong"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "insurer_metrics.digital_claim_support",
-    "text": "insurer_metrics.digital_claim_support: available"
+    "text": "insurer_metrics.digital_claim_support: digital claim support is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "insurer_metrics.cashless_focus",
-    "text": "insurer_metrics.cashless_focus: available"
+    "text": "insurer_metrics.cashless_focus: cashless claims are available"
   },
   {
     "domain": "Health Insurance",
@@ -627,13 +627,13 @@
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "eligibility.adult_and_family_variants",
-    "text": "eligibility.adult_and_family_variants: yes"
+    "text": "eligibility.adult_and_family_variants: adult and family variants are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "HDFC ERGO Optima Secure",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -657,13 +657,13 @@
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
@@ -675,49 +675,49 @@
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: unlimited in some variants"
+    "text": "coverage.restoration: restoration is unlimited in some variants"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.annual_health_checkups",
-    "text": "coverage.annual_health_checkups: available"
+    "text": "coverage.annual_health_checkups: annual health checkups are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.maternity",
-    "text": "coverage.maternity: optional or depends on the plan variant"
+    "text": "coverage.maternity: maternity is optional or depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "coverage.consumables",
-    "text": "coverage.consumables: depends on the plan variant"
+    "text": "coverage.consumables: consumables depend on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "family.type",
-    "text": "family.type: individual or family floater"
+    "text": "family.type: family type is individual or family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "family.family_floater",
-    "text": "family.family_floater: yes"
+    "text": "family.family_floater: family floater is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: upper middle"
+    "text": "financials.premium_level: premium level is upper middle"
   },
   {
     "domain": "Health Insurance",
@@ -729,19 +729,19 @@
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: strong"
+    "text": "insurer_metrics.network_strength: hospital network is strong"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "insurer_metrics.cashless_focus",
-    "text": "insurer_metrics.cashless_focus: available"
+    "text": "insurer_metrics.cashless_focus: cashless claims are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "insurer_metrics.wellness_benefits",
-    "text": "insurer_metrics.wellness_benefits: available"
+    "text": "insurer_metrics.wellness_benefits: wellness benefits are available"
   },
   {
     "domain": "Health Insurance",
@@ -753,13 +753,13 @@
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "eligibility.adult_and_family_variants",
-    "text": "eligibility.adult_and_family_variants: yes"
+    "text": "eligibility.adult_and_family_variants: adult and family variants are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Care Supreme",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -783,13 +783,13 @@
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
@@ -801,49 +801,49 @@
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.consumables",
-    "text": "coverage.consumables: optional or depends on the plan variant"
+    "text": "coverage.consumables: consumables are optional or depend on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.personalization",
-    "text": "coverage.personalization: available"
+    "text": "coverage.personalization: personalization is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "coverage.daycare",
-    "text": "coverage.daycare: covered"
+    "text": "coverage.daycare: daycare procedures are covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "family.type",
-    "text": "family.type: individual or family floater"
+    "text": "family.type: family type is individual or family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "family.family_floater",
-    "text": "family.family_floater: yes"
+    "text": "family.family_floater: family floater is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: upper middle"
+    "text": "financials.premium_level: premium level is upper middle"
   },
   {
     "domain": "Health Insurance",
@@ -855,19 +855,19 @@
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: strong"
+    "text": "insurer_metrics.network_strength: hospital network is strong"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "insurer_metrics.digital_claim_support",
-    "text": "insurer_metrics.digital_claim_support: available"
+    "text": "insurer_metrics.digital_claim_support: digital claim support is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "insurer_metrics.customization_focus",
-    "text": "insurer_metrics.customization_focus: available"
+    "text": "insurer_metrics.customization_focus: customization is available"
   },
   {
     "domain": "Health Insurance",
@@ -879,13 +879,13 @@
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "eligibility.portability_supported",
-    "text": "eligibility.portability_supported: supported"
+    "text": "eligibility.portability_supported: portability is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ICICI Lombard Elevate",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -909,25 +909,25 @@
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.chronic_management",
-    "text": "coverage.chronic_management: covered"
+    "text": "coverage.chronic_management: chronic disease management is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.wellness_rewards",
-    "text": "coverage.wellness_rewards: available"
+    "text": "coverage.wellness_rewards: wellness rewards are available"
   },
   {
     "domain": "Health Insurance",
@@ -939,37 +939,37 @@
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "coverage.maternity",
-    "text": "coverage.maternity: depends on the plan variant"
+    "text": "coverage.maternity: maternity depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "family.type",
-    "text": "family.type: individual or family floater"
+    "text": "family.type: family type is individual or family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "family.family_floater",
-    "text": "family.family_floater: yes"
+    "text": "family.family_floater: family floater is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: upper middle"
+    "text": "financials.premium_level: premium level is upper middle"
   },
   {
     "domain": "Health Insurance",
@@ -981,19 +981,19 @@
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "insurer_metrics.wellness_orientation",
-    "text": "insurer_metrics.wellness_orientation: strong"
+    "text": "insurer_metrics.wellness_orientation: wellness focus is strong"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "insurer_metrics.digital_support",
-    "text": "insurer_metrics.digital_support: available"
+    "text": "insurer_metrics.digital_support: digital support is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "insurer_metrics.chronic_care_focus",
-    "text": "insurer_metrics.chronic_care_focus: available"
+    "text": "insurer_metrics.chronic_care_focus: chronic care is available"
   },
   {
     "domain": "Health Insurance",
@@ -1005,13 +1005,13 @@
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "eligibility.adult_and_family_variants",
-    "text": "eligibility.adult_and_family_variants: yes"
+    "text": "eligibility.adult_and_family_variants: adult and family variants are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "Aditya Birla Activ One Max",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -1035,67 +1035,67 @@
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.hospitalization",
-    "text": "coverage.hospitalization: covered"
+    "text": "coverage.hospitalization: hospitalization is covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.pre_existing_disease",
-    "text": "coverage.pre_existing_disease: covered after a waiting period"
+    "text": "coverage.pre_existing_disease: pre-existing disease is covered after a waiting period"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.restoration",
-    "text": "coverage.restoration: available"
+    "text": "coverage.restoration: restoration is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.daycare",
-    "text": "coverage.daycare: covered"
+    "text": "coverage.daycare: daycare procedures are covered"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.maternity",
-    "text": "coverage.maternity: optional or depends on the plan variant"
+    "text": "coverage.maternity: maternity is optional or depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.health_checkups",
-    "text": "coverage.health_checkups: available"
+    "text": "coverage.health_checkups: health checkups are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "coverage.room_rent_cap",
-    "text": "coverage.room_rent_cap: depends on the plan variant"
+    "text": "coverage.room_rent_cap: room rent cap depends on the plan variant"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "family.supported",
-    "text": "family.supported: supported"
+    "text": "family.supported: family coverage is supported"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "family.type",
-    "text": "family.type: individual or family floater"
+    "text": "family.type: family type is individual or family floater"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "family.family_floater",
-    "text": "family.family_floater: yes"
+    "text": "family.family_floater: family floater is available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "financials.premium_level",
-    "text": "financials.premium_level: mid to upper mid"
+    "text": "financials.premium_level: premium level is mid to upper mid"
   },
   {
     "domain": "Health Insurance",
@@ -1107,19 +1107,19 @@
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "insurer_metrics.network_strength",
-    "text": "insurer_metrics.network_strength: good"
+    "text": "insurer_metrics.network_strength: hospital network is good"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "insurer_metrics.wellness_benefits",
-    "text": "insurer_metrics.wellness_benefits: available"
+    "text": "insurer_metrics.wellness_benefits: wellness benefits are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "insurer_metrics.add_on_flexibility",
-    "text": "insurer_metrics.add_on_flexibility: available"
+    "text": "insurer_metrics.add_on_flexibility: add-on flexibility is available"
   },
   {
     "domain": "Health Insurance",
@@ -1131,13 +1131,13 @@
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "eligibility.adult_and_family_variants",
-    "text": "eligibility.adult_and_family_variants: yes"
+    "text": "eligibility.adult_and_family_variants: adult and family variants are available"
   },
   {
     "domain": "Health Insurance",
     "policy_name": "ManipalCigna ProHealth Prime",
     "section": "claim_process.mode",
-    "text": "claim_process.mode: cashless; reimbursement"
+    "text": "claim_process.mode: claims are settled via cashless or reimbursement"
   },
   {
     "domain": "Health Insurance",
@@ -1599,7 +1599,7 @@
     "domain": "Travel Insurance",
     "policy_name": "HDFC ERGO Travel Insurance",
     "section": "policy_types",
-    "text": "policy_types: Leisure travel plans; Business travel plans; Student travel plans"
+    "text": "policy_types: policy types include Leisure travel plans, Business travel plans and Student travel plans"
   },
   {
     "domain": "Travel Insurance",
@@ -1617,7 +1617,7 @@
     "domain": "Travel Insurance",
     "policy_name": "Reliance Travel Care Policy",
     "section": "plan_variants",
-    "text": "plan_variants: Standard; Silver; Gold; Platinum"
+    "text": "plan_variants: plan variants include Standard, Silver, Gold and Platinum"
   },
   {
     "domain": "Travel Insurance",
