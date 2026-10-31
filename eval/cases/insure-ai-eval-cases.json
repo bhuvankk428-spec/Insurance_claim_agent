@@ -1,0 +1,1093 @@
+{
+  "version": 1,
+  "description": "Insure.AI model-quality evaluation set. Claim cases exercise the claim-story service with a fixed policy/FIR/evidence context. Image cases exercise the vision consistency check. RAG cases check whether the expected policy chunk lands in the top 3 retrieved chunks.",
+  "scenarios": {
+    "motor_comprehensive": {
+      "domain": "motor",
+      "policyText": "MOTOR COMPREHENSIVE POLICY\nCoverage: The policy covers own damage to the insured vehicle due to accident, collision, overturning, fire, explosion, lightning, theft, flood, cyclone, storm, earthquake, riot, strike, malicious acts and terrorism. Third-party liability for bodily injury, death and property damage is included. Cashless repairs at network garages and roadside assistance are available.\nExclusions: The insurer shall not be liable for any claim arising from driving under the influence of alcohol or drugs, racing, speed testing, use of the vehicle for commercial hire, driving without a valid licence, intentional damage, war, nuclear risks, or wear and tear. Exclusions apply to consequential loss and contractual liability.",
+      "policyData": {
+        "ownerName": "Ravi Kumar",
+        "vehicleNumber": "KA01AB1234",
+        "landLocation": "Bengaluru, Karnataka",
+        "policyNumber": "MOT-2026-001",
+        "sumInsured": "800000"
+      },
+      "firData": {
+        "incident": "Car collision accident on Outer Ring Road",
+        "vehicleNumber": "KA01AB1234",
+        "location": "Bengaluru, Karnataka",
+        "firNumber": "FIR-2026-001"
+      },
+      "imageLocation": "Bengaluru, Karnataka",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Photo shows a damaged vehicle consistent with a collision",
+        "confidence": 0.9,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 15,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Policy and FIR vehicle numbers match"
+        ],
+        "domain": "Motor Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    },
+    "health_comprehensive": {
+      "domain": "health",
+      "policyText": "HEALTH COMPREHENSIVE POLICY\nCoverage: In-patient hospitalization, day-care procedures, pre and post hospitalization expenses, ambulance charges, modern treatments, and cashless treatment at network hospitals are covered.\nWaiting periods: Pre-existing diseases are covered only after a continuous waiting period of 48 months. Maternity is covered after 24 months. The initial waiting period is 30 days except for accidents.\nExclusions: Cosmetic surgery, self-inflicted injury, suicide attempt, war, nuclear risks, routine health check-ups, and treatment taken during the initial waiting period are excluded.",
+      "policyData": {
+        "ownerName": "Anita Sharma",
+        "memberId": "HLT-7788",
+        "policyNumber": "HLT-2026-144",
+        "insurer": "Star Health"
+      },
+      "firData": {
+        "incident": "Hospitalization for cardiac surgery",
+        "location": "Mumbai, Maharashtra",
+        "documentNumber": "HOSP-2026-771"
+      },
+      "imageLocation": "Mumbai, Maharashtra",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Hospital document photo is readable",
+        "confidence": 0.85,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 20,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Policy member details match the hospital document"
+        ],
+        "domain": "Health Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    },
+    "crop_pmfby": {
+      "domain": "crop",
+      "policyText": "PRADHAN MANTRI FASAL BIMA YOJANA (PMFBY)\nCoverage: The scheme covers crop loss due to drought, flood, cyclone, hailstorm, pests, crop diseases, excess rainfall, prevented sowing, post-harvest loss for notified crops, and localized calamities.\nExclusions: Farmer negligence or improper farming practices, crops not notified by the state, post-harvest losses beyond the notified period, non-compliance with scheme rules, and false claims are excluded.\nClaims: Claims are triggered when actual yield falls below threshold yield and are aimed to be settled within about two months after final yield data.",
+      "policyData": {
+        "farmerName": "Suresh Patil",
+        "landLocation": "Nashik, Maharashtra",
+        "crop": "Wheat",
+        "scheme": "PMFBY",
+        "policyNumber": "CROP-2026-55"
+      },
+      "firData": {
+        "incident": "Crop loss due to drought",
+        "location": "Nashik, Maharashtra",
+        "documentNumber": "CROP-2026-55"
+      },
+      "imageLocation": "Nashik, Maharashtra",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Field photo shows damaged crop consistent with drought",
+        "confidence": 0.8,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 18,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Land location matches scheme records"
+        ],
+        "domain": "Crop Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    },
+    "travel_guard": {
+      "domain": "travel",
+      "policyText": "TRAVEL GUARD POLICY\nCoverage: Emergency medical treatment and hospitalization abroad, emergency medical evacuation, dental emergencies due to accident, trip cancellation or interruption for covered reasons, loss or delay of checked-in baggage, and personal accident cover in many variants.\nExclusions: Pre-existing illnesses, adventure sports and high-risk activities unless an add-on is purchased, travel against medical advice, war and terrorism, and claims arising from intoxication are excluded.",
+      "policyData": {
+        "travelerName": "Priya Nair",
+        "passportNumber": "P1234567",
+        "destination": "Singapore",
+        "policyNumber": "TRV-2026-88"
+      },
+      "firData": {
+        "incident": "Baggage loss at airport",
+        "location": "Singapore",
+        "documentNumber": "TRV-2026-88"
+      },
+      "imageLocation": "Singapore",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Airport baggage document is readable",
+        "confidence": 0.82,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 22,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Travel dates and destination match the policy"
+        ],
+        "domain": "Travel Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    },
+    "home_shield": {
+      "domain": "home",
+      "policyText": "HOME SHIELD POLICY\nCoverage: Loss or damage to building and contents due to fire, lightning, explosion, flood, storm, cyclone, earthquake if opted, burglary, theft, housebreaking, and electrical or mechanical breakdown of specified appliances if selected. Reconstruction or repair and alternative accommodation rent are covered as per limits.\nExclusions: Wear and tear, gradual deterioration, war, nuclear risks, intentional damage, and loss while the home is unoccupied for more than 30 consecutive days are excluded.",
+      "policyData": {
+        "ownerName": "Mohan Rao",
+        "landLocation": "Hyderabad, Telangana",
+        "policyNumber": "HOME-2026-12",
+        "sumInsured": "1500000"
+      },
+      "firData": {
+        "incident": "Fire damage to kitchen",
+        "location": "Hyderabad, Telangana",
+        "documentNumber": "HOME-2026-12"
+      },
+      "imageLocation": "Hyderabad, Telangana",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Photo shows fire damage in the insured kitchen",
+        "confidence": 0.88,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 16,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Property address matches the policy"
+        ],
+        "domain": "Home Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    },
+    "life_jeevan": {
+      "domain": "life",
+      "policyText": "LIC JEEVAN UMANG POLICY\nCoverage: Provides life cover up to age 100 with a guaranteed annual survival benefit of 8% of basic sum assured after the premium paying term, and a maturity benefit at age 100. Death benefit is payable to the nominee on death during the policy term.\nExclusions: Suicide within 12 months from commencement or revival, fraudulent misrepresentation, and death due to war or nuclear perils are excluded.",
+      "policyData": {
+        "policyholderName": "Ramesh Gupta",
+        "policyNumber": "LIC-2026-991",
+        "sumAssured": "1000000"
+      },
+      "firData": {
+        "incident": "Death due to road accident",
+        "location": "Delhi",
+        "documentNumber": "DEATH-2026-21"
+      },
+      "imageLocation": "UNKNOWN",
+      "imageAnalysis": {
+        "status": "skipped",
+        "reason": "No image evidence required for this document set"
+      },
+      "evidenceRisk": {
+        "riskScore": 30,
+        "riskLevel": "medium",
+        "reasons": [],
+        "signals": [
+          "Nominee details match the policy"
+        ],
+        "domain": "Life Insurance"
+      },
+      "matchLevel": "full",
+      "geoTagged": false
+    },
+    "pa_cover": {
+      "domain": "personal-accident",
+      "policyText": "PERSONAL ACCIDENT POLICY\nCoverage: Accidental death benefit up to 100% of sum insured, permanent total disability, permanent partial disability as per injury scale, temporary total disability weekly compensation, and accidental hospitalization expenses.\nExclusions: No cover for death or disability not due to an accident, self-harm or suicide attempt, intentional injury, injury under the influence of alcohol or drugs beyond legal limits, criminal acts, war, civil commotion, or terrorism.",
+      "policyData": {
+        "insuredName": "Kiran Das",
+        "policyNumber": "PA-2026-300",
+        "sumInsured": "2000000"
+      },
+      "firData": {
+        "incident": "Road accident injury",
+        "location": "Kolkata, West Bengal",
+        "documentNumber": "PA-2026-77"
+      },
+      "imageLocation": "Kolkata, West Bengal",
+      "imageAnalysis": {
+        "status": "ok",
+        "reason": "Photo shows injuries consistent with a road accident",
+        "confidence": 0.8,
+        "quality": {
+          "blur": false,
+          "irrelevant": false,
+          "suspected_fake": false
+        }
+      },
+      "evidenceRisk": {
+        "riskScore": 25,
+        "riskLevel": "low",
+        "reasons": [],
+        "signals": [
+          "Accident location and date match the FIR"
+        ],
+        "domain": "personal-accident"
+      },
+      "matchLevel": "full",
+      "geoTagged": true
+    }
+  },
+  "cases": [
+    {
+      "id": "claim-motor-collision-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged in a collision accident on Outer Ring Road in Bengaluru on 1 February 2026. I filed an FIR the same day and the vehicle number on the policy matches the FIR. The damage was caused by another vehicle hitting the front bumper."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-motor-theft-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My motorcycle was stolen from the apartment parking area in Bengaluru on 3 February 2026. I reported the theft to the police immediately and filed an FIR. The vehicle number and owner details match my motor policy.",
+        "overrides": {
+          "firData": {
+            "incident": "Motorcycle theft from apartment parking",
+            "vehicleNumber": "KA01AB1234",
+            "location": "Bengaluru, Karnataka",
+            "firNumber": "FIR-2026-002"
+          }
+        }
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-motor-alcohol-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was involved in a collision while I was driving home after a party. I had consumed alcohol before driving, and the police report records that I was under the influence of alcohol. The front bumper and headlight were damaged.",
+        "overrides": {
+          "firData": {
+            "incident": "Car collision accident while driver was under the influence of alcohol",
+            "vehicleNumber": "KA01AB1234",
+            "location": "Bengaluru, Karnataka",
+            "firNumber": "FIR-2026-003"
+          },
+          "evidenceRisk": {
+            "riskScore": 78,
+            "riskLevel": "high",
+            "reasons": [
+              "Police report records alcohol impairment"
+            ],
+            "signals": [],
+            "domain": "motor"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-motor-racing-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged in a collision during a street racing event on the highway. I was participating in a speed test when the car hit the barrier. The vehicle is insured under a private motor policy.",
+        "overrides": {
+          "firData": {
+            "incident": "Car collision accident during street racing and speed testing",
+            "vehicleNumber": "KA01AB1234",
+            "location": "Bengaluru, Karnataka",
+            "firNumber": "FIR-2026-004"
+          },
+          "evidenceRisk": {
+            "riskScore": 82,
+            "riskLevel": "high",
+            "reasons": [
+              "Incident occurred during racing"
+            ],
+            "signals": [],
+            "domain": "motor"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-motor-story-mismatch-partial",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged in a collision near my office in Bengaluru. Another car hit the rear side and the bumper was broken. I reported the collision to the police and submitted photos of the damaged car.",
+        "overrides": {
+          "firData": {
+            "incident": "Motorcycle theft from apartment parking",
+            "vehicleNumber": "KA01AB1234",
+            "location": "Bengaluru, Karnataka",
+            "firNumber": "FIR-2026-005"
+          }
+        }
+      },
+      "expected": {
+        "status": "partial",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-motor-geo-mismatch-partial",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged in a collision accident on Outer Ring Road in Bengaluru on 1 February 2026. I filed an FIR at the local police station and the vehicle details match the policy.",
+        "overrides": {
+          "matchLevel": "partial",
+          "imageLocation": "New Delhi, Delhi",
+          "evidenceRisk": {
+            "riskScore": 72,
+            "riskLevel": "high",
+            "reasons": [
+              "Image location does not match incident location"
+            ],
+            "signals": [],
+            "domain": "motor"
+          }
+        }
+      },
+      "expected": {
+        "status": "partial",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-motor-evidence-reject",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged in a collision accident on Outer Ring Road in Bengaluru. I filed an FIR and submitted photos of the damaged vehicle. The policy and FIR records should confirm the vehicle details.",
+        "overrides": {
+          "matchLevel": "reject",
+          "evidenceRisk": {
+            "riskScore": 88,
+            "riskLevel": "high",
+            "reasons": [
+              "Policy vehicle number does not match the FIR vehicle number"
+            ],
+            "signals": [],
+            "domain": "motor"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-health-cardiac-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "health_comprehensive",
+        "story": "I was hospitalized in Mumbai for cardiac surgery on 10 February 2026. The hospital is in the insurer network and I was admitted for five days. My policy member details match the hospital records and I submitted the discharge summary."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-health-pre-existing-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "health_comprehensive",
+        "story": "I was hospitalized for complications from diabetes, which I have had for many years. The hospitalization took place during the initial waiting period of the policy. I submitted the hospital bills and my medical history.",
+        "overrides": {
+          "firData": {
+            "incident": "Hospitalization for pre-existing diabetes complications during the waiting period",
+            "location": "Mumbai, Maharashtra",
+            "documentNumber": "HOSP-2026-772"
+          },
+          "evidenceRisk": {
+            "riskScore": 75,
+            "riskLevel": "high",
+            "reasons": [
+              "Treatment falls inside the pre-existing disease waiting period"
+            ],
+            "signals": [],
+            "domain": "health"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-health-cosmetic-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "health_comprehensive",
+        "story": "I was hospitalized for a cosmetic surgery procedure to change my appearance. The admission was planned and not caused by an accident or illness. The hospital submitted the bills for reimbursement.",
+        "overrides": {
+          "firData": {
+            "incident": "Hospitalization for cosmetic surgery",
+            "location": "Mumbai, Maharashtra",
+            "documentNumber": "HOSP-2026-773"
+          },
+          "evidenceRisk": {
+            "riskScore": 70,
+            "riskLevel": "high",
+            "reasons": [
+              "Procedure is listed under cosmetic exclusions"
+            ],
+            "signals": [],
+            "domain": "health"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-health-maternity-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "health_comprehensive",
+        "story": "My wife was hospitalized for a maternity delivery in Mumbai after 24 months of continuous coverage. The hospital is part of the cashless network. The policy member details and the admission records match.",
+        "overrides": {
+          "firData": {
+            "incident": "Hospitalization for maternity delivery after 24 months",
+            "location": "Mumbai, Maharashtra",
+            "documentNumber": "HOSP-2026-774"
+          }
+        }
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-crop-drought-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "crop_pmfby",
+        "story": "My wheat crop in Nashik was damaged due to drought during the Kharif season. The crop was notified under the scheme and I have land records and cultivation details. The yield loss is significant compared with the threshold yield."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-crop-flood-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "crop_pmfby",
+        "story": "My notified wheat crop in Nashik was submerged due to a flood after heavy rainfall. I reported the loss to the agriculture office and submitted land records and crop details. The field photos show standing water and damaged crops.",
+        "overrides": {
+          "firData": {
+            "incident": "Crop loss due to flood",
+            "location": "Nashik, Maharashtra",
+            "documentNumber": "CROP-2026-56"
+          },
+          "imageAnalysis": {
+            "status": "ok",
+            "reason": "Field photo shows flood water and damaged crop",
+            "confidence": 0.8,
+            "quality": {
+              "blur": false,
+              "irrelevant": false,
+              "suspected_fake": false
+            }
+          }
+        }
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-crop-notified-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "crop_pmfby",
+        "story": "My crop was damaged by heavy rain, but the crop is not notified by the state for this season. I submitted the loss report and land records to the agriculture office. The crop was grown without scheme enrolment.",
+        "overrides": {
+          "firData": {
+            "incident": "Crop loss for a crop not notified by the state",
+            "location": "Nashik, Maharashtra",
+            "documentNumber": "CROP-2026-57"
+          },
+          "evidenceRisk": {
+            "riskScore": 76,
+            "riskLevel": "high",
+            "reasons": [
+              "Crop is not on the notified list for the season"
+            ],
+            "signals": [],
+            "domain": "crop"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-crop-negligence-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "crop_pmfby",
+        "story": "My crop was damaged because I did not follow the recommended farming practices and irrigation schedule. The agriculture officer noted farmer negligence in the loss report. I still submitted the claim with land records.",
+        "overrides": {
+          "firData": {
+            "incident": "Crop loss due to farmer negligence and improper farming practices",
+            "location": "Nashik, Maharashtra",
+            "documentNumber": "CROP-2026-58"
+          },
+          "evidenceRisk": {
+            "riskScore": 80,
+            "riskLevel": "high",
+            "reasons": [
+              "Loss report records farmer negligence"
+            ],
+            "signals": [],
+            "domain": "crop"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-travel-baggage-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "travel_guard",
+        "story": "My checked-in baggage was lost at Singapore airport during my insured trip. I reported the loss to the airline and filed a baggage irregularity report the same day. I have the boarding pass, baggage tag and travel policy."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-travel-medical-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "travel_guard",
+        "story": "I was hospitalized abroad in Singapore due to a sudden medical emergency during my insured trip. I contacted the global assistance helpline and the hospital admission was approved. I submitted the medical bills and discharge summary.",
+        "overrides": {
+          "firData": {
+            "incident": "Emergency medical treatment and hospitalization abroad",
+            "location": "Singapore",
+            "documentNumber": "TRV-2026-89"
+          }
+        }
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-travel-adventure-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "travel_guard",
+        "story": "I suffered an injury while scuba diving during my trip to Singapore. The injury required hospital treatment and I submitted the medical bills. I did not purchase the adventure sports add-on for this travel policy.",
+        "overrides": {
+          "firData": {
+            "incident": "Adventure sports injury during scuba diving",
+            "location": "Singapore",
+            "documentNumber": "TRV-2026-90"
+          },
+          "evidenceRisk": {
+            "riskScore": 74,
+            "riskLevel": "high",
+            "reasons": [
+              "Adventure sports are excluded without an add-on"
+            ],
+            "signals": [],
+            "domain": "travel"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-home-fire-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "home_shield",
+        "story": "My kitchen was damaged by fire on 12 February 2026. The fire started from an electrical short circuit and damaged the cabinets and appliances. I reported the fire to the fire station and submitted photos of the damage."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-home-wear-tear-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "home_shield",
+        "story": "My building was damaged due to wear and tear and gradual deterioration of the walls over many years. There was no fire, flood or burglary. I submitted a contractor estimate for repainting and repairs.",
+        "overrides": {
+          "firData": {
+            "incident": "Damage due to wear and tear of the building",
+            "location": "Hyderabad, Telangana",
+            "documentNumber": "HOME-2026-13"
+          },
+          "evidenceRisk": {
+            "riskScore": 72,
+            "riskLevel": "high",
+            "reasons": [
+              "Damage is due to gradual wear and tear"
+            ],
+            "signals": [],
+            "domain": "home"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-life-suicide-rejected",
+      "type": "claim",
+      "input": {
+        "scenario": "life_jeevan",
+        "story": "The policyholder died due to suicide within 12 months of the policy commencement date. The nominee submitted the death certificate and policy documents. The insurer is reviewing the claim under the suicide exclusion clause.",
+        "overrides": {
+          "firData": {
+            "incident": "Death due to suicide within 12 months of policy commencement",
+            "location": "Delhi",
+            "documentNumber": "DEATH-2026-22"
+          },
+          "evidenceRisk": {
+            "riskScore": 85,
+            "riskLevel": "high",
+            "reasons": [
+              "Death occurred within the suicide exclusion period"
+            ],
+            "signals": [],
+            "domain": "life"
+          }
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-pa-accident-approved",
+      "type": "claim",
+      "input": {
+        "scenario": "pa_cover",
+        "story": "I was injured in a road accident in Kolkata when a truck hit my scooter. I was hospitalized for two days and the discharge summary confirms accident-related injuries. The FIR and policy details match my records."
+      },
+      "expected": {
+        "status": "approved",
+        "eligible": true
+      }
+    },
+    {
+      "id": "claim-invalid-short-story",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "story": "My car was damaged."
+      },
+      "expected": {
+        "status": "invalid",
+        "eligible": false
+      }
+    },
+    {
+      "id": "claim-invalid-missing-context",
+      "type": "claim",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "skipContext": true,
+        "story": "My car was damaged in a collision on Outer Ring Road in Bengaluru on 1 February 2026. I filed an FIR the same day and the vehicle number matches my policy. I submitted photos of the damaged bumper and headlight."
+      },
+      "expected": {
+        "status": "invalid",
+        "eligible": false
+      }
+    },
+    {
+      "id": "image-motor-crash-photo-a",
+      "type": "image",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "imagePath": "test_pdf_for_verification/geotagged-photo.jpg",
+        "incident": "Motorcycle collision with major front-end damage"
+      },
+      "expected": {
+        "status": "ok"
+      }
+    },
+    {
+      "id": "image-motor-crash-photo-b",
+      "type": "image",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "imagePath": "test_pdf_for_verification/S100R HP4.jpg",
+        "incident": "Motorcycle collision with major front-end damage"
+      },
+      "expected": {
+        "status": "ok"
+      }
+    },
+    {
+      "id": "image-text-placeholder-partial",
+      "type": "image",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "imagePath": "test_pdf_for_verification/incident_photo_geotag.jpg",
+        "incident": "Motorcycle collision with major front-end damage"
+      },
+      "expected": {
+        "status": "partial"
+      }
+    },
+    {
+      "id": "image-irrelevant-handshake-reject",
+      "type": "image",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "imagePath": "public/login.jpg",
+        "incident": "Motorcycle collision with major front-end damage"
+      },
+      "expected": {
+        "status": "reject"
+      }
+    },
+    {
+      "id": "image-irrelevant-selfie-reject",
+      "type": "image",
+      "input": {
+        "scenario": "motor_comprehensive",
+        "imagePath": "public/bhuvan.jpg",
+        "incident": "Motorcycle collision with major front-end damage"
+      },
+      "expected": {
+        "status": "reject"
+      }
+    },
+    {
+      "id": "rag-pmfby-perils",
+      "type": "rag",
+      "input": {
+        "question": "Which perils are covered under the PMFBY crop insurance scheme?",
+        "domain": "Crop Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+            "section": "coverage.perils"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-pmfby-settlement-timeline",
+      "type": "rag",
+      "input": {
+        "question": "How long does PMFBY take to settle claims after the final yield data?",
+        "domain": "Crop Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+            "section": "claims.timeline_goal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-pmfby-exclusions",
+      "type": "rag",
+      "input": {
+        "question": "What are the exclusions under the PMFBY crop insurance scheme?",
+        "domain": "Crop Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+            "section": "exclusions"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-star-no-room-rent-cap",
+      "type": "rag",
+      "input": {
+        "question": "Which Star Health Comprehensive Plan option has no room rent cap?",
+        "domain": "Health Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Star Health Comprehensive Plan",
+            "section": "raw_text"
+          },
+          {
+            "policy_name": "Star Health Comprehensive Plan",
+            "section": "best_for"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-niva-large-family",
+      "type": "rag",
+      "input": {
+        "question": "Which Niva Bupa Health Companion plan is best for a large joint family?",
+        "domain": "Health Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Niva Bupa Health Companion Plan",
+            "section": "best_for"
+          },
+          {
+            "policy_name": "Niva Bupa Health Companion Plan",
+            "section": "raw_text"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-icici-car-coverage",
+      "type": "rag",
+      "input": {
+        "question": "What does ICICI Lombard Comprehensive Car Insurance cover?",
+        "domain": "Motor Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+            "section": "coverage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-icici-car-addons",
+      "type": "rag",
+      "input": {
+        "question": "What add-ons are available with ICICI Lombard Comprehensive Car Insurance?",
+        "domain": "Motor Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "ICICI Lombard Comprehensive Car Insurance",
+            "section": "add_ons"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-icici-home-coverage",
+      "type": "rag",
+      "input": {
+        "question": "What risks are covered by ICICI Lombard Complete Home Protect?",
+        "domain": "Home Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "ICICI Lombard Complete Home Protect",
+            "section": "coverage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-hdfc-home-additional-features",
+      "type": "rag",
+      "input": {
+        "question": "What are the additional features of HDFC ERGO Home Shield?",
+        "domain": "Home Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "HDFC ERGO Home Shield",
+            "section": "additional_features"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-lic-maturity-benefit",
+      "type": "rag",
+      "input": {
+        "question": "What is the maturity benefit of LIC Jeevan Umang?",
+        "domain": "Life Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "LIC Jeevan Umang",
+            "section": "benefits.maturity_benefit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-lic-survival-benefit",
+      "type": "rag",
+      "input": {
+        "question": "When does LIC Jeevan Umang pay the guaranteed annual survival benefit?",
+        "domain": "Life Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "LIC Jeevan Umang",
+            "section": "benefits.survival_benefit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-brightfuture-parent-death",
+      "type": "rag",
+      "input": {
+        "question": "What does BrightFuture EduPlan provide if the parent dies?",
+        "domain": "Life Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "BrightFuture EduPlan",
+            "section": "features.life_cover_on_parent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-hdfc-travel-coverage",
+      "type": "rag",
+      "input": {
+        "question": "What does HDFC ERGO Travel Insurance cover?",
+        "domain": "Travel Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "HDFC ERGO Travel Insurance",
+            "section": "coverage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-reliance-travel-checks",
+      "type": "rag",
+      "input": {
+        "question": "What should I check before buying Reliance Travel Care Policy?",
+        "domain": "Travel Insurance"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "Reliance Travel Care Policy",
+            "section": "key_checks_before_buying"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-hdfc-pa-coverage",
+      "type": "rag",
+      "input": {
+        "question": "What is included in HDFC ERGO Personal Accident Cover coverage highlights?",
+        "domain": "any"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "HDFC ERGO Personal Accident Cover",
+            "section": "coverage_highlights"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag-techguard-coverage",
+      "type": "rag",
+      "input": {
+        "question": "What does TechGuard Device Protect cover for smartphones and laptops?",
+        "domain": "any"
+      },
+      "expected": {
+        "chunks": [
+          {
+            "policy_name": "TechGuard Device Protect",
+            "section": "coverage"
+          }
+        ]
+      }
+    }
+  ]
+}

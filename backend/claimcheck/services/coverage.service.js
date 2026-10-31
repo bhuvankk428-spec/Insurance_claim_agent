@@ -1,4 +1,8 @@
 import OpenAI from "openai";
+import {
+  recordAiCall,
+  recordJsonParse,
+} from "../utils/aiTelemetry.js";
 
 const hasOpenAIKey =
   Boolean(process.env.OPENAI_API_KEY) &&
@@ -12,12 +16,32 @@ const openai = hasOpenAIKey
   : null;
 
 function extractJSON(text) {
+  if (typeof text !== "string" || !text.trim()) {
+    recordJsonParse({ ok: false });
+    return null;
+  }
+
   try {
-    const start = text.indexOf("{");
-    const end = text.lastIndexOf("}");
-    if (start === -1 || end === -1) return null;
-    return JSON.parse(text.slice(start, end + 1));
+    const parsed = JSON.parse(text.trim());
+    recordJsonParse({ ok: true });
+    return parsed;
   } catch {
+    // Models sometimes wrap JSON in prose or Markdown fences. Salvage it.
+  }
+
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start === -1 || end === -1) {
+    recordJsonParse({ ok: false });
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(text.slice(start, end + 1));
+    recordJsonParse({ ok: true, repaired: true });
+    return parsed;
+  } catch {
+    recordJsonParse({ ok: false });
     return null;
   }
 }
@@ -107,6 +131,7 @@ ${JSON.stringify(firData || {}, null, 2)}
 `;
 
   const handle = async (client, model) => {
+    const startedAt = Date.now();
     const completion = await client.chat.completions.create({
       model,
       temperature: 0.2,
@@ -119,6 +144,11 @@ ${JSON.stringify(firData || {}, null, 2)}
         },
         { role: "user", content: prompt },
       ],
+    });
+    recordAiCall({
+      model,
+      usage: completion.usage,
+      latencyMs: Date.now() - startedAt,
     });
 
     const text = completion.choices?.[0]?.message?.content || "";

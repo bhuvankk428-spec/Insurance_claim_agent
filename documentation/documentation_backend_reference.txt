@@ -52,6 +52,42 @@ Claimcheck Service (`backend/claimcheck`)
     2) OCR parsing of visible coordinate text in image
     3) OpenAI vision parsing of visible coordinate text (if `OPENAI_API_KEY` is set)
 
+`backend/claimcheck/utils/aiTelemetry.js`
+- Additive telemetry for model-backed claim/image calls.
+- Records calls, prompt/completion/total tokens, latency, JSON parse attempts,
+  JSON recovered from prose/Markdown, and unrecoverable JSON.
+- Cleared by the evaluation harness before each case; does not change decisions
+  or response shapes.
+- Used by `coverage.service.js`, `story.service.js`, and `image.service.js`.
+
+Evaluation Harness (`eval`)
+---------------------------
+`eval/cases/insure-ai-eval-cases.json`
+- 45 fixed cases: 24 claim stories, 5 image checks, 16 RAG policy questions.
+- Claim cases reference a scenario and may override nested context fields.
+
+`eval/run-eval.js`
+- Runs requested suites (claim, image, rag) and writes JSON + Markdown reports.
+- Claim modes: `ai`, `heuristic`.
+- RAG modes: `auto`, `db`, `embed`, `keyword`.
+- Disables Supabase persistence during claim evaluation.
+
+`eval/compare.js`
+- Compares two tagged runs or result files and reports metric deltas plus
+  pass/fail case changes.
+
+`eval/validate-cases.js`
+- Validates case count, ids, scenario references, image paths, and expected RAG
+  chunks against `backend/chat/policy_chunks.json`.
+
+NPM scripts:
+- `npm run eval`
+- `npm run eval:compare`
+- `npm run eval:validate`
+
+See `documentation/model_quality_evaluation.txt` for metric definitions,
+modes, outputs, and current environment limitations.
+
 State and Persistence
 ---------------------
 - Transient claim step state: in-memory `claimStore`, with serialized `claimContext` returned to the frontend for browser-session handoff.

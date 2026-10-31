@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 .vercel
+eval/.cache
+eval/results
 *.local
 .env
 .env.*

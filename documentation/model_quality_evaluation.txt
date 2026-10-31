@@ -1,0 +1,275 @@
+Model Quality Evaluation
+========================
+
+Purpose
+-------
+Manual testing is useful, but it does not produce a number that can be
+tracked over time. This harness turns the existing Insure.AI flows into a
+repeatable evaluation run with fixed inputs and expected outcomes.
+
+What is measured
+----------------
+Claim story decisions:
+- Accuracy: predicted approved/partial/rejected/invalid matches the expected label.
+- Invalid JSON rate: model responses that could not be parsed at all.
+- JSON repair rate: responses that contained JSON inside prose or Markdown
+  fences and were recovered by extracting the first `{` through the last `}`.
+- Average latency per case: full claim-story service call, including coverage
+  and story model calls when enabled.
+- Average cost per query: token usage x the prices in `eval/lib/pricing.js`.
+- Confusion matrix: expected label vs predicted label.
+
+Image evidence checks:
+- Accuracy of the vision status (ok/partial/reject).
+- Invalid JSON rate, JSON repair rate, average latency, and average cost.
+- Cases are skipped when no OpenAI key is configured or a fixture is missing.
+
+RAG retrieval:
+- Top-3 hit rate: the expected policy chunk appears in the top 3 results.
+- Top-1 hit rate: the expected chunk is rank 1.
+- MRR: mean reciprocal rank of the first expected chunk.
+- Average latency per query.
+- Average embedding cost per query (embed mode only).
+- Per-case top-3 chunks are saved so a miss can be inspected.
+
+Dataset
+-------
+`eval/cases/insure-ai-eval-cases.json` contains 45 cases:
+
+- 24 claim cases
+  - motor: collision, theft, alcohol, racing, story mismatch, geo mismatch,
+    evidence rejection
+  - health: cardiac hospitalization, pre-existing waiting period, cosmetic
+    exclusion, maternity after waiting period
+  - crop: drought, flood, notified-crop exclusion, negligence exclusion
+  - travel: baggage loss, medical emergency, adventure-sports exclusion
+  - home: fire, wear-and-tear exclusion
+  - life: suicide exclusion
+  - personal accident: road-accident injury
+  - invalid input: short story, missing claim context
+- 5 image cases
+  - two real motorcycle-damage photos expected to pass
+  - one text-only placeholder expected to be partial
+  - two irrelevant images expected to be rejected
+- 16 RAG questions
+  - PMFBY perils, settlement timeline, exclusions
+  - Star Health room-rent cap, Niva Bupa large-family fit
+  - ICICI car coverage/add-ons, ICICI home coverage
+  - HDFC home additional features
+  - LIC maturity/survival benefits, BrightFuture parent death cover
+  - HDFC travel coverage, Reliance travel checks
+  - HDFC personal accident coverage, TechGuard device coverage
+
+Claim cases reference a scenario in the same file and may override nested
+fields. A scenario contains the policy text, policy fields, FIR fields, image
+location, image analysis, evidence risk, match level, and geo flag. This keeps
+the input explicit without duplicating long policy text in every case.
+
+Run modes
+---------
+Claim modes:
+- `ai`: use the configured OpenAI key, matching production behavior.
+- `heuristic`: disable OpenAI for the claim service. Useful as a deterministic
+  baseline and to show the value of the model layer.
+
+RAG modes:
+- `auto`: probe Postgres/pgvector; use db when available, then local
+  embeddings, then keyword retrieval.
+- `db`: use the real `retrieveChunks` implementation against pgvector.
+- `embed`: embed `backend/chat/policy_chunks.json` locally with the configured
+  embedding model and rank by cosine similarity. Chunk vectors are cached in
+  `eval/.cache/`, so repeat runs only pay for query embeddings. The same domain
+  alias filter as production is applied.
+- `keyword`: mirror the production keyword fallback scorer over the local
+  chunk file. Deterministic and free, but weaker than embeddings.
+
+Running
+-------
+Validate the dataset:
+  npm run eval:validate
+
+Full run:
+  npm run eval -- --tag baseline
+
+Deterministic baseline:
+  npm run eval -- --tag keyword-baseline --claim-mode heuristic --rag-mode keyword
+
+Re-run after a prompt or chunk-size change:
+  npm run eval -- --tag after-change
+  npm run eval:compare -- baseline after-change
+
+Optional flags:
+  --suite claim,image,rag
+  --claim-mode ai|heuristic
+  --rag-mode auto|db|embed|keyword
+  --limit <n>
+  --verbose
+  --no-images
+  --cases <path>
+
+Outputs
+-------
+`eval/results/latest.json`
+  Most recent run, all case-level details.
+
+`eval/results/latest-<tag>.json`
+  Most recent run for that tag. `eval:compare` can load a tag directly.
+
+`eval/results/latest.md`
+  Human-readable summary of the most recent run.
+
+`eval/results/history/<runId>.json`
+  Immutable run history. Generated results and the embedding cache are
+  gitignored; they stay local for inspection.
+
+`eval/results/compare-<baseline>-<candidate>.md`
+  Metric deltas and cases whose pass/fail changed.
+
+Comparison
+----------
+`npm run eval:compare -- <baseline> <candidate>` accepts a tag, a path to a
+JSON result, or a substring of a history filename. It prints and writes:
+
+- accuracy delta
+- invalid JSON rate delta
+- JSON repair rate delta
+- latency delta
+- cost delta
+- RAG top-3/top-1/MRR deltas
+- list of cases that changed from pass to fail or fail to pass
+
+Telemetry hooks
+---------------
+`backend/claimcheck/utils/aiTelemetry.js` records model calls, token usage,
+latency, JSON parse success, JSON repair, and unrecoverable JSON. The claim
+services (`coverage.service.js`, `story.service.js`, `image.service.js`) call
+these hooks after each model response.
+
+The hooks are additive. They do not change decisions, response shapes, or
+fallback behavior. Telemetry is reset before each evaluation case so metrics
+are attributed to one case at a time. Evaluation is therefore sequential.
+
+Baseline results (2026-10-31)
+----------------------------
+Environment: `gpt-4o-mini` for claim/vision, `text-embedding-3-small` for RAG,
+Postgres and Supabase unavailable.
+
+Keyword-only baseline (`keyword-baseline`):
+- Claim: 12.5% accuracy (24 cases), 0.4 ms, $0
+- RAG: top-3 75.0%, top-1 25.0%, MRR 0.438, 2.4 ms, $0
+
+AI baseline after fixture cleanup (`ai-v3`):
+- Claim: 100.0% accuracy (24/24), 0.0% invalid JSON, 0.0% repair,
+  1778.3 ms, $0.00011897 per query
+- Image: 80.0% accuracy (4/5), 0.0% invalid JSON, 80.0% repair,
+  4470.4 ms, $0.00392028 per query
+- RAG: top-3 87.5%, top-1 56.3%, MRR 0.708, 345.7 ms,
+  $0.00000026 per query
+
+Delta, keyword baseline -> `ai-v3`:
+- Claim accuracy +87.5 pp; latency +1778 ms; cost +$0.000119 per query
+- RAG top-3 +12.5 pp, top-1 +31.3 pp, MRR +0.271; latency +343 ms
+- Image comparison is not meaningful across runs because vision is
+  nondeterministic (see limitations).
+
+The first AI run (`ai-baseline`) scored 83.3% on claims. Four misses were
+fixture inconsistencies, not model errors: three stories used "collision"
+while the incident text used "accident", and the crop-flood case reused a
+drought image analysis. After fixing the fixtures, the claim score reached
+100%. This is why the dataset should be validated whenever scenarios change.
+
+Remaining known misses in `ai-v3`:
+- `rag-brightfuture-parent-death`: the expected chunk is tagged
+  `Education / Child Plan`, but the case uses the frontend's `Life Insurance`
+  filter, so the chunk is excluded.
+- `rag-hdfc-pa-coverage`: `any` domain lets a health chunk outrank the expected
+  personal-accident coverage chunk.
+
+Image miss: the text-only placeholder image is expected to be `partial`, but
+the vision model sometimes rejects it. This case is intentionally left in the
+dataset as a borderline example.
+
+Current environment limitations
+-------------------------------
+- Postgres/pgvector was unreachable from the evaluation environment
+  (`DATABASE_URL` connection timed out). RAG `auto` therefore uses local
+  embedding retrieval, which reproduces the same embedding model and cosine
+  ranking but does not test the live SQL query.
+- Supabase was unreachable. Claim evaluation disables Supabase persistence on
+  purpose and suppresses only the expected "Supabase is not configured" logs.
+- Image evaluation uses existing repository fixtures. These are not a
+  comprehensive fraud-image dataset. Vision calls use the production
+  temperature, so borderline labels (especially the text-only placeholder) can
+  change between runs; repeat the image suite when the difference matters.
+- The harness does not upload PDFs or rerun OCR/EXIF. Document extraction has
+  its own existing tests and fixtures under `test_pdf_for_verification/`.
+- Live pgvector retrieval does not expose embedding token usage, so db-mode
+  cost is reported as `n/a`. Use embed mode for exact per-query embedding cost.
+- Invalid JSON is not silently repaired into a decision. If extraction fails,
+  the existing service fallback runs (partial/manual review). "Repaired" only
+  means JSON was recovered from surrounding prose.
+- RAG domain filtering surfaced a production gap: BrightFuture child-plan
+  chunks are tagged `Education / Child Plan`, while the frontend only offers
+  `Life Insurance`. A user filtering by Life Insurance therefore cannot reach
+  the BrightFuture chunk. The eval case keeps the real frontend domain, so this
+  miss is reported instead of hidden.
+- `Home Insurance` and `Life Insurance` work through the alias fallback because
+  those chunk domains match the normalized frontend values exactly. There is no
+  domain option for `Personal Accident` or device protection, so those cases use
+  `any` and compete against all domains.
+
+Changing chunk size
+-------------------
+`backend/chat/scripts/buildChunks.js` currently creates one chunk per leaf
+value. If chunking logic changes:
+
+1. Run the chunk builder and re-embed the chunk table for production.
+2. Update `backend/chat/policy_chunks.json` if the local file is regenerated.
+3. Delete `eval/.cache/` so local embeddings are rebuilt.
+4. Run `npm run eval -- --tag after-chunking --rag-mode embed`.
+5. Compare with `npm run eval:compare -- baseline after-chunking`.
+
+Adding cases
+------------
+Add an object to `cases` in
+`eval/cases/insure-ai-eval-cases.json`:
+
+Claim:
+  {
+    "id": "claim-example",
+    "type": "claim",
+    "input": {
+      "scenario": "motor_comprehensive",
+      "story": "...",
+      "overrides": { "firData": { "incident": "..." } }
+    },
+    "expected": { "status": "approved", "eligible": true }
+  }
+
+Image:
+  {
+    "id": "image-example",
+    "type": "image",
+    "input": {
+      "scenario": "motor_comprehensive",
+      "imagePath": "test_pdf_for_verification/geotagged-photo.jpg",
+      "incident": "Motorcycle collision with major front-end damage"
+    },
+    "expected": { "status": "ok" }
+  }
+
+RAG:
+  {
+    "id": "rag-example",
+    "type": "rag",
+    "input": { "question": "...", "domain": "Health Insurance" },
+    "expected": {
+      "chunks": [
+        { "policy_name": "Star Health Comprehensive Plan", "section": "raw_text" }
+      ]
+    }
+  }
+
+Keep the dataset between 30 and 50 cases. `npm run eval:validate` checks the
+count, unique ids, scenario references, image paths, and that every expected
+RAG chunk exists in `policy_chunks.json`.

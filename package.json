@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\""
+    "backend": "concurrently -n chat,claim \"node backend/chat/server.js\" \"node backend/claimcheck/server.js\"",
+    "eval": "node eval/run-eval.js",
+    "eval:compare": "node eval/compare.js",
+    "eval:validate": "node eval/validate-cases.js"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.80",

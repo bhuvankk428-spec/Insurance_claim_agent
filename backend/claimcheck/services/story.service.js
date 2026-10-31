@@ -7,6 +7,10 @@ import {
 } from "../store/claimStore.js";
 import { upsertClaimDecision } from "./supabase.service.js";
 import { checkCoverage } from "./coverage.service.js";
+import {
+  recordAiCall,
+  recordJsonParse,
+} from "../utils/aiTelemetry.js";
 
 /* ---------------- CLAIM CODE GENERATORS ---------------- */
 function generateFullClaimCode() {
@@ -41,26 +45,46 @@ if (hasOpenAIKey) {
 
 /* ---------------- JSON EXTRACT ---------------- */
 function extractJSON(text) {
+  if (typeof text !== "string" || !text.trim()) {
+    recordJsonParse({ ok: false });
+    return null;
+  }
+
+  let parsed = null;
+  let repaired = false;
+
   try {
+    parsed = JSON.parse(text.trim());
+  } catch {
+    // Models sometimes wrap JSON in prose or Markdown fences. Salvage it.
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
-    if (start === -1 || end === -1) return null;
-
-    const parsed = JSON.parse(text.slice(start, end + 1));
-
-    // strict shape validation
-    if (
-      typeof parsed.consistent !== "boolean" ||
-      !parsed.reason ||
-      !parsed.riskLevel
-    ) {
+    if (start === -1 || end === -1) {
+      recordJsonParse({ ok: false });
       return null;
     }
 
-    return parsed;
-  } catch {
+    try {
+      parsed = JSON.parse(text.slice(start, end + 1));
+      repaired = true;
+    } catch {
+      recordJsonParse({ ok: false });
+      return null;
+    }
+  }
+
+  // strict shape validation
+  if (
+    typeof parsed.consistent !== "boolean" ||
+    !parsed.reason ||
+    !parsed.riskLevel
+  ) {
+    recordJsonParse({ ok: false });
     return null;
   }
+
+  recordJsonParse({ ok: true, repaired });
+  return parsed;
 }
 
 function isImageDateReason(reason = "") {
@@ -335,8 +359,11 @@ Respond STRICTLY in JSON:
 }
 `;
 
+        const storyModel =
+          process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini";
+        const startedAt = Date.now();
         const completion = await openai.chat.completions.create({
-          model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+          model: storyModel,
           temperature: 0.2,
           messages: [
             {
@@ -346,6 +373,11 @@ Respond STRICTLY in JSON:
             },
             { role: "user", content: prompt },
           ],
+        });
+        recordAiCall({
+          model: storyModel,
+          usage: completion.usage,
+          latencyMs: Date.now() - startedAt,
         });
 
         const text = completion.choices[0]?.message?.content;
